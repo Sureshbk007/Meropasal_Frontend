@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { LayoutGrid, Zap } from "lucide-react";
-import { ProductCard, Crousel } from "../components";
+import { ProductCard } from "../components";
 
 function Home() {
   return (
@@ -77,9 +77,10 @@ function Home() {
           />
           <h3 className="text-3xl text-slate-800 font-semibold ">Flash Sale</h3>
         </div>
-        <div className="overflow-x-auto flex gap-10 pb-5 scrollBar">
-          {[1, 2, 3, 4, 5, 6, 7].map((val, index) => (
-            <Link key={val} to={`/products/${index}`}>
+
+        <div className="overflow-x-auto flex gap-5 pb-3 scrollBar">
+          {Array.from({ length: 15 }).map((val, index) => (
+            <Link key={index} to={`/products/${index}`}>
               <ProductCard
                 imgUrl="https://source.unsplash.com/random/300X300"
                 name="Product name and shit it is what it is fdgfsdg fdgfd gf d"

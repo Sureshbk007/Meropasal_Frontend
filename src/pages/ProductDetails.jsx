@@ -1,4 +1,3 @@
-import { Star, StarHalf } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { StarRating } from "../components";

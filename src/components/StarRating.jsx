@@ -1,6 +1,6 @@
 import { Star, StarHalf } from "lucide-react";
 
-const StarRating = ({ rating, size = 24, className }) => {
+const StarRating = ({ rating = 0, size = 24, className }) => {
   const fullStars = Math.floor(rating);
   const halfStars = rating % 1 !== 0 ? 1 : 0;
   const emptyStars = 5 - fullStars - halfStars;
@@ -8,12 +8,17 @@ const StarRating = ({ rating, size = 24, className }) => {
   return (
     <div className={`relative ${className}`}>
       <div className="flex">
-        {Array.from({ length: 5 }, () => (
-          <Star fill="white" strokeWidth={0.2} size={size} />
+        {Array.from({ length: 5 }, (_, idx) => (
+          <Star
+            fill="white"
+            strokeWidth={0.2}
+            size={size}
+            key={`blank-${idx}`}
+          />
         ))}
       </div>
       <div className="flex absolute top-0">
-        {Array.from({ length: fullStars }).map((_, idx) => (
+        {Array.from({ length: fullStars }, (_, idx) => (
           <Star
             key={`full-${idx}`}
             strokeWidth={0.2}
@@ -21,7 +26,7 @@ const StarRating = ({ rating, size = 24, className }) => {
             size={size}
           />
         ))}
-        {Array.from({ length: halfStars }).map((_, idx) => (
+        {Array.from({ length: halfStars }, (_, idx) => (
           <StarHalf
             key={`half-${idx}`}
             strokeWidth={0.2}
@@ -30,7 +35,7 @@ const StarRating = ({ rating, size = 24, className }) => {
             size={size}
           ></StarHalf>
         ))}
-        {Array.from({ length: emptyStars }).map((_, idx) => (
+        {Array.from({ length: emptyStars }, (_, idx) => (
           <Star
             key={`empty-${idx}`}
             strokeWidth={0.2}

@@ -6,7 +6,7 @@ function Header() {
     <div>
       {/* top navbar */}
       <div className="flex text-[8px] sm:text-sm justify-between px-20 py-2 bg-gray-100">
-        <a href="#sale">Sale!!</a>
+        <a href="/#sale">Sale!!</a>
         <nav className="flex gap-10">
           <Link to="#" className="text-slate-600">
             Refund
