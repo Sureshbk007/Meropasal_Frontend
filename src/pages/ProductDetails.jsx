@@ -189,7 +189,7 @@ function ProductDetails() {
           )}
 
           {/* Quantity */}
-          <div className="flex mt-4 items-center">
+          <div className="flex mt-4 items-center ">
             <span className="text-lg font-medium text-slate-500 mr-5 ">
               Quantity:
             </span>
@@ -274,7 +274,7 @@ function ProductDetails() {
                 crossPrice={2000}
                 rating={4.5}
                 ratingCount={5}
-                className="w-28"
+                className="w-52"
               />
             </Link>
           ))}

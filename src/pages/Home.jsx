@@ -88,7 +88,6 @@ function Home() {
                 crossPrice={2000}
                 rating={4.5}
                 ratingCount={5}
-                className="flex-shrink-0"
               />
             </Link>
           ))}
@@ -102,7 +101,7 @@ function Home() {
         </h3>
 
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10">
-          {Array.from({ length: 10 }).map((val, i) => (
+          {Array.from({ length: 10 }).map((_, i) => (
             <Link to={"/products/123"} key={i}>
               <ProductCard
                 imgUrl="https://source.unsplash.com/random/300X300"
@@ -111,7 +110,6 @@ function Home() {
                 crossPrice={2000}
                 rating={4.5}
                 ratingCount={5}
-                className="w-28"
               />
             </Link>
           ))}
