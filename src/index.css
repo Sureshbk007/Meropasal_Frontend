@@ -4,12 +4,13 @@
 @tailwind utilities;
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
   font-family: "Poppins", sans-serif;
 }
+
 .scrollBar::-webkit-scrollbar{
+  height: 13px;
   background-color: rgb(156, 154, 154);
-  width: 15px;
   border-radius: 10px;
   cursor: pointer;
 }

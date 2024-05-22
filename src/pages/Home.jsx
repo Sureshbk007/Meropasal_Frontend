@@ -16,14 +16,14 @@ function Home() {
         </div>
         <div className="rounded-xl overflow-hidden shadow-xl ">
           <img
-            src="https://images.unsplash.com/photo-1591085686350-798c0f9faa7f?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src="https://plus.unsplash.com/premium_photo-1677995700941-100976883af7?q=80&w=1523&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt=""
             className="w-full h-full object-cover object-center"
           />
         </div>
         <div className="rounded-xl overflow-hidden shadow-xl">
           <img
-            src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src="https://plus.unsplash.com/premium_photo-1661585773166-e9423e96b2f3?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt=""
             className="w-full h-full object-cover object-center"
           />
@@ -67,7 +67,7 @@ function Home() {
       </div>
 
       {/* flash sale */}
-      <div className="bg-gray-100 p-16 flex flex-col gap-8 " id="sale">
+      <div className="bg-gray-100 p-16 flex flex-col gap-8" id="sale">
         <div className="flex gap-4 items-center">
           <Zap
             className="rounded-full bg-black"
@@ -79,7 +79,7 @@ function Home() {
         </div>
 
         <div className="overflow-x-auto flex gap-5 pb-3 scrollBar">
-          {Array.from({ length: 15 }).map((val, index) => (
+          {Array.from({ length: 15 }).map((_, index) => (
             <Link key={index} to={`/products/${index}`}>
               <ProductCard
                 imgUrl="https://source.unsplash.com/random/300X300"
@@ -96,7 +96,7 @@ function Home() {
       </div>
 
       {/* latest products */}
-      <div className="p-16 flex flex-col  gap-8">
+      <section className="p-16 flex flex-col  gap-8">
         <h3 className="text-3xl text-slate-800 font-semibold ">
           Latest Products
         </h3>
@@ -116,7 +116,7 @@ function Home() {
             </Link>
           ))}
         </div>
-      </div>
+      </section>
 
       <div className="h-60 bg-red-500 flex justify-center items-center bg-[url('https://source.unsplash.com/random/')] bg-no-repeat bg-cover bg-center bg-opacity-10">
         <span className="text-3xl font-bold text-slate-100 italic drop-shadow-2xl">
