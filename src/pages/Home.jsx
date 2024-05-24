@@ -3,6 +3,55 @@ import { LayoutGrid, Zap } from "lucide-react";
 import { ProductCard } from "../components";
 
 function Home() {
+  const totalCategories = [
+    {
+      id: Date.now(),
+      img: "https://www.thispersondoesnotexist.com",
+      title: "Pants",
+    },
+    {
+      id: Date.now(),
+      img: "https://www.thispersondoesnotexist.com",
+      title: "Slippers",
+    },
+    {
+      id: Date.now(),
+      img: "https://www.thispersondoesnotexist.com",
+      title: "Joggers",
+    },
+    {
+      id: Date.now(),
+      img: "https://www.thispersondoesnotexist.com",
+      title: "Glasses",
+    },
+    {
+      id: Date.now(),
+      img: "https://www.thispersondoesnotexist.com",
+      title: "Bags",
+    },
+    {
+      id: Date.now(),
+      img: "https://www.thispersondoesnotexist.com",
+      title: "Slippers",
+    },
+    {
+      id: Date.now(),
+      img: "https://www.thispersondoesnotexist.com",
+      title: "Joggers",
+    },
+    {
+      id: Date.now(),
+      img: "https://www.thispersondoesnotexist.com",
+      title: "Glasses",
+    },
+    {
+      id: Date.now(),
+      img: "https://www.thispersondoesnotexist.com",
+      title: "Glasses",
+    },
+  ];
+  let categories =
+    totalCategories.length > 8 ? totalCategories.slice(0, 8) : totalCategories;
   return (
     <>
       {/* banners */}
@@ -31,39 +80,41 @@ function Home() {
       </div>
 
       {/* categories */}
-      <div className="hidden md:grid grid-cols-9 p-8 ">
-        {Array.from({ length: 8 }).map((_, id) => (
-          <Link to={`/products/${id}`} key={id}>
+      <div className="hidden md:flex justify-center gap-14 p-8">
+        {categories.map((category) => (
+          <Link to={`/products/${categories.id}`} key={categories.id}>
             <figure className="flex flex-col items-center">
               <div className="w-20 border-2 rounded-full overflow-hidden ">
                 <img
-                  src="https://www.thispersondoesnotexist.com"
-                  alt="haha"
+                  src={`${category.img}`}
+                  alt={`${category.title}`}
                   className="w-full rounded-full"
                 />
               </div>
               <figcaption className="font-semibold text-sm text-nowrap mt-2 text-slate-700 ">
-                Shoes
+                {category.title}
               </figcaption>
             </figure>
           </Link>
         ))}
 
-        <Link to="/products">
-          <figure className="flex flex-col items-center">
-            <div className="w-20 h-20 border-2 rounded-full overflow-hidden flex justify-center items-center ">
-              <LayoutGrid
-                fillOpacity={0.8}
-                fill="gray"
-                strokeWidth={0}
-                size={40}
-              />
-            </div>
-            <figcaption className="font-semibold text-sm text-nowrap mt-2 text-slate-700 ">
-              All Category
-            </figcaption>
-          </figure>
-        </Link>
+        {totalCategories.length > 8 && (
+          <Link to="/products">
+            <figure className="flex flex-col items-center">
+              <div className="w-20 h-20 border-2 rounded-full overflow-hidden flex justify-center items-center ">
+                <LayoutGrid
+                  fillOpacity={0.8}
+                  fill="gray"
+                  strokeWidth={0}
+                  size={40}
+                />
+              </div>
+              <figcaption className="font-semibold text-sm text-nowrap mt-2 text-slate-700 ">
+                All Category
+              </figcaption>
+            </figure>
+          </Link>
+        )}
       </div>
 
       {/* flash sale */}

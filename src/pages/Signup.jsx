@@ -19,7 +19,7 @@ function Signup() {
 
   return (
     <div className="flex">
-      <div className="basis-1/2 flex flex-col items-center justify-center gap-3 bg-gray-50">
+      <div className="basis-1/2 flex flex-col items-center justify-center gap-4 bg-gray-50">
         <span className="text-2xl text-slate-600 font-semibold">
           Create your account
         </span>
