@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { LayoutGrid, Zap } from "lucide-react";
-import { ProductCard } from "../components";
+import { Footer, Header, ProductCard } from "../components";
 
 function Home() {
   const totalCategories = [
@@ -54,6 +54,7 @@ function Home() {
     totalCategories.length > 8 ? totalCategories.slice(0, 8) : totalCategories;
   return (
     <>
+      <Header />
       {/* banners */}
       <div className="grid grid-cols-3 grid-rows-2 gap-5 p-5 h-[65vh] ">
         <div className="col-span-2 row-span-2 rounded-xl overflow-hidden shadow-2xl ">
@@ -172,6 +173,8 @@ function Home() {
           "Let's Shop Beyond Boundries"
         </span>
       </div>
+
+      <Footer />
     </>
   );
 }

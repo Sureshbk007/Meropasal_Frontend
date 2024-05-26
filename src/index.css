@@ -18,3 +18,7 @@ html {
   border-radius: 10px;
   cursor:pointer;
 }
+
+.scrollBarHidden::-webkit-scrollbar{
+  display: none;
+}

@@ -3,13 +3,7 @@ import { Header, Footer } from "./components";
 import { Outlet } from "react-router-dom";
 
 function App() {
-  return (
-    <div className="bg-slate-50">
-      <Header />
-      <Outlet />
-      <Footer />
-    </div>
-  );
+  return <Outlet />;
 }
 
 export default App;

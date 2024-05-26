@@ -9,6 +9,7 @@ import {
   Home,
   ProductDetails,
   Products,
+  Checkout,
 } from "./pages";
 import "./index.css";
 import {
@@ -27,6 +28,7 @@ const router = createBrowserRouter(
       <Route path="contact" element={<Contact />} />
       <Route path="products" element={<Products />} />
       <Route path="products/:slug" element={<ProductDetails />} />
+      <Route path="checkout" element={<Checkout />} />
       <Route path="*" element={<PageNotFound />} />
     </Route>
   )
