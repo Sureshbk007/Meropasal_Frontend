@@ -5,7 +5,7 @@ import { ProductCard } from "../components";
 function Products() {
   const [showAll, setShowAll] = useState({
     categories: false,
-    brand: false,
+    brands: false,
   });
 
   const categories = [
@@ -40,7 +40,7 @@ function Products() {
   const displayCategories = showAll.categories
     ? categories
     : categories.slice(0, 8);
-  const displayBands = showAll.brand ? brands : brands.slice(0, 8);
+  const displayBands = showAll.brands ? brands : brands.slice(0, 8);
   const searchQuery = "";
   return (
     <div className="flex gap-2">
@@ -69,9 +69,8 @@ function Products() {
         </div>
 
         {/* category */}
-        <div>
+        {/* <div>
           <div className="text-lg text-slate-700 border-b-2 mb-2">Category</div>
-          {/* <hr /> */}
           <ul className="text-slate-600 ">
             {displayCategories.map((category, idx) => (
               <li key={idx}>
@@ -89,8 +88,30 @@ function Products() {
               </button>
             )}
           </ul>
-        </div>
+        </div> */}
 
+        {/* brand */}
+        <div>
+          <div className="text-lg text-slate-700 border-b-2 mb-2">Category</div>
+          <ul className="text-slate-600 ">
+            {displayCategories.map((category, idx) => (
+              <li key={idx}>
+                <label className="flex gap-2 items-center accent-violet-600 cursor-pointer hover:text-violet-600">
+                  <input type="checkbox" name={category} value={category} />
+                  <span>{category}</span>
+                </label>
+              </li>
+            ))}
+            {categories.length > 8 && (
+              <button
+                onClick={() => toggleShowAll("categories")}
+                className="text-violet-700"
+              >
+                {showAll.categories ? "- Show Less" : "+ Show More"}
+              </button>
+            )}
+          </ul>
+        </div>
         {/* brand */}
         <div>
           <div className="text-lg text-slate-700 border-b-2 mb-2">Brand</div>
@@ -105,10 +126,10 @@ function Products() {
             ))}
             {brands.length > 8 && (
               <button
-                onClick={() => toggleShowAll("brand")}
+                onClick={() => toggleShowAll("brands")}
                 className="text-violet-700"
               >
-                {showAll.categories ? "- Show Less" : "+ Show More"}
+                {showAll.brand ? "- Show Less" : "+ Show More"}
               </button>
             )}
           </ul>
