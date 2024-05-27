@@ -183,7 +183,7 @@ function Home() {
       {/* categories */}
       <div className="hidden md:flex justify-center gap-14 p-8 overflow-hidden">
         {categories.map((category) => (
-          <Link to={`/products/${categories.id}`} key={categories.id}>
+          <Link to={`/products/${category.id}`} key={category.id}>
             <figure className="flex flex-col items-center">
               <div className="w-20 border-2 rounded-full overflow-hidden ">
                 <img
@@ -231,8 +231,8 @@ function Home() {
         </div>
 
         <div className="overflow-x-auto flex gap-5 pb-3 scrollBar">
-          {Array.from({ length: 15 }).map((_, index) => (
-            <Link key={index} to={`/products/${index}`}>
+          {Array.from({ length: 15 }).map((_, idx) => (
+            <Link key={idx} to={`/products/${idx}`}>
               <ProductCard
                 imgUrl="https://via.placeholder.com/150/92c952"
                 name="Product name and shit it is what it is fdgfsdg fdgfd gf d"
