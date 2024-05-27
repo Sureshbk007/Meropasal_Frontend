@@ -44,7 +44,7 @@ function Signup() {
                     value={signupData.fullName}
                     className="outline-none px-2 bg-transparent text-sm w-full"
                     onChange={handleSignup}
-                    placeholder="John Doe"
+                    placeholder="Ram Bahadur"
                   />
                 </div>
               </label>

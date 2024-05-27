@@ -5,53 +5,153 @@ import { Footer, Header, ProductCard } from "../components";
 function Home() {
   const totalCategories = [
     {
-      id: Date.now(),
-      img: "https://www.thispersondoesnotexist.com",
-      title: "Pants",
+      albumId: 1,
+      id: 1,
+      title: "accusamus beatae ad facilis cum similique qui sunt",
+      url: "https://via.placeholder.com/600/92c952",
+      thumbnailUrl: "https://via.placeholder.com/150/92c952",
     },
     {
-      id: Date.now(),
-      img: "https://www.thispersondoesnotexist.com",
-      title: "Slippers",
+      albumId: 1,
+      id: 2,
+      title: "reprehenderit est deserunt velit ipsam",
+      url: "https://via.placeholder.com/600/771796",
+      thumbnailUrl: "https://via.placeholder.com/150/771796",
     },
     {
-      id: Date.now(),
-      img: "https://www.thispersondoesnotexist.com",
-      title: "Joggers",
+      albumId: 1,
+      id: 3,
+      title: "officia porro iure quia iusto qui ipsa ut modi",
+      url: "https://via.placeholder.com/600/24f355",
+      thumbnailUrl: "https://via.placeholder.com/150/24f355",
     },
     {
-      id: Date.now(),
-      img: "https://www.thispersondoesnotexist.com",
-      title: "Glasses",
+      albumId: 1,
+      id: 4,
+      title: "culpa odio esse rerum omnis laboriosam voluptate repudiandae",
+      url: "https://via.placeholder.com/600/d32776",
+      thumbnailUrl: "https://via.placeholder.com/150/d32776",
     },
     {
-      id: Date.now(),
-      img: "https://www.thispersondoesnotexist.com",
-      title: "Bags",
+      albumId: 1,
+      id: 5,
+      title: "natus nisi omnis corporis facere molestiae rerum in",
+      url: "https://via.placeholder.com/600/f66b97",
+      thumbnailUrl: "https://via.placeholder.com/150/f66b97",
     },
     {
-      id: Date.now(),
-      img: "https://www.thispersondoesnotexist.com",
-      title: "Slippers",
+      albumId: 1,
+      id: 6,
+      title: "accusamus ea aliquid et amet sequi nemo",
+      url: "https://via.placeholder.com/600/56a8c2",
+      thumbnailUrl: "https://via.placeholder.com/150/56a8c2",
     },
     {
-      id: Date.now(),
-      img: "https://www.thispersondoesnotexist.com",
-      title: "Joggers",
+      albumId: 1,
+      id: 7,
+      title: "officia delectus consequatur vero aut veniam explicabo molestias",
+      url: "https://via.placeholder.com/600/b0f7cc",
+      thumbnailUrl: "https://via.placeholder.com/150/b0f7cc",
     },
     {
-      id: Date.now(),
-      img: "https://www.thispersondoesnotexist.com",
-      title: "Glasses",
+      albumId: 1,
+      id: 8,
+      title: "aut porro officiis laborum odit ea laudantium corporis",
+      url: "https://via.placeholder.com/600/54176f",
+      thumbnailUrl: "https://via.placeholder.com/150/54176f",
     },
     {
-      id: Date.now(),
-      img: "https://www.thispersondoesnotexist.com",
-      title: "Glasses",
+      albumId: 1,
+      id: 9,
+      title: "qui eius qui autem sed",
+      url: "https://via.placeholder.com/600/51aa97",
+      thumbnailUrl: "https://via.placeholder.com/150/51aa97",
+    },
+    {
+      albumId: 1,
+      id: 10,
+      title: "beatae et provident et ut vel",
+      url: "https://via.placeholder.com/600/810b14",
+      thumbnailUrl: "https://via.placeholder.com/150/810b14",
+    },
+    {
+      albumId: 1,
+      id: 11,
+      title: "nihil at amet non hic quia qui",
+      url: "https://via.placeholder.com/600/1ee8a4",
+      thumbnailUrl: "https://via.placeholder.com/150/1ee8a4",
+    },
+    {
+      albumId: 1,
+      id: 12,
+      title:
+        "mollitia soluta ut rerum eos aliquam consequatur perspiciatis maiores",
+      url: "https://via.placeholder.com/600/66b7d2",
+      thumbnailUrl: "https://via.placeholder.com/150/66b7d2",
+    },
+    {
+      albumId: 1,
+      id: 13,
+      title: "repudiandae iusto deleniti rerum",
+      url: "https://via.placeholder.com/600/197d29",
+      thumbnailUrl: "https://via.placeholder.com/150/197d29",
+    },
+    {
+      albumId: 1,
+      id: 14,
+      title: "est necessitatibus architecto ut laborum",
+      url: "https://via.placeholder.com/600/61a65",
+      thumbnailUrl: "https://via.placeholder.com/150/61a65",
+    },
+    {
+      albumId: 1,
+      id: 15,
+      title: "harum dicta similique quis dolore earum ex qui",
+      url: "https://via.placeholder.com/600/f9cee5",
+      thumbnailUrl: "https://via.placeholder.com/150/f9cee5",
+    },
+    {
+      albumId: 1,
+      id: 16,
+      title:
+        "iusto sunt nobis quasi veritatis quas expedita voluptatum deserunt",
+      url: "https://via.placeholder.com/600/fdf73e",
+      thumbnailUrl: "https://via.placeholder.com/150/fdf73e",
+    },
+    {
+      albumId: 1,
+      id: 17,
+      title: "natus doloribus necessitatibus ipsa",
+      url: "https://via.placeholder.com/600/9c184f",
+      thumbnailUrl: "https://via.placeholder.com/150/9c184f",
+    },
+    {
+      albumId: 1,
+      id: 18,
+      title: "laboriosam odit nam necessitatibus et illum dolores reiciendis",
+      url: "https://via.placeholder.com/600/1fe46f",
+      thumbnailUrl: "https://via.placeholder.com/150/1fe46f",
+    },
+    {
+      albumId: 1,
+      id: 19,
+      title: "perferendis nesciunt eveniet et optio a",
+      url: "https://via.placeholder.com/600/56acb2",
+      thumbnailUrl: "https://via.placeholder.com/150/56acb2",
+    },
+    {
+      albumId: 1,
+      id: 20,
+      title:
+        "assumenda voluptatem laboriosam enim consequatur veniam placeat reiciendis error",
+      url: "https://via.placeholder.com/600/8985dc",
+      thumbnailUrl: "https://via.placeholder.com/150/8985dc",
     },
   ];
+
   let categories =
     totalCategories.length > 8 ? totalCategories.slice(0, 8) : totalCategories;
+
   return (
     <>
       <Header />
@@ -81,19 +181,19 @@ function Home() {
       </div>
 
       {/* categories */}
-      <div className="hidden md:flex justify-center gap-14 p-8">
+      <div className="hidden md:flex justify-center gap-14 p-8 overflow-hidden">
         {categories.map((category) => (
           <Link to={`/products/${categories.id}`} key={categories.id}>
             <figure className="flex flex-col items-center">
               <div className="w-20 border-2 rounded-full overflow-hidden ">
                 <img
-                  src={`${category.img}`}
+                  src={`${category.url}`}
                   alt={`${category.title}`}
                   className="w-full rounded-full"
                 />
               </div>
-              <figcaption className="font-semibold text-sm text-nowrap mt-2 text-slate-700 ">
-                {category.title}
+              <figcaption className="font-semibold text-sm mt-2 text-slate-700 text-center text-wrap line-clamp-2">
+                {`Category${category.id}`}
               </figcaption>
             </figure>
           </Link>
@@ -134,7 +234,7 @@ function Home() {
           {Array.from({ length: 15 }).map((_, index) => (
             <Link key={index} to={`/products/${index}`}>
               <ProductCard
-                imgUrl="https://source.unsplash.com/random/300X300"
+                imgUrl="https://via.placeholder.com/150/92c952"
                 name="Product name and shit it is what it is fdgfsdg fdgfd gf d"
                 price={1500}
                 crossPrice={2000}
@@ -156,7 +256,7 @@ function Home() {
           {Array.from({ length: 10 }).map((_, i) => (
             <Link to={"/products/123"} key={i}>
               <ProductCard
-                imgUrl="https://source.unsplash.com/random/300X300"
+                imgUrl="https://via.placeholder.com/150/92c952"
                 name="Product name and shit it is what it is fdgfsdg fdgfd gf d"
                 price={1500}
                 crossPrice={2000}

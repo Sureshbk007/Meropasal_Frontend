@@ -121,7 +121,7 @@ function Header() {
                 ))}
               </div>
 
-              <div className="basis-1/6 flex flex-col gap-5">
+              <div className="basis-1/6 flex flex-col gap-5 border-t-2 border-violet-300 pt-1">
                 <div>
                   <div className="flex justify-between items-center">
                     <span className="font-semibold text-slate-800">Total</span>

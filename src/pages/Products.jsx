@@ -176,7 +176,7 @@ function Products() {
             {Array.from({ length: 16 }).map((_, idx) => (
               <Link key={idx} to={`/products/${idx}`}>
                 <ProductCard
-                  imgUrl="https://source.unsplash.com/random/300X300"
+                  imgUrl="https://via.placeholder.com/150/92c952"
                   name="Product name and shit it is "
                   price={1500}
                   crossPrice={2000}

@@ -224,7 +224,7 @@ function ProductDetails() {
             </div>
 
             <div className="flex gap-4 mt-8 font-medium">
-              <button className="border bg-blue-500 text-white p-4 basis-1/2 rounded-xl">
+              <button className="border bg-blue-500 hover:bg-blue-700 text-white p-4 basis-1/2 rounded-xl">
                 Buy Now
               </button>
               <button className="bg-violet-800 hover:bg-violet-900 text-white p-4 basis-1/2 rounded-xl">
@@ -271,7 +271,7 @@ function ProductDetails() {
             {Array.from({ length: 5 }).map((val, i) => (
               <Link to={"/products/123"} key={i}>
                 <ProductCard
-                  imgUrl="https://source.unsplash.com/random/300X300"
+                  imgUrl="https://via.placeholder.com/150/92c952"
                   name="Product name and shit it is what it is fdgfsdg fdgfd gf d"
                   price={1500}
                   crossPrice={2000}

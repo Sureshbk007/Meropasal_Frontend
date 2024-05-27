@@ -9,12 +9,12 @@ html {
 
 .scrollBar::-webkit-scrollbar{
   height: 13px;
-  background-color: rgb(156, 154, 154);
+  background-color: #cbd5e1;
   border-radius: 10px;
   cursor: pointer;
 }
 .scrollBar::-webkit-scrollbar-thumb{
-  background-color: #374151;
+  background-color: #8b5cf6;
   border-radius: 10px;
   cursor:pointer;
 }
