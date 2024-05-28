@@ -156,7 +156,7 @@ function Home() {
     <>
       <Header />
       {/* banners */}
-      <div className="grid grid-cols-3 grid-rows-2 gap-5 p-5 h-[65vh] ">
+      <div className="grid sm:grid-cols-3 lg:grid-rows-2 gap-2 p-2 max-h-[65vh] ">
         <div className="col-span-2 row-span-2 rounded-xl overflow-hidden shadow-2xl ">
           <img
             src="https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -181,18 +181,18 @@ function Home() {
       </div>
 
       {/* categories */}
-      <div className="hidden md:flex justify-center gap-14 p-8 overflow-hidden">
+      <div className="flex flex-wrap justify-center gap-2 lg:gap-14 px-1 py-4 lg:p-8">
         {categories.map((category) => (
           <Link to={`/products/${category.id}`} key={category.id}>
             <figure className="flex flex-col items-center">
-              <div className="w-20 border-2 rounded-full overflow-hidden ">
+              <div className="w-14 lg:w-20 rounded-full overflow-hidden ">
                 <img
                   src={`${category.url}`}
                   alt={`${category.title}`}
-                  className="w-full rounded-full"
+                  className="w-full"
                 />
               </div>
-              <figcaption className="font-semibold text-sm mt-2 text-slate-700 text-center text-wrap line-clamp-2">
+              <figcaption className="font-semibold text-xs lg:text-sm mt-2 text-slate-700 text-center text-wrap line-clamp-2">
                 {`Category${category.id}`}
               </figcaption>
             </figure>
@@ -202,15 +202,15 @@ function Home() {
         {totalCategories.length > 8 && (
           <Link to="/products">
             <figure className="flex flex-col items-center">
-              <div className="w-20 h-20 border-2 rounded-full overflow-hidden flex justify-center items-center ">
+              <div className="w-14 lg:w-20 aspect-square border-2 rounded-full overflow-hidden flex justify-center items-center ">
                 <LayoutGrid
-                  fillOpacity={0.8}
+                  fillOpacity={0.5}
                   fill="gray"
                   strokeWidth={0}
                   size={40}
                 />
               </div>
-              <figcaption className="font-semibold text-sm text-nowrap mt-2 text-slate-700 ">
+              <figcaption className="font-semibold text-xs lg:text-sm text-nowrap mt-2 text-slate-700 ">
                 All Category
               </figcaption>
             </figure>
@@ -219,18 +219,19 @@ function Home() {
       </div>
 
       {/* flash sale */}
-      <div className="bg-gray-100 p-16 flex flex-col gap-8" id="sale">
-        <div className="flex gap-4 items-center">
+      <div className="bg-gray-100 px-2 py-4 lg:p-16 flex flex-col gap-3 lg:gap-8">
+        <div className="flex gap-2 lg:gap-4 items-center">
           <Zap
-            className="rounded-full bg-black"
             fill="white"
-            size={40}
             strokeWidth={1.5}
+            className="rounded-full bg-black w-8 h-8 lg:w-10 lg:h-10"
           />
-          <h3 className="text-3xl text-slate-800 font-semibold ">Flash Sale</h3>
+          <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold ">
+            Flash Sale
+          </h3>
         </div>
 
-        <div className="overflow-x-auto flex gap-5 pb-3 scrollBar">
+        <div className="overflow-x-auto flex gap-1 lg:gap-5 pb-3 scrollBar">
           {Array.from({ length: 15 }).map((_, idx) => (
             <Link key={idx} to={`/products/${idx}`}>
               <ProductCard
@@ -247,12 +248,12 @@ function Home() {
       </div>
 
       {/* latest products */}
-      <section className="p-16 flex flex-col  gap-8">
-        <h3 className="text-3xl text-slate-800 font-semibold ">
+      <section className="px-2 py-4 lg:p-16 flex flex-col gap-1 lg:gap-8">
+        <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold text-start p-3 lg:p-0">
           Latest Products
         </h3>
 
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10">
+        <div className="grid gap-y-5 lg:gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 justify-items-center ">
           {Array.from({ length: 10 }).map((_, i) => (
             <Link to={"/products/123"} key={i}>
               <ProductCard
@@ -268,8 +269,8 @@ function Home() {
         </div>
       </section>
 
-      <div className="h-60 bg-red-500 flex justify-center items-center bg-[url('https://source.unsplash.com/random/')] bg-no-repeat bg-cover bg-center bg-opacity-10">
-        <span className="text-3xl font-bold text-slate-100 italic drop-shadow-2xl">
+      <div className="bannerGradient h-44 lg:h-60 flex justify-center items-center">
+        <span className="text-xl lg:text-3xl font-bold text-slate-100 italic drop-shadow-2xl">
           "Let's Shop Beyond Boundries"
         </span>
       </div>

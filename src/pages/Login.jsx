@@ -21,14 +21,19 @@ function Login() {
     <>
       <Header />
       <div className="flex">
-        <div className="basis-1/2 p-20 bg-violet-500">
-          <img src={LoginBannerSvg} alt="Login Banner image" />
+        <div className="hidden md:flex items-center justify-center md:basis-1/2 p-10 bg-violet-500 ">
+          <img
+            src={LoginBannerSvg}
+            alt="Login Banner image"
+            className="max-w-[500px] w-full"
+          />
         </div>
-        <div className="basis-1/2 flex flex-col items-center justify-center gap-3 bg-gray-50">
-          <span className="text-2xl text-slate-600 font-semibold">
+
+        <div className="w-full min-h-[70vh] md:basis-1/2 md:min-h-[90vh] flex flex-col items-center justify-center gap-3 bg-gray-50">
+          <span className="text-2xl text-slate-600 font-semibold mb-5">
             Welcome back!
           </span>
-          <form className="flex flex-col gap-3   min-w-72">
+          <form className="flex flex-col gap-3 min-w-72">
             <div>
               <label className="flex flex-col gap-1">
                 <span className="text-sm font-medium text-slate-500">

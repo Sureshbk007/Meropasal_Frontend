@@ -15,7 +15,7 @@ function Drawer({ isOpen, onClose, children }) {
         className="fixed inset-0 bg-black z-50 opacity-80"
         onClick={onClose}
       />
-      <div className="fixed right-0 top-0 bottom-0 w-2/5 bg-slate-50 z-50 transition-all duration-200">
+      <div className="fixed right-0 top-0 bottom-0 text-sm md:text-base w-full lg:w-2/5 bg-slate-50 z-50 transition-all duration-200">
         {children}
       </div>
     </div>,

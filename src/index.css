@@ -8,6 +8,7 @@ html {
 }
 
 .scrollBar::-webkit-scrollbar{
+  display: block;
   height: 13px;
   background-color: #cbd5e1;
   border-radius: 10px;
@@ -21,4 +22,10 @@ html {
 
 .scrollBarHidden::-webkit-scrollbar{
   display: none;
+}
+
+.bannerGradient{
+  background-image: linear-gradient(to bottom,rgb(75, 85, 99, 0.5), rgb(75, 85, 99)), url('https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') ;
+  background-size: cover;
+  background-position: center;
 }

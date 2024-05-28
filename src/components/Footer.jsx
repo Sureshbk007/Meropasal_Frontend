@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 function Footer() {
   const currentDate = new Date().getFullYear();
   return (
-    <div className="bg-gray-900 flex flex-col justify-between text-slate-300">
-      <div className="flex flex-wrap gap-5 justify-around p-8">
-        <div className="flex flex-col items-center justify-center">
+    <div className="bg-gray-900 flex flex-col gap-5 text-slate-300 text-sm sm:text-base">
+      <div className="p-5 flex items-center justify-center sm:justify-between flex-wrap gap-5">
+        <div className="flex flex-col items-center">
           <h3 className="text-2xl font-semibold">MeroPasal.com</h3>
           <p>"Let's Shop Beyond Boundries"</p>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div className="flex  items-center gap-5 lg:gap-10">
           <Link className="block" to="/">
             Home
           </Link>

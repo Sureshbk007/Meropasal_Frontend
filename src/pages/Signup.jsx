@@ -22,8 +22,8 @@ function Signup() {
     <>
       <Header />
       <div className="flex">
-        <div className="basis-1/2 flex flex-col items-center justify-center gap-4 bg-gray-50">
-          <span className="text-2xl text-slate-600 font-semibold">
+        <div className="w-full min-h-[70vh] md:basis-1/2 md:min-h-[90vh] flex flex-col items-center justify-center gap-3 bg-gray-50 p-5">
+          <span className="text-2xl text-slate-600 font-semibold mb-5">
             Create your account
           </span>
           <form className="flex flex-col gap-4 min-w-80">
@@ -142,8 +142,13 @@ function Signup() {
             </Link>
           </div>
         </div>
-        <div className="basis-1/2 p-20 bg-violet-500 ">
-          <img src={SignupBannerSvg} alt="Signup Banner image" />
+
+        <div className="hidden md:flex items-center justify-center basis-1/2 p-10 bg-violet-500 ">
+          <img
+            src={SignupBannerSvg}
+            alt="Signup Banner image"
+            className="max-w-[500px] w-full"
+          />
         </div>
       </div>
       <Footer />
