@@ -5,7 +5,6 @@ import {
   Login,
   Signup,
   PageNotFound,
-  Contact,
   Home,
   ProductDetails,
   Products,
@@ -25,7 +24,6 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="login" element={<Login />} />
       <Route path="Signup" element={<Signup />} />
-      <Route path="contact" element={<Contact />} />
       <Route path="products" element={<Products />} />
       <Route path="products/:slug" element={<ProductDetails />} />
       <Route path="checkout" element={<Checkout />} />
