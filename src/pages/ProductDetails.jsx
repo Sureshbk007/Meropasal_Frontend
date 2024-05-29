@@ -285,7 +285,7 @@ function ProductDetails() {
           </div>
         </details>
 
-        <div className="bg-gray-100 px-2 py-4 lg:px-5 lg:py-5 flex flex-col gap-3 lg:gap-8">
+        <div className="bg-gray-100 px-2 py-4 lg:px-5 lg:py-5 flex flex-col gap-3 lg:gap-8 rounded-lg">
           <div className="flex gap-2 lg:gap-4 items-center">
             <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold ">
               Similar Products
