@@ -167,7 +167,7 @@ function Header() {
 
             <div className="bg-transparent absolute top-full left-0 right-0 h-2"></div>
             {/* Dropdown Menu */}
-            <ul className="hidden sm:flex flex-col absolute top-full right-0 mt-2 bg-slate-50 border rounded-lg group-hover:visible group-hover:opacity-100 opacity-0 transition-opacity duration-500 z-10 w-max">
+            <ul className="invisible sm:flex flex-col absolute top-full right-0 mt-2 bg-slate-50 border rounded-lg group-hover:visible group-hover:opacity-100 opacity-0 transition-opacity duration-500 z-10 w-max">
               <li className="font-medium  flex items-center gap-4 text-sm p-4">
                 <span className="cursor-default">New customer? </span>
                 <Link to="signup" className="text-violet-700">

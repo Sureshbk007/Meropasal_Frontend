@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Footer, Header, ProductCard, StarRating } from "../components";
+import { Home } from "lucide-react";
 
 function ProductDetails() {
   const { slug } = useParams();
@@ -24,11 +25,27 @@ function ProductDetails() {
       url: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       name: "product",
     },
+    {
+      url: "https://images.unsplash.com/photo-1591085686350-798c0f9faa7f?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      name: "product",
+    },
+    {
+      url: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      name: "product",
+    },
+    {
+      url: "https://images.unsplash.com/photo-1591085686350-798c0f9faa7f?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      name: "product",
+    },
+    {
+      url: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      name: "product",
+    },
   ];
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
 
   const [selectedImage, setSelectedImage] = useState(images[0].url);
   const colors = ["red", "blue", "green", "orange"];
@@ -50,11 +67,11 @@ function ProductDetails() {
   return (
     <>
       <Header />
-      <main className="flex flex-col gap-5 px-16 py-5">
+      <main className="flex flex-col gap-4 px-2 lg:px-16 py-2 lg:py-5 text-sm lg:text-base">
         {/* breadcrumbs */}
-        <nav className="flex ">
-          <Link className="hover:text-gray-400" to="/">
-            Home
+        <nav className="flex items-center">
+          <Link to="/">
+            <Home size={20} className="text-slate-800 hover:text-gray-400" />
           </Link>
           {breadList.map((item, idx) => {
             if (!(idx === breadList.length - 1)) {
@@ -74,24 +91,24 @@ function ProductDetails() {
           </div>
         </nav>
 
-        <section className="flex gap-5 ">
-          <div className="basis-1/2 ">
-            <div className="h-96 rounded-lg overflow-hidden">
+        <section className="flex gap-3 lg:gap-5 flex-col lg:flex-row">
+          <div className="basis-1/2">
+            <div className=" h-52 md:h-72 lg:h-96 rounded-lg overflow-hidden border shadow-md bg-gray-100">
               <img
                 src={selectedImage}
-                alt=""
-                className="h-full w-full object-cover object-center"
+                alt="Product image"
+                className="h-full w-full object-contain object-center"
               />
             </div>
-            <div className=" flex gap-5 mt-2 overflow-x-auto p-2 scrollBar">
+            <div className=" flex gap-2 lg:gap-5 mt-2 overflow-x-auto lg:p-2 scrollBarHidden">
               {images.map((image, idx) => (
                 <img
                   src={image.url}
                   key={idx}
                   alt=""
-                  className={`w-24 h-24 object-cover rounded cursor-pointer  ${
+                  className={`w-14 h-14 lg:w-24 lg:h-24 object-cover rounded cursor-pointer  ${
                     selectedImage === image.url
-                      ? "border-gray-400 border-[5px]"
+                      ? "border-violet-500 border-[3px]"
                       : "border-transparent"
                   } `}
                   onClick={handleImageClick}
@@ -99,20 +116,25 @@ function ProductDetails() {
               ))}
             </div>
           </div>
-          <div className="basis-1/2 p-2 pt-0 flex flex-col gap-1 overflow-auto">
-            <h1 className="text-2xl font-medium line-clamp-2">
+
+          <div className="basis-1/2 p-1 lg:p-2 pt-0 flex flex-col lg:gap-1 overflow-auto">
+            <h1 className="text-xl lg:text-2xl font-medium line-clamp-4 tracking-tighter lg:tracking-tight leading-tight md:leading-snug">
               Jordan High red Lorem ipsum dolor sit amet consectetur adipisicing
               elit. Veritatis illo cumque quaerat voluptas eos harum expedita
               reprehenderit nesciunt nam ratione.
             </h1>
-            <div className="flex items-start pt-1 gap-1">
-              <StarRating rating={4.5} size={25} />
-              <span className="text-slate-600 font-medium text-lg">4.5</span>
+            {/* rating */}
+            <div className="flex pt-1 gap-1 items-center">
+              <StarRating rating={4.5} />
+              <span className="text-slate-600 font-medium text-sm lg:text-lg">
+                4.5
+              </span>
             </div>
-            <div className="flex items-end gap-2">
+            {/* price */}
+            <div className="flex items-end gap-2 py-2">
               <data
                 value={1500}
-                className="text-3xl font-semibold text-violet-700"
+                className="text-xl lg:text-3xl font-semibold text-violet-700"
               >
                 Rs 1500
               </data>
@@ -125,18 +147,18 @@ function ProductDetails() {
             {/* colors */}
             {colors.length > 0 && (
               <div className="my-1 flex flex-col gap-1">
-                <div className="text-lg font-medium text-slate-500 mb-1">
+                <div className="lg:text-lg font-medium text-slate-500 lg:mb-1">
                   Color:
-                  <span className="text-slate-700 font-medium ml-3">
+                  <span className="text-slate-700 font-medium ml-1 lg:ml-3">
                     {cartSelect.color}
                   </span>
                 </div>
-                <div className="flex gap-4 overflow-x-auto scrollBar p-2">
+                <div className="flex gap-2 lg:gap-4 overflow-x-auto scrollBar p-1 lg:p-2">
                   {colors.map((color) => (
                     <label
                       className={`px-3 py-1 border border-slate-300 rounded-2xl bg-gray-100 cursor-pointer ${
                         color === cartSelect.color &&
-                        "outline outline-gray-500 outline-2"
+                        "outline outline-violet-500 outline-2"
                       }`}
                       key={color}
                     >
@@ -147,7 +169,7 @@ function ProductDetails() {
                         className="hidden"
                         onChange={handleCartSelectChange}
                       />
-                      <span className="text-sm font-medium text-slate-800 ">
+                      <span className="text-xs lg:text-sm font-medium text-slate-800 ">
                         {color}
                       </span>
                     </label>
@@ -159,18 +181,18 @@ function ProductDetails() {
             {/* size */}
             {sizes.length > 0 && (
               <div className="my-1 flex flex-col gap-1">
-                <div className="text-lg font-medium text-slate-500 mb-1">
+                <div className="lg:text-lg font-medium text-slate-500 mb-1">
                   Size:
-                  <span className="text-slate-700 font-medium ml-3">
+                  <span className="text-slate-700 font-medium ml-1 lg:ml-3">
                     {cartSelect.size}
                   </span>
                 </div>
-                <div className="flex gap-4 overflow-x-auto scrollBar p-2">
+                <div className="flex gap-2 lg:gap-4 overflow-x-auto scrollBar p-1 lg:p-2">
                   {sizes.map((size) => (
                     <label
                       className={`px-3 py-1 border border-slate-300 rounded-2xl bg-gray-100 cursor-pointer ${
                         size === cartSelect.size &&
-                        "outline outline-gray-500 outline-2"
+                        "outline outline-violet-500 outline-2"
                       }`}
                       key={size}
                     >
@@ -181,7 +203,7 @@ function ProductDetails() {
                         className="hidden"
                         onChange={handleCartSelectChange}
                       />
-                      <span className="text-sm font-medium text-slate-800 ">
+                      <span className="text-xs lg:text-sm font-medium text-slate-800 ">
                         {size}
                       </span>
                     </label>
@@ -191,8 +213,8 @@ function ProductDetails() {
             )}
 
             {/* Quantity */}
-            <div className="flex mt-4 items-center ">
-              <span className="text-lg font-medium text-slate-500 mr-5 ">
+            <div className="flex mt-2 lg:mt-4 items-center ">
+              <span className="lg:text-lg font-medium text-slate-500 mr-2 lg:mr-5 ">
                 Quantity:
               </span>
 
@@ -201,7 +223,7 @@ function ProductDetails() {
                   name="quantity"
                   value={cartSelect.quantity}
                   onChange={handleCartSelectChange}
-                  className="px-3 border border-gray-300 rounded-lg bg-gray-100 outline-gray-500 font-medium text-slate-700 cursor-pointer"
+                  className="px-3 border border-gray-300 rounded-lg bg-gray-100 outline-violet-500 font-medium text-slate-700 cursor-pointer"
                 >
                   {Array.from(
                     { length: stockQty > 5 ? 5 : stockQty },
@@ -209,7 +231,7 @@ function ProductDetails() {
                       <option
                         value={idx + 1}
                         key={idx}
-                        className="font-medium text-slate-700"
+                        className="lg:font-medium text-slate-700"
                       >
                         {idx + 1}
                       </option>
@@ -223,11 +245,11 @@ function ProductDetails() {
               )}
             </div>
 
-            <div className="flex gap-4 mt-8 font-medium">
-              <button className="border bg-blue-500 hover:bg-blue-700 text-white p-4 basis-1/2 rounded-xl">
+            <div className="flex gap-4 mt-4 lg:mt-8 font-medium">
+              <button className="border bg-blue-500 hover:bg-blue-700 text-white p-3 lg:p-4 basis-1/2 rounded-xl">
                 Buy Now
               </button>
-              <button className="bg-violet-800 hover:bg-violet-900 text-white p-4 basis-1/2 rounded-xl">
+              <button className="bg-violet-800 hover:bg-violet-900 text-white p-3 lg:p-4 basis-1/2 rounded-xl">
                 Add to Cart
               </button>
             </div>
@@ -236,9 +258,9 @@ function ProductDetails() {
 
         <details
           open
-          className="cursor-pointer p-5 bg-gray-200 rounded-lg outline-none"
+          className="text-sm lg:text-base cursor-pointer p-2 lg:p-5 bg-gray-100 rounded-lg outline-none"
         >
-          <summary className="text-xl font-semibold text-slate-600 my-2">
+          <summary className="text-base lg:text-xl font-semibold text-slate-600 my-2 outline-none">
             Product Details
           </summary>
           <div>
@@ -263,13 +285,16 @@ function ProductDetails() {
           </div>
         </details>
 
-        <section className="flex flex-col gap-5 ">
-          <h3 className="text-3xl text-slate-800 font-semibold ">
-            Similar product
-          </h3>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10">
-            {Array.from({ length: 5 }).map((val, i) => (
-              <Link to={"/products/123"} key={i}>
+        <div className="bg-gray-100 px-2 py-4 lg:px-5 lg:py-5 flex flex-col gap-3 lg:gap-8">
+          <div className="flex gap-2 lg:gap-4 items-center">
+            <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold ">
+              Similar Products
+            </h3>
+          </div>
+
+          <div className="overflow-x-auto flex gap-1 lg:gap-5 pb-3 scrollBarHidden">
+            {Array.from({ length: 15 }).map((_, idx) => (
+              <Link key={idx} to={`/products/${idx}`}>
                 <ProductCard
                   imgUrl="https://via.placeholder.com/150/92c952"
                   name="Product name and shit it is what it is fdgfsdg fdgfd gf d"
@@ -277,12 +302,11 @@ function ProductDetails() {
                   crossPrice={2000}
                   rating={4.5}
                   ratingCount={5}
-                  className="w-52"
                 />
               </Link>
             ))}
           </div>
-        </section>
+        </div>
       </main>
       <Footer />
     </>
