@@ -292,8 +292,8 @@ function ProductDetails() {
             </h3>
           </div>
 
-          <div className="overflow-x-auto flex gap-1 lg:gap-5 pb-3 scrollBarHidden">
-            {Array.from({ length: 15 }).map((_, idx) => (
+          <div className="overflow-x-auto flex gap-1 lg:gap-5 pb-3 scrollbar-none lg:scrollbar-show">
+            {Array.from({ length: 7 }).map((_, idx) => (
               <Link key={idx} to={`/products/${idx}`}>
                 <ProductCard
                   imgUrl="https://via.placeholder.com/150/92c952"

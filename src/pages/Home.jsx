@@ -231,7 +231,10 @@ function Home() {
           </h3>
         </div>
 
-        <div className="overflow-x-auto flex gap-1 lg:gap-5 pb-3 scrollBar">
+        <div
+          className="overflow-x-auto flex gap-1 lg:gap-5 pb-3 scrollbar-none lg:scrollbar-show
+        "
+        >
           {Array.from({ length: 15 }).map((_, idx) => (
             <Link key={idx} to={`/products/${idx}`}>
               <ProductCard
