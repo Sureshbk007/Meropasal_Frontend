@@ -9,9 +9,9 @@ function Footer() {
       <div className="p-5 lg:p-10 flex items-center justify-center sm:justify-between flex-wrap gap-5">
         <div className="flex flex-col items-center gap-2">
           <Link to="/">
-            <img src={BrandLogoSvg} alt="brand name" />
+            <img src={BrandLogoSvg} alt="brand name" className="max-h-10" />
           </Link>
-          <p>"Let's Shop Beyond Boundries"</p>
+          <p>"All You Need, Just a Click Away"</p>
         </div>
         <div className="flex  items-center gap-5 lg:gap-10">
           <Link className="block" to="/">

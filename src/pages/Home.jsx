@@ -274,7 +274,7 @@ function Home() {
 
       <div className="bannerGradient h-44 lg:h-60 flex justify-center items-center">
         <span className="text-xl lg:text-3xl font-bold text-slate-100 italic drop-shadow-2xl">
-          "Let's Shop Beyond Boundries"
+          "All You Need, Just a Click Away"
         </span>
       </div>
 

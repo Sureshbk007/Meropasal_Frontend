@@ -25,7 +25,7 @@ function Header() {
       {/*navbar */}
       <div className="flex px-3 py-2 md:px-16 gap-3 items-center justify-between sticky top-0 z-50 bg-slate-50 text-xs sm:text-base border-b">
         <Link to="/">
-          <img src={BrandLogoSvg} alt="brand name" />
+          <img src={BrandLogoSvg} alt="brand name" className="max-h-10" />
         </Link>
         <form className="relative border-2 border-slate-300 rounded-lg w-full max-w-lg flex items-center">
           <input
