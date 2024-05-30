@@ -25,22 +25,6 @@ function ProductDetails() {
       url: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       name: "product",
     },
-    {
-      url: "https://images.unsplash.com/photo-1591085686350-798c0f9faa7f?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "product",
-    },
-    {
-      url: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "product",
-    },
-    {
-      url: "https://images.unsplash.com/photo-1591085686350-798c0f9faa7f?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "product",
-    },
-    {
-      url: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "product",
-    },
   ];
 
   useEffect(() => {
@@ -100,12 +84,12 @@ function ProductDetails() {
                 className="h-full w-full object-contain object-center"
               />
             </div>
-            <div className=" flex gap-2 lg:gap-5 mt-2 overflow-x-auto lg:p-2 scrollBarHidden">
+            <div className=" flex gap-2 lg:gap-5 mt-2 overflow-x-auto lg:p-2 scrollbar-none lg:scrollbar-show">
               {images.map((image, idx) => (
                 <img
                   src={image.url}
                   key={idx}
-                  alt=""
+                  alt="product image list"
                   className={`w-14 h-14 lg:w-24 lg:h-24 object-cover rounded cursor-pointer  ${
                     selectedImage === image.url
                       ? "border-violet-500 border-[3px]"
@@ -153,7 +137,7 @@ function ProductDetails() {
                     {cartSelect.color}
                   </span>
                 </div>
-                <div className="flex gap-2 lg:gap-4 overflow-x-auto scrollBar p-1 lg:p-2">
+                <div className="flex gap-2 lg:gap-4 overflow-x-auto flex-wrap p-1 lg:p-2">
                   {colors.map((color) => (
                     <label
                       className={`px-3 py-1 border border-slate-300 rounded-2xl bg-gray-100 cursor-pointer ${
@@ -187,7 +171,7 @@ function ProductDetails() {
                     {cartSelect.size}
                   </span>
                 </div>
-                <div className="flex gap-2 lg:gap-4 overflow-x-auto scrollBar p-1 lg:p-2">
+                <div className="flex gap-2 lg:gap-4 overflow-x-auto p-1 lg:p-2 flex-wrap">
                   {sizes.map((size) => (
                     <label
                       className={`px-3 py-1 border border-slate-300 rounded-2xl bg-gray-100 cursor-pointer ${
