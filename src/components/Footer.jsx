@@ -1,13 +1,16 @@
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import { Link } from "react-router-dom";
+import { BrandLogoSvg } from "../assets/svg";
 
 function Footer() {
   const currentDate = new Date().getFullYear();
   return (
     <div className="bg-gray-900 flex flex-col gap-5 text-slate-300 text-sm sm:text-base">
-      <div className="p-5 flex items-center justify-center sm:justify-between flex-wrap gap-5">
-        <div className="flex flex-col items-center">
-          <h3 className="text-2xl font-semibold">MeroPasal.com</h3>
+      <div className="p-5 lg:p-10 flex items-center justify-center sm:justify-between flex-wrap gap-5">
+        <div className="flex flex-col items-center gap-2">
+          <Link to="/">
+            <img src={BrandLogoSvg} alt="brand name" />
+          </Link>
           <p>"Let's Shop Beyond Boundries"</p>
         </div>
         <div className="flex  items-center gap-5 lg:gap-10">

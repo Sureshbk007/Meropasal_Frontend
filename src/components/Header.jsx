@@ -14,9 +14,9 @@ import {
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Drawer from "./Drawer";
-
+import { BrandLogoSvg } from "../assets/svg/";
 function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const stockQty = 5;
 
@@ -25,19 +25,35 @@ function Header() {
       {/*navbar */}
       <div className="flex px-3 py-2 md:px-16 gap-3 items-center justify-between sticky top-0 z-50 bg-slate-50 text-xs sm:text-base border-b">
         <Link to="/">
-          <div className="border p-2 bg-brand text-white rounded-xl">
-            MeroPasal
-          </div>
+          <img src={BrandLogoSvg} alt="brand name" />
         </Link>
-        <form className="border-2 border-slate-300 rounded-lg px-2 w-full flex max-w-60 sm:max-w-96">
+        <form className="relative border-2 border-slate-300 rounded-lg w-full max-w-lg flex items-center">
           <input
             type="search"
             className="p-2 outline-none w-full bg-transparent text-slate-700"
             placeholder="Search..."
           />
-          <button type="submit" className="flex justify-center items-center ">
+          <button type="submit" className="mr-2">
             <Search color="gray" className="h-4 sm:h-auto" />
           </button>
+          {/* search list */}
+          <ul className="hidden absolute top-[45px] bg-gray-100 w-full border-2 rounded-lg overflow-hidden">
+            <li className="p-2 hover:bg-gray-300 cursor-pointer">
+              shoes for men
+            </li>
+            <li className="p-2 hover:bg-gray-300 cursor-pointer">
+              shoes for men
+            </li>
+            <li className="p-2 hover:bg-gray-300 cursor-pointer">
+              shoes for men
+            </li>
+            <li className="p-2 hover:bg-gray-300 cursor-pointer">
+              shoes for men
+            </li>
+            <li className="p-2 hover:bg-gray-300 cursor-pointer">
+              shoes for men
+            </li>
+          </ul>
         </form>
 
         <div className="flex gap-1 sm:gap-4 items-center relative ">
@@ -49,7 +65,7 @@ function Header() {
             <span className="absolute top-0 right-0 bg-red-500 text-white rounded-xl text-[10px] sm:text-sm text-center font-medium w-5"></span>
           </button>
           <Drawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)}>
-            <div className="p-2 sm:p-6 flex flex-col justify-evenly sm:justify-between h-full">
+            <div className="p-2 sm:p-6 flex flex-col justify-evenly sm:justify-between h-full ">
               <div className="flex items-center justify-between text-violet-700 pb-3 border-b-2 border-violet-300">
                 <Truck className="h-8" />
                 <MoveRight
@@ -59,7 +75,7 @@ function Header() {
                   className="p-1 text-xl rounded-lg hover:bg-violet-200 cursor-pointer h-8 sm:h-auto"
                 />
               </div>
-              <div className="basis-4/6 flex flex-col overflow-y-auto scrollBarHidden ">
+              <div className="basis-4/6 flex flex-col overflow-y-auto scrollbar-none ">
                 {Array.from({ length: 10 }, (_, idx) => (
                   <div
                     className="flex justify-between items-center p-2 gap-2"

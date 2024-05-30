@@ -159,7 +159,7 @@ function Products() {
           onClose={() => setIsSidebarFilterOpen(false)}
           side="left"
         >
-          <div className=" flex flex-col gap-4 px-10 py-5 h-full overflow-y-auto">
+          <div className=" flex flex-col gap-4 px-10 py-5 h-full overflow-y-auto scrollbar-none">
             <div className="flex items-center justify-between">
               <h4 className="text-xl font-medium text-slate-800">Filters</h4>
               <span
