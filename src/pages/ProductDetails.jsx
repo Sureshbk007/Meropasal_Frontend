@@ -93,7 +93,7 @@ function ProductDetails() {
 
         <section className="flex gap-3 lg:gap-5 flex-col lg:flex-row">
           <div className="basis-1/2">
-            <div className=" h-52 md:h-72 lg:h-96 rounded-lg overflow-hidden border shadow-md bg-gray-100">
+            <div className=" h-52 md:h-72 lg:h-96 rounded-lg overflow-hidden ">
               <img
                 src={selectedImage}
                 alt="Product image"
