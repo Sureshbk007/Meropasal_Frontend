@@ -43,9 +43,9 @@ function ProductDetails() {
     },
   ];
 
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const [selectedImage, setSelectedImage] = useState(images[0].url);
   const colors = ["red", "blue", "green", "orange"];
