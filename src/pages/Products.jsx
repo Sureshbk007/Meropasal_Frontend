@@ -153,13 +153,13 @@ function Products() {
         </div>
 
         {/* sidebar filters */}
-        <div className={`${isSidebarOpen ? "display-block" : "hidden"}`}>
+        <div className={`${isSidebarOpen ? "block" : "hidden"}`}>
           <div
             className="fixed inset-0 bg-black z-50 opacity-80"
             onClick={() => setIsSidebarOpen(false)}
           ></div>
           <div className="fixed w-4/5 sm:w-3/5 z-50 left-0 top-0 bottom-0 bg-slate-50 overflow-scroll">
-            <div className=" flex flex-col gap-4 px-10 py-5 shadow-2xl w-full ">
+            <div className=" flex flex-col gap-4 px-10 py-5 w-full ">
               <div className="flex items-center justify-between">
                 <h4 className="text-xl font-medium text-slate-800">Filters</h4>
                 <span
@@ -281,6 +281,7 @@ function Products() {
             </div>
           </div>
         </div>
+        {/* sidebar end */}
 
         <div className="xl:basis-4/5 p-5  flex flex-col gap-3 w-full">
           <div className="pb-2 border-b flex justify-between flex-col lg:flex-row gap-2">
