@@ -207,7 +207,7 @@ function Home() {
                   fillOpacity={0.5}
                   fill="gray"
                   strokeWidth={0}
-                  size={40}
+                  size={30}
                 />
               </div>
               <figcaption className="font-semibold text-xs lg:text-sm text-nowrap mt-2 text-slate-700 ">
