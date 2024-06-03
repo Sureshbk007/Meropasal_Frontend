@@ -1,5 +1,5 @@
 import { MoveLeft } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { esewaPng, vanPng } from "../assets/png/";
 
@@ -15,6 +15,10 @@ function Checkout() {
     paymentMethod: "COD",
   });
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleFormData = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -23,12 +27,12 @@ function Checkout() {
     navigate(-1);
   };
   return (
-    <div className="flex flex-col mx-28 my-10 text-slate-700">
+    <div className="flex flex-col mx-4 my-10 sm:mx-8 lg:mx-28 text-slate-700 gap-10">
       <h1 className="text-center text-3xl font-bold text-slate-800">
         MeroPasal
       </h1>
-      <form className="flex gap-10">
-        <div className="basis-3/5 flex flex-col gap-8">
+      <form className="flex flex-col md:flex-row gap-10">
+        <div className="basis-3/5 flex flex-col gap-8 order-last md:order-none">
           <div className="flex items-center gap-3">
             <MoveLeft
               onClick={goBack}
@@ -42,7 +46,7 @@ function Checkout() {
           <div className="flex flex-col gap-2">
             <h4 className="font-bold">1. General Information</h4>
 
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-col lg:flex-row">
               {/* fullname */}
               <div className="basis-1/2 flex flex-col">
                 <label className="flex flex-col">
@@ -75,7 +79,7 @@ function Checkout() {
                     name="email"
                     value={formData.email}
                     onChange={handleFormData}
-                    className="border outline-violet-500 px-2 py-1 border-gray-300 rounded"
+                    className="border outline-violet-500 px-2 py-1 border-gray-300 rounded w-full"
                   />
                 </label>
                 {/* <span className="text-red-600 text-sm">
@@ -131,7 +135,7 @@ function Checkout() {
               </span> */}
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-col md:flex-row">
               {/* Address */}
               <div className="basis-1/2 flex flex-col">
                 <label className="flex flex-col">
@@ -179,7 +183,7 @@ function Checkout() {
                 }`}
               >
                 <div className="flex flex-col items-center justify-center">
-                  <img src={vanPng} alt="van image" className="h-9" />
+                  <img src={vanPng} alt="van image" className="h-7 lg:h-9" />
                   <span className="text-sm">Cash on delivery</span>
                   <input
                     type="radio"
@@ -197,7 +201,7 @@ function Checkout() {
                 }`}
               >
                 <div className="flex flex-col items-center justify-center ">
-                  <img src={esewaPng} alt="esewa logo" className="h-9" />
+                  <img src={esewaPng} alt="esewa logo" className="h-7 lg:h-9" />
                 </div>
                 <input
                   type="radio"
@@ -210,7 +214,8 @@ function Checkout() {
             </div>
           </div>
         </div>
-        <div className="basis-2/5 flex flex-col h-full gap-3 p-4 shadow-xl border-2 border-gray-300 rounded-lg">
+
+        <div className="basis-2/5 md:min-w-[370px] flex flex-col h-full gap-3 p-4 shadow-xl border-2 border-gray-300 rounded-lg">
           <h3 className="font-semibold text-center">Order Summary</h3>
           <div className="flex flex-col gap-3">
             {Array.from({ length: 3 }, (_, idx) => (
@@ -252,12 +257,18 @@ function Checkout() {
             </div>
             <button
               type="submit"
-              className="bg-violet-800 hover:bg-violet-900 w-full p-3 text-white font-medium rounded-lg"
+              className="hidden md:block bg-violet-800 hover:bg-violet-900 w-full p-3 text-white font-medium rounded-lg"
             >
               Place Order
             </button>
           </div>
         </div>
+        <button
+          type="submit"
+          className="block md:hidden bg-violet-800 hover:bg-violet-900 w-full p-3 text-white font-medium rounded-lg order-last"
+        >
+          Place Order
+        </button>
       </form>
     </div>
   );

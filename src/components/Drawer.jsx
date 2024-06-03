@@ -1,13 +1,23 @@
+import { useEffect } from "react";
 import ReactDOM from "react-dom";
 
 function Drawer({ isOpen, onClose, children, side = "right", className }) {
-  if (isOpen) {
-    document.documentElement.style.overflow = "hidden";
-    document.documentElement.style.marginRight = "17px";
-  } else {
-    document.documentElement.style.overflow = "auto";
-    document.documentElement.style.marginRight = "0";
-  }
+  useEffect(() => {
+    const body = document.body.style;
+
+    if (isOpen) {
+      body.overflow = "hidden";
+      body.marginRight = "17px";
+    } else {
+      body.overflow = "";
+      body.marginRight = "";
+    }
+
+    return () => {
+      body.overflow = "";
+      body.marginRight = "";
+    };
+  }, [isOpen]);
 
   return ReactDOM.createPortal(
     <>
