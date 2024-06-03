@@ -2,44 +2,59 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Footer, Header, ProductCard, StarRating } from "../components";
 import { Home } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/slices/cartSlice";
 
 function ProductDetails() {
   const { slug } = useParams();
   const location = useLocation();
+  const dispatch = useDispatch();
   const breadList = location.pathname.split("/").filter((data) => data);
 
-  const images = [
-    {
-      url: "https://fastly.picsum.photos/id/866/1280/720.jpg?hmac=kfyiYNokOFMcfgqjn74ycjuYX5nBOtmyoVYS7JXvweM",
-      name: "product",
-    },
-    {
-      url: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "product",
-    },
-    {
-      url: "https://images.unsplash.com/photo-1591085686350-798c0f9faa7f?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "product",
-    },
-    {
-      url: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      name: "product",
-    },
-  ];
+  const [product, setProduct] = useState({
+    id: Date.now(),
+    name: "Jordan nike air 150",
+    images: [
+      {
+        url: "https://fastly.picsum.photos/id/866/1280/720.jpg?hmac=kfyiYNokOFMcfgqjn74ycjuYX5nBOtmyoVYS7JXvweM",
+        name: "product",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        name: "product",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1591085686350-798c0f9faa7f?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        name: "product",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        name: "product",
+      },
+    ],
+    colors: ["red", "blue", "green", "orange"],
+    sizes: ["sm", "m", "lg", "xl", "2xl"],
+    stockQty: 10,
+    rating: 4.5,
+    price: 1300,
+    crossedPrice: 1500,
+  });
+
+  const [selectedImage, setSelectedImage] = useState(product.images[0].url);
+  const [cartSelect, setCartSelect] = useState({
+    id: product.id,
+    name: product.name,
+    img: product.images[0].url,
+    color: product.colors[0],
+    size: product.sizes[1],
+    selectedQty: 1,
+    stockQty: product.stockQty,
+    price: product.price,
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const [selectedImage, setSelectedImage] = useState(images[0].url);
-  const colors = ["red", "blue", "green", "orange"];
-  const sizes = ["sm", "m", "lg", "xl", "2xl"];
-  const stockQty = 10;
-  const [cartSelect, setCartSelect] = useState({
-    color: colors[0],
-    size: sizes[1],
-    quantity: 1,
-  });
 
   const handleImageClick = (e) => {
     setSelectedImage(e.target.src);
@@ -48,6 +63,7 @@ function ProductDetails() {
   const handleCartSelectChange = (e) => {
     setCartSelect({ ...cartSelect, [e.target.name]: e.target.value });
   };
+
   return (
     <>
       <Header />
@@ -85,7 +101,7 @@ function ProductDetails() {
               />
             </div>
             <div className=" flex gap-2 lg:gap-5 mt-2 overflow-x-auto lg:p-2 scrollbar-none lg:scrollbar-show">
-              {images.map((image, idx) => (
+              {product.images.map((image, idx) => (
                 <img
                   src={image.url}
                   key={idx}
@@ -103,33 +119,37 @@ function ProductDetails() {
 
           <div className="basis-1/2 p-1 lg:p-2 pt-0 flex flex-col lg:gap-1 overflow-auto">
             <h1 className="text-xl lg:text-2xl font-medium line-clamp-4 tracking-tighter lg:tracking-tight leading-tight md:leading-snug">
-              Jordan High red Lorem ipsum dolor sit amet consectetur adipisicing
-              elit. Veritatis illo cumque quaerat voluptas eos harum expedita
-              reprehenderit nesciunt nam ratione.
+              {product.name}
             </h1>
             {/* rating */}
             <div className="flex pt-1 gap-1 items-center">
-              <StarRating rating={4.5} />
+              <StarRating rating={product.rating} />
               <span className="text-slate-600 font-medium text-sm lg:text-lg">
-                4.5
+                {product.rating}
               </span>
             </div>
             {/* price */}
             <div className="flex items-end gap-2 py-2">
               <data
-                value={1500}
+                value={product.price}
                 className="text-xl lg:text-3xl font-semibold text-violet-700"
               >
-                Rs 1500
+                Rs {product.price}
               </data>
               <data value="2000" className="line-through opacity-50">
-                Rs 2000
+                Rs {product.crossedPrice}
               </data>
-              <span className="font-medium text-slate-600">20% off</span>
+              <span className="font-medium text-slate-600">
+                {Math.ceil(
+                  ((product.crossedPrice - product.price) * 100) /
+                    product.crossedPrice
+                )}
+                % off
+              </span>
             </div>
 
             {/* colors */}
-            {colors.length > 0 && (
+            {product.colors.length > 0 && (
               <div className="my-1 flex flex-col gap-1">
                 <div className="lg:text-lg font-medium text-slate-500 lg:mb-1">
                   Color:
@@ -138,7 +158,7 @@ function ProductDetails() {
                   </span>
                 </div>
                 <div className="flex gap-2 lg:gap-4 overflow-x-auto flex-wrap p-1 lg:p-2">
-                  {colors.map((color) => (
+                  {product.colors.map((color) => (
                     <label
                       className={`px-3 py-1 border border-slate-300 rounded-2xl bg-gray-100 cursor-pointer ${
                         color === cartSelect.color &&
@@ -163,7 +183,7 @@ function ProductDetails() {
             )}
 
             {/* size */}
-            {sizes.length > 0 && (
+            {product.sizes.length > 0 && (
               <div className="my-1 flex flex-col gap-1">
                 <div className="lg:text-lg font-medium text-slate-500 mb-1">
                   Size:
@@ -172,7 +192,7 @@ function ProductDetails() {
                   </span>
                 </div>
                 <div className="flex gap-2 lg:gap-4 overflow-x-auto p-1 lg:p-2 flex-wrap">
-                  {sizes.map((size) => (
+                  {product.sizes.map((size) => (
                     <label
                       className={`px-3 py-1 border border-slate-300 rounded-2xl bg-gray-100 cursor-pointer ${
                         size === cartSelect.size &&
@@ -202,15 +222,15 @@ function ProductDetails() {
                 Quantity:
               </span>
 
-              {stockQty > 0 ? (
+              {product.stockQty > 0 ? (
                 <select
-                  name="quantity"
+                  name="selectedQty"
                   value={cartSelect.quantity}
                   onChange={handleCartSelectChange}
                   className="px-3 border border-gray-300 rounded-lg bg-gray-100 outline-violet-500 font-medium text-slate-700 cursor-pointer"
                 >
                   {Array.from(
-                    { length: stockQty > 5 ? 5 : stockQty },
+                    { length: product.stockQty > 5 ? 5 : product.stockQty },
                     (_, idx) => (
                       <option
                         value={idx + 1}
@@ -233,7 +253,10 @@ function ProductDetails() {
               <button className="border bg-blue-500 hover:bg-blue-700 text-white p-3 lg:p-4 basis-1/2 rounded-xl">
                 Buy Now
               </button>
-              <button className="bg-violet-800 hover:bg-violet-900 text-white p-3 lg:p-4 basis-1/2 rounded-xl">
+              <button
+                className="bg-violet-800 hover:bg-violet-900 text-white p-3 lg:p-4 basis-1/2 rounded-xl"
+                onClick={() => dispatch(addToCart(cartSelect))}
+              >
                 Add to Cart
               </button>
             </div>

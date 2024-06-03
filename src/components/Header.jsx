@@ -11,13 +11,18 @@ import {
   User,
   UserCircle,
 } from "lucide-react";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import Drawer from "./Drawer";
 import { BrandLogoSvg } from "../assets/svg/";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromCart, toggleCart } from "../store/slices/cartSlice";
+
 function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLogged);
+  const userData = useSelector((state) => state.auth.data);
+  const isCartOpen = useSelector((state) => state.cart.isCartOpen);
+  const orders = useSelector((state) => state.cart.orders);
   const stockQty = 5;
 
   return (
@@ -59,105 +64,120 @@ function Header() {
         <div className="flex gap-1 sm:gap-4 items-center relative ">
           <button
             className="relative cursor-pointer p-2 rounded-full hover:bg-violet-600 group"
-            onClick={() => setDrawerOpen(true)}
+            onClick={() => dispatch(toggleCart(true))}
           >
             <ShoppingCart className="h-5 sm:h-auto text-slate-700 group-hover:text-white" />
-            <span className="absolute top-0 right-0 bg-red-500 text-white rounded-xl text-[10px] sm:text-sm text-center font-medium w-5"></span>
+            <span className="absolute top-0 right-0 bg-red-500 text-white rounded-xl text-[10px] sm:text-sm text-center font-medium w-5">
+              {orders.length === 0 ? "" : orders.length}
+            </span>
           </button>
-          <Drawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)}>
-            <div className="p-2 sm:p-6 flex flex-col justify-evenly sm:justify-between h-full ">
-              <div className="flex items-center justify-between text-violet-700 pb-3 border-b-2 border-violet-300">
-                <Truck className="h-8" />
-                <MoveRight
-                  onClick={() => setDrawerOpen(false)}
-                  size={32}
-                  strokeWidth={3}
-                  className="p-1 text-xl rounded-lg hover:bg-violet-200 cursor-pointer h-8 sm:h-auto"
-                />
-              </div>
-              <div className="basis-4/6 flex flex-col overflow-y-auto scrollbar-none ">
-                {Array.from({ length: 10 }, (_, idx) => (
-                  <div
-                    className="flex justify-between items-center p-2 gap-2"
-                    key={idx}
-                  >
-                    <div className="flex gap-2">
-                      <img
-                        src="https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="product image"
-                        className="h-16 w-16 md:w-24 object-cover object-center rounded"
-                      />
-                      <div className="flex flex-col justify-center">
-                        <span className="line-clamp-1 text-slate-800 font-medium">
-                          Nike Low Calf shoes
-                        </span>
-                        <span className="text-slate-500 text-sm">
-                          Variant: red/lg
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      {stockQty > 0 ? (
-                        <select
-                          name="quantity"
-                          className="px-3 border border-gray-300 rounded-lg bg-gray-100 outline-gray-500 font-medium text-slate-700 cursor-pointer text-xs'"
-                        >
-                          {Array.from(
-                            { length: stockQty > 5 ? 5 : stockQty },
-                            (_, idx) => (
-                              <option
-                                value={idx + 1}
-                                key={idx}
-                                className="font-medium text-slate-700"
-                              >
-                                {idx + 1}
-                              </option>
-                            )
-                          )}
-                        </select>
-                      ) : (
-                        <span className="text-white border bg-red-400 px-3 rounded-lg cursor-not-allowed">
-                          Out of stock
-                        </span>
-                      )}
-                    </div>
-                    <data value="" className="text-xs sm:text-sm font-medium">
-                      Rs 25000
-                    </data>
-                    <Trash2
-                      color="white"
-                      size={28}
-                      className="bg-red-500 p-1 rounded-full cursor-pointer h-7 sm:h-auto"
-                    />
-                  </div>
-                ))}
-              </div>
 
-              <div className="basis-1/6 flex flex-col gap-5 border-t-2 border-violet-300 pt-1">
-                <div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-semibold text-slate-800">Total</span>
-                    <data>Rs 1500</data>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-semibold text-slate-800">
-                      Shipping
-                    </span>
-                    <span className="text-sm text-slate-700">
-                      Cost will appear on checkout
-                    </span>
-                  </div>
+          {/* cart items */}
+          {orders.length > 0 && (
+            <Drawer
+              isOpen={isCartOpen}
+              onClose={() => dispatch(toggleCart(false))}
+            >
+              <div className="p-2 sm:p-6 flex flex-col justify-evenly sm:justify-between h-full ">
+                <div className="flex items-center justify-between text-violet-700 pb-3 border-b-2 border-violet-300">
+                  <Truck className="h-8" />
+                  <MoveRight
+                    onClick={() => dispatch(toggleCart(false))}
+                    size={32}
+                    strokeWidth={3}
+                    className="p-1 text-xl rounded-lg hover:bg-violet-200 cursor-pointer h-8 sm:h-auto"
+                  />
                 </div>
-                <Link
-                  to="/checkout"
-                  className="uppercase md:text-lg text-white font-bold bg-violet-800 w-full p-4 rounded-lg text-center hover:bg-violet-900"
-                  onClick={() => setDrawerOpen(false)}
-                >
-                  checkout
-                </Link>
+                <div className="basis-4/6 flex flex-col overflow-y-auto scrollbar-none ">
+                  {orders.map((order) => (
+                    <div
+                      className="flex justify-between items-center p-2 gap-2"
+                      key={order.id}
+                    >
+                      <div className="flex gap-2">
+                        <img
+                          src={order.img}
+                          alt="product image"
+                          className="h-16 w-16 md:w-24 object-cover object-center rounded"
+                        />
+                        <div className="flex flex-col justify-center">
+                          <span className="line-clamp-1 text-slate-800 font-medium">
+                            {order.name}
+                          </span>
+                          <span className="text-slate-500 text-sm">
+                            Variant: {order.color}/{order.size}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        {order.stockQty > 0 ? (
+                          <select
+                            name="quantity"
+                            className="px-3 border border-gray-300 rounded-lg bg-gray-100 outline-violet-500 font-medium text-slate-700 cursor-pointer text-xs'"
+                          >
+                            {Array.from(
+                              {
+                                length: order.stockQty > 5 ? 5 : order.stockQty,
+                              },
+                              (_, idx) => (
+                                <option
+                                  value={idx + 1}
+                                  key={idx}
+                                  className="font-medium text-slate-700"
+                                >
+                                  {idx + 1}
+                                </option>
+                              )
+                            )}
+                          </select>
+                        ) : (
+                          <span className="text-white border bg-red-400 px-3 rounded-lg cursor-not-allowed">
+                            Out of stock
+                          </span>
+                        )}
+                      </div>
+                      <data value="" className="text-xs sm:text-sm font-medium">
+                        Rs {order.price}
+                      </data>
+                      <Trash2
+                        color="white"
+                        size={28}
+                        className="bg-red-500 p-1 rounded-full cursor-pointer h-7 sm:h-auto"
+                        onClick={() => dispatch(removeFromCart(order.id))}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="basis-1/6 flex flex-col gap-5 border-t-2 border-violet-300 pt-1">
+                  <div>
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold text-slate-800">
+                        Total
+                      </span>
+                      <data>Rs 1500</data>
+                    </div>
+                    <div className="flex justify-between items-center gap-10">
+                      <span className="font-semibold text-slate-800">
+                        Shipping
+                      </span>
+                      <span className="text-sm text-slate-700">
+                        Cost will appear on checkout
+                      </span>
+                    </div>
+                  </div>
+
+                  <Link
+                    to="/checkout"
+                    className="uppercase md:text-lg text-white font-bold bg-violet-800 w-full p-4 rounded-lg text-center hover:bg-violet-900"
+                    onClick={() => setDrawerOpen(false)}
+                  >
+                    checkout
+                  </Link>
+                </div>
               </div>
-            </div>
-          </Drawer>
+            </Drawer>
+          )}
 
           <div className="border rounded-full hover:bg-violet-600 group shadow bg-slate-200 relative">
             {isLoggedIn ? (
