@@ -14,18 +14,18 @@ const StarRating = ({ rating = 0, className }) => {
       </div>
       <div className="flex absolute top-0">
         {Array.from({ length: fullStars }, (_, idx) => (
-          <Star key={`full-${idx}`} strokeWidth={0.1} fill="yellow" />
+          <Star key={`full-${idx}`} strokeWidth={0} fill="#FDCC0D" />
         ))}
         {Array.from({ length: halfStars }, (_, idx) => (
           <StarHalf
             key={`half-${idx}`}
             strokeWidth={0.1}
-            fill="yellow"
+            fill="#FDCC0D"
             className="relative"
           ></StarHalf>
         ))}
         {Array.from({ length: emptyStars }, (_, idx) => (
-          <Star key={`empty-${idx}`} strokeWidth={0.1} fill="white" />
+          <Star key={`empty-${idx}`} strokeWidth={0.1} />
         ))}
       </div>
     </div>

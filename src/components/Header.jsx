@@ -15,7 +15,11 @@ import { Link } from "react-router-dom";
 import Drawer from "./Drawer";
 import { BrandLogoSvg } from "../assets/svg/";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart, toggleCart } from "../store/slices/cartSlice";
+import {
+  changeCartProductQty,
+  removeFromCart,
+  toggleCart,
+} from "../store/slices/cartSlice";
 
 function Header() {
   const dispatch = useDispatch();
@@ -23,7 +27,15 @@ function Header() {
   const userData = useSelector((state) => state.auth.data);
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
   const orders = useSelector((state) => state.cart.orders);
-  const stockQty = 5;
+
+  const totalCartAmount = orders.reduce(
+    (total, item) => total + item.selectedQty * item.price,
+    0
+  );
+
+  const handleCartQtyChange = (e, id) => {
+    dispatch(changeCartProductQty({ id, selectedQty: e.target.value }));
+  };
 
   return (
     <>
@@ -113,6 +125,8 @@ function Header() {
                         {order.stockQty > 0 ? (
                           <select
                             name="quantity"
+                            value={order.selectedQty}
+                            onChange={(e) => handleCartQtyChange(e, order.id)}
                             className="px-3 border border-gray-300 rounded-lg bg-gray-100 outline-violet-500 font-medium text-slate-700 cursor-pointer text-xs'"
                           >
                             {Array.from(
@@ -155,7 +169,7 @@ function Header() {
                       <span className="font-semibold text-slate-800">
                         Total
                       </span>
-                      <data>Rs 1500</data>
+                      <data>Rs {totalCartAmount}</data>
                     </div>
                     <div className="flex justify-between items-center gap-10">
                       <span className="font-semibold text-slate-800">

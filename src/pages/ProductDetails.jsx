@@ -4,6 +4,8 @@ import { Footer, Header, ProductCard, StarRating } from "../components";
 import { Home } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../store/slices/cartSlice";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
 function ProductDetails() {
   const { slug } = useParams();
@@ -35,14 +37,14 @@ function ProductDetails() {
     colors: ["red", "blue", "green", "orange"],
     sizes: ["sm", "m", "lg", "xl", "2xl"],
     stockQty: 10,
-    rating: 4.5,
+    rating: 2.5,
     price: 1300,
     crossedPrice: 1500,
   });
 
   const [selectedImage, setSelectedImage] = useState(product.images[0].url);
   const [cartSelect, setCartSelect] = useState({
-    id: product.id,
+    id: Date.now(),
     name: product.name,
     img: product.images[0].url,
     color: product.colors[0],
@@ -117,8 +119,8 @@ function ProductDetails() {
             </div>
           </div>
 
-          <div className="basis-1/2 p-1 lg:p-2 pt-0 flex flex-col lg:gap-1 overflow-auto">
-            <h1 className="text-xl lg:text-2xl font-medium line-clamp-4 tracking-tighter lg:tracking-tight leading-tight md:leading-snug">
+          <div className="basis-1/2 p-1 lg:p-2 pt-0 flex flex-col">
+            <h1 className="text-slate-700 text-xl lg:text-2xl font-medium line-clamp-4 tracking-tighter lg:tracking-tight leading-tight md:leading-snug">
               {product.name}
             </h1>
             {/* rating */}
@@ -132,7 +134,7 @@ function ProductDetails() {
             <div className="flex items-end gap-2 py-2">
               <data
                 value={product.price}
-                className="text-xl lg:text-3xl font-semibold text-violet-700"
+                className="text-lg lg:text-2xl font-semibold text-slate-700"
               >
                 Rs {product.price}
               </data>
@@ -299,7 +301,29 @@ function ProductDetails() {
             </h3>
           </div>
 
-          <div className="overflow-x-auto flex gap-1 lg:gap-5 pb-3 scrollbar-none lg:scrollbar-show">
+          <Carousel
+            className="z-40"
+            swipeable
+            draggable={false}
+            removeArrowOnDeviceType={["mobile"]}
+            responsive={{
+              desktop: {
+                breakpoint: { max: 3000, min: 1024 },
+                items: 5,
+                slidesToSlide: 4,
+              },
+              tablet: {
+                breakpoint: { max: 1024, min: 464 },
+                items: 4.5,
+                slidesToSlide: 4,
+              },
+              mobile: {
+                breakpoint: { max: 464, min: 0 },
+                items: 2.15,
+                slidesToSlide: 5,
+              },
+            }}
+          >
             {Array.from({ length: 7 }).map((_, idx) => (
               <Link key={idx} to={`/products/${idx}`}>
                 <ProductCard
@@ -312,7 +336,7 @@ function ProductDetails() {
                 />
               </Link>
             ))}
-          </div>
+          </Carousel>
         </div>
       </main>
       <Footer />

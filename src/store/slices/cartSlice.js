@@ -33,9 +33,17 @@ const cartSlice = createSlice({
         state.isCartOpen = false;
       }
     },
+    changeCartProductQty: (state, action) => {
+      const { id, selectedQty } = action.payload;
+      const product = state.orders.find((item) => item.id === id);
+      if (product) {
+        product.selectedQty = +selectedQty;
+      }
+    },
   },
 });
 
-export const { toggleCart, addToCart, removeFromCart } = cartSlice.actions;
+export const { toggleCart, addToCart, removeFromCart, changeCartProductQty } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

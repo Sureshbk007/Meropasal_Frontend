@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { LayoutGrid, Zap } from "lucide-react";
 import { Footer, Header, ProductCard } from "../components";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
 function Home() {
   const totalCategories = [
@@ -231,9 +233,28 @@ function Home() {
           </h3>
         </div>
 
-        <div
-          className="overflow-x-auto flex gap-1 lg:gap-5 pb-3 scrollbar-none lg:scrollbar-show
-        "
+        <Carousel
+          className="p-2 z-40"
+          swipeable
+          draggable={false}
+          removeArrowOnDeviceType={["mobile"]}
+          responsive={{
+            desktop: {
+              breakpoint: { max: 3000, min: 1024 },
+              items: 5,
+              slidesToSlide: 4,
+            },
+            tablet: {
+              breakpoint: { max: 1024, min: 464 },
+              items: 4.5,
+              slidesToSlide: 4,
+            },
+            mobile: {
+              breakpoint: { max: 464, min: 0 },
+              items: 2.2,
+              slidesToSlide: 5,
+            },
+          }}
         >
           {Array.from({ length: 15 }).map((_, idx) => (
             <Link key={idx} to={`/products/${idx}`}>
@@ -247,7 +268,7 @@ function Home() {
               />
             </Link>
           ))}
-        </div>
+        </Carousel>
       </div>
 
       {/* latest products */}
