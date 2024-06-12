@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { LogOut } from "lucide-react";
 
 const initialState = {
-  isLogged: true,
+  isLogged: false,
   data: {
     id: "1",
     fullName: "Suresh bk",

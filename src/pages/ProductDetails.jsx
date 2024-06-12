@@ -7,6 +7,7 @@ import { addToCart } from "../store/slices/cartSlice";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { toast } from "react-toastify";
+import currencyFormat from "../utils/currencyFormat";
 
 function ProductDetails() {
   const { slug } = useParams();
@@ -73,10 +74,7 @@ function ProductDetails() {
 
   const handleAddtoCart = () => {
     dispatch(addToCart(cartSelect));
-    toast.success("Product added to cart!", {
-      autoClose: 2000,
-      position: "top-right",
-    });
+    toast.success("Product added to cart!");
   };
 
   return (
@@ -149,10 +147,10 @@ function ProductDetails() {
                 value={product.price}
                 className="text-lg lg:text-2xl font-semibold text-slate-700"
               >
-                Rs {product.price}
+                {currencyFormat(product.price)}
               </data>
               <data value="2000" className="line-through opacity-50">
-                Rs {product.crossedPrice}
+                {currencyFormat(product.crossedPrice)}
               </data>
               <span className="font-medium text-slate-600">
                 {Math.ceil(

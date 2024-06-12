@@ -20,6 +20,7 @@ import {
   removeFromCart,
   toggleCart,
 } from "../store/slices/cartSlice";
+import currencyFormat from "../utils/currencyFormat";
 
 function Header() {
   const dispatch = useDispatch();
@@ -151,7 +152,7 @@ function Header() {
                         )}
                       </div>
                       <data value="" className="text-xs sm:text-sm font-medium">
-                        Rs {order.price}
+                        {currencyFormat(order.price * order.selectedQty)}
                       </data>
                       <Trash2
                         color="white"
@@ -169,7 +170,7 @@ function Header() {
                       <span className="font-semibold text-slate-800">
                         Total
                       </span>
-                      <data>Rs {totalCartAmount}</data>
+                      <data>{currencyFormat(totalCartAmount)}</data>
                     </div>
                     <div className="flex justify-between items-center gap-10">
                       <span className="font-semibold text-slate-800">
@@ -192,9 +193,9 @@ function Header() {
             </Drawer>
           )}
 
-          <div className="border rounded-full hover:bg-violet-600 group shadow bg-slate-200 relative">
+          <div className="border rounded-full hover:bg-violet-600 group shadow bg-slate-200 relative ">
             {isLoggedIn ? (
-              <Link to="/dashboard" className="block w-7 h-7 sm:w-10 ">
+              <Link to="/dashboard" className="block w-7 h-8 sm:w-10">
                 <img
                   src={userData.img}
                   alt="profile picture"
@@ -219,7 +220,7 @@ function Header() {
             <ul className="invisible sm:flex flex-col absolute top-full right-0 mt-2 bg-slate-50 border rounded-lg group-hover:visible group-hover:opacity-100 opacity-0 transition-opacity duration-500 z-10 w-max">
               <li className="font-medium  flex items-center gap-4 text-sm p-4">
                 <span className="cursor-default">New customer? </span>
-                <Link to="signup" className="text-violet-700">
+                <Link to="/signup" className="text-violet-700">
                   Signup
                 </Link>
               </li>

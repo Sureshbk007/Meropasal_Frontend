@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { esewaPng, vanPng } from "../assets/png/";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleCart } from "../store/slices/cartSlice";
+import currencyFormat from "../utils/currencyFormat";
 function Checkout() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -23,9 +24,10 @@ function Checkout() {
     dispatch(toggleCart(false));
   }, []);
 
-  const totalPrice = orders.reduce((total, currOrder) => {
-    return total + currOrder.selectedQty * currOrder.price;
-  }, 0);
+  const totalCartAmount = orders.reduce(
+    (total, item) => total + item.selectedQty * item.price,
+    0
+  );
 
   const handleFormData = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -250,7 +252,7 @@ function Checkout() {
                   </div>
                 </div>
                 <data className="font-medium">
-                  Rs {order.selectedQty * order.price}
+                  {currencyFormat(order.selectedQty * order.price)}
                 </data>
               </div>
             ))}
@@ -260,7 +262,9 @@ function Checkout() {
             <div>
               <div className="flex items-center justify-between">
                 <span className="">Sub-total</span>
-                <data className="font-medium">Rs {totalPrice}</data>
+                <data className="font-medium">
+                  {currencyFormat(totalCartAmount)}
+                </data>
               </div>
               <div className="flex items-center justify-between">
                 <span>Delivery Charge</span>
@@ -268,7 +272,9 @@ function Checkout() {
               </div>
               <div className="flex items-center justify-between">
                 <span>Total</span>
-                <data className="font-medium">Rs {totalPrice}</data>
+                <data className="font-medium">
+                  {currencyFormat(totalCartAmount)}
+                </data>
               </div>
             </div>
             <button

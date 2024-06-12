@@ -1,4 +1,6 @@
 import { StarRating } from "../components";
+import currencyFormat from "../utils/currencyFormat";
+
 function ProductCard({ imgUrl, name, price, crossPrice, rating, className }) {
   return (
     <div
@@ -16,10 +18,12 @@ function ProductCard({ imgUrl, name, price, crossPrice, rating, className }) {
           </div>
         </div>
         <div className="flex gap-2 items-center">
-          <span className="text-slate-700 lg:text-lg font-bold">Rs {price}</span>
+          <span className="text-slate-700 lg:text-lg font-bold">
+            {currencyFormat(price)}
+          </span>
           {crossPrice && (
             <span className="line-through text-xs lg:text-sm opacity-60">
-              Rs {crossPrice}
+              {currencyFormat(crossPrice)}
             </span>
           )}
         </div>
