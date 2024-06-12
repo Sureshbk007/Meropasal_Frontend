@@ -2,7 +2,8 @@ import { MoveLeft } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { esewaPng, vanPng } from "../assets/png/";
-
+import { useDispatch, useSelector } from "react-redux";
+import { toggleCart } from "../store/slices/cartSlice";
 function Checkout() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -15,9 +16,16 @@ function Checkout() {
     paymentMethod: "COD",
   });
 
+  const orders = useSelector((state) => state.cart.orders);
+  const dispatch = useDispatch();
   useEffect(() => {
     window.scrollTo(0, 0);
+    dispatch(toggleCart(false));
   }, []);
+
+  const totalPrice = orders.reduce((total, currOrder) => {
+    return total + currOrder.selectedQty * currOrder.price;
+  }, 0);
 
   const handleFormData = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -26,6 +34,7 @@ function Checkout() {
   const goBack = () => {
     navigate(-1);
   };
+
   return (
     <div className="flex flex-col mx-4 my-10 sm:mx-8 lg:mx-28 text-slate-700 gap-10">
       <h1 className="text-center text-3xl font-bold text-slate-800">
@@ -218,24 +227,31 @@ function Checkout() {
         <div className="basis-2/5 md:min-w-[370px] flex flex-col h-full gap-3 p-4 shadow-xl border-2 border-gray-300 rounded-lg">
           <h3 className="font-semibold text-center">Order Summary</h3>
           <div className="flex flex-col gap-3">
-            {Array.from({ length: 3 }, (_, idx) => (
-              <div className="flex justify-between" key={idx}>
+            {orders.map((order) => (
+              <div className="flex justify-between" key={order.id}>
                 <div className="flex gap-3">
                   <img
-                    src="https://via.placeholder.com/150/92c952"
-                    alt="product image"
+                    src={order.img}
+                    alt={order.name}
                     className="h-20 w-20 object-cover object-center rounded"
                   />
                   <div className="flex flex-col text-sm">
-                    <span className="font-medium">Nike air jordan</span>
-                    <span className="text-slate-500">Variant: red/large</span>
+                    <span className="font-medium">{order.name}</span>
+                    <span className="text-slate-500">
+                      Variant: {order?.color}/{order.size}
+                    </span>
                     <div>
-                      <span className="font-medium">Rs 250</span>
-                      <span className="text-slate-400"> x 1</span>
+                      <span className="font-medium">Rs {order.price}</span>
+                      <span className="text-slate-400">
+                        {" "}
+                        x {order.selectedQty}
+                      </span>
                     </div>
                   </div>
                 </div>
-                <data className="font-medium">Rs 1200</data>
+                <data className="font-medium">
+                  Rs {order.selectedQty * order.price}
+                </data>
               </div>
             ))}
           </div>
@@ -244,7 +260,7 @@ function Checkout() {
             <div>
               <div className="flex items-center justify-between">
                 <span className="">Sub-total</span>
-                <data className="font-medium">Rs 17000</data>
+                <data className="font-medium">Rs {totalPrice}</data>
               </div>
               <div className="flex items-center justify-between">
                 <span>Delivery Charge</span>
@@ -252,7 +268,7 @@ function Checkout() {
               </div>
               <div className="flex items-center justify-between">
                 <span>Total</span>
-                <data className="font-medium">Rs 17000</data>
+                <data className="font-medium">Rs {totalPrice}</data>
               </div>
             </div>
             <button

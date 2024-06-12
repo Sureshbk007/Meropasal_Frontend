@@ -184,7 +184,6 @@ function Header() {
                   <Link
                     to="/checkout"
                     className="uppercase md:text-lg text-white font-bold bg-violet-800 w-full p-4 rounded-lg text-center hover:bg-violet-900"
-                    onClick={() => setDrawerOpen(false)}
                   >
                     checkout
                   </Link>
@@ -195,11 +194,11 @@ function Header() {
 
           <div className="border rounded-full hover:bg-violet-600 group shadow bg-slate-200 relative">
             {isLoggedIn ? (
-              <Link to="/dashboard" className="block w-7 sm:w-10 ">
+              <Link to="/dashboard" className="block w-7 h-7 sm:w-10 ">
                 <img
-                  src="https://www.thispersondoesnotexist.com"
+                  src={userData.img}
                   alt="profile picture"
-                  className="w-full object-cover rounded-full"
+                  className="w-full h-full object-cover rounded-full"
                 />
               </Link>
             ) : (

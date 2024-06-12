@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../store/slices/cartSlice";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { toast } from "react-toastify";
 
 function ProductDetails() {
   const { slug } = useParams();
@@ -63,7 +64,19 @@ function ProductDetails() {
   };
 
   const handleCartSelectChange = (e) => {
-    setCartSelect({ ...cartSelect, [e.target.name]: e.target.value });
+    const value =
+      e.target.name === "selectedQty"
+        ? parseInt(e.target.value)
+        : e.target.value;
+    setCartSelect({ ...cartSelect, [e.target.name]: value });
+  };
+
+  const handleAddtoCart = () => {
+    dispatch(addToCart(cartSelect));
+    toast.success("Product added to cart!", {
+      autoClose: 2000,
+      position: "top-right",
+    });
   };
 
   return (
@@ -257,7 +270,7 @@ function ProductDetails() {
               </button>
               <button
                 className="bg-violet-800 hover:bg-violet-900 text-white p-3 lg:p-4 basis-1/2 rounded-xl"
-                onClick={() => dispatch(addToCart(cartSelect))}
+                onClick={handleAddtoCart}
               >
                 Add to Cart
               </button>

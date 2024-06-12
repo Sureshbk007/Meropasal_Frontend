@@ -19,12 +19,24 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    toggleCart: (state) => {
-      if (state.orders.length > 0) state.isCartOpen = !state.isCartOpen;
+    toggleCart: (state, action) => {
+      state.isCartOpen = action.payload;
     },
+
     addToCart: (state, action) => {
-      state.orders.push(action.payload);
+      const product = action.payload;
+      const existingProduct = state.orders.find(
+        (order) => order.id === product.id
+      );
+
+      if (existingProduct) {
+        const newQty = existingProduct.selectedQty + product.selectedQty;
+        existingProduct.selectedQty = newQty > 5 ? 5 : newQty;
+      } else {
+        state.orders.push(product);
+      }
     },
+
     removeFromCart: (state, action) => {
       state.orders = state.orders.filter(
         (order) => order.id !== action.payload
@@ -33,6 +45,7 @@ const cartSlice = createSlice({
         state.isCartOpen = false;
       }
     },
+
     changeCartProductQty: (state, action) => {
       const { id, selectedQty } = action.payload;
       const product = state.orders.find((item) => item.id === id);
