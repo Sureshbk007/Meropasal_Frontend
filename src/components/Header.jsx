@@ -86,11 +86,11 @@ function Header() {
           </button>
 
           {/* cart items */}
-          {orders.length > 0 && (
-            <Drawer
-              isOpen={isCartOpen}
-              onClose={() => dispatch(toggleCart(false))}
-            >
+          <Drawer
+            isOpen={isCartOpen}
+            onClose={() => dispatch(toggleCart(false))}
+          >
+            {orders.length > 0 ? (
               <div className="p-2 sm:p-6 flex flex-col justify-evenly sm:justify-between h-full ">
                 <div className="flex items-center justify-between text-violet-700 pb-3 border-b-2 border-violet-300">
                   <Truck className="h-8" />
@@ -190,8 +190,23 @@ function Header() {
                   </Link>
                 </div>
               </div>
-            </Drawer>
-          )}
+            ) : (
+              <div className="p-2 sm:p-6 w-96">
+                <div className="flex items-center justify-between text-violet-700 pb-3 border-b-2 border-violet-300">
+                  <Truck className="h-8" />
+                  <MoveRight
+                    onClick={() => dispatch(toggleCart(false))}
+                    size={32}
+                    strokeWidth={3}
+                    className="p-1 text-xl rounded-lg hover:bg-violet-200 cursor-pointer h-8 sm:h-auto"
+                  />
+                </div>
+                <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-lg font-medium text-slate-600">
+                  Cart is Empty
+                </div>
+              </div>
+            )}
+          </Drawer>
 
           <div className="border rounded-full hover:bg-violet-600 group shadow bg-slate-200 relative ">
             {isLoggedIn ? (

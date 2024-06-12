@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Footer, Header, ProductCard, StarRating } from "../components";
-import { Home } from "lucide-react";
+import { Home, ShoppingBag } from "lucide-react";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../store/slices/cartSlice";
+import { addToCart, toggleCart } from "../store/slices/cartSlice";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { toast } from "react-toastify";
 import currencyFormat from "../utils/currencyFormat";
 
 function ProductDetails() {
@@ -74,7 +73,7 @@ function ProductDetails() {
 
   const handleAddtoCart = () => {
     dispatch(addToCart(cartSelect));
-    toast.success("Product added to cart!");
+    dispatch(toggleCart(true));
   };
 
   return (
@@ -262,15 +261,12 @@ function ProductDetails() {
               )}
             </div>
 
-            <div className="flex gap-4 mt-4 lg:mt-8 font-medium">
-              <button className="border bg-blue-500 hover:bg-blue-700 text-white p-3 lg:p-4 basis-1/2 rounded-xl">
-                Buy Now
-              </button>
+            <div className="mt-4 lg:mt-8 font-medium">
               <button
-                className="bg-violet-800 hover:bg-violet-900 text-white p-3 lg:p-4 basis-1/2 rounded-xl"
+                className="flex gap-2 justify-center items-center bg-violet-800 hover:bg-violet-900 text-white p-3 lg:p-5 rounded-xl w-full"
                 onClick={handleAddtoCart}
               >
-                Add to Cart
+                <ShoppingBag /> Add to Cart
               </button>
             </div>
           </div>
