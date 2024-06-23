@@ -4,30 +4,51 @@ const initialState = {
   isLogged: false,
   data: null,
   loading: false,
-  error: null,
+  error: {
+    login: null,
+    signup: null,
+  },
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logout: (state) => {
-      state.isLogged = false;
+    clearLoginError: (state) => {
+      state.error.login = null;
+    },
+    clearSignupError: (state) => {
+      state.error.signup = null;
     },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(signup.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(signup.fulfilled, (state, action) => {
+        state.data = action.payload.data;
+        state.loading = false;
+        state.error.signup = null;
+        state.isLogged = true;
+      })
+      .addCase(signup.rejected, (state, action) => {
+        state.error.signup = action.payload.errors;
+        state.loading = false;
+        state.isLogged = false;
+        state.data = null;
+      })
       .addCase(login.pending, (state) => {
         state.loading = true;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.data = action.payload.data;
         state.loading = false;
-        state.error = null;
+        state.error.login = null;
         state.isLogged = true;
       })
       .addCase(login.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error.login = action.payload.errors;
         state.loading = false;
         state.isLogged = false;
         state.data = null;
@@ -37,10 +58,34 @@ const authSlice = createSlice({
         state.data = null;
       })
       .addCase(logout.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error.login = action.payload;
       });
   },
 });
+
+export const { clearLoginError, clearSignupError } = authSlice.actions;
+
+export const signup = createAsyncThunk(
+  "auth/signup",
+  async (signupData, { rejectWithValue }) => {
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signupData),
+      });
+      const data = await response.json();
+      if (!data.success) {
+        return rejectWithValue(data);
+      }
+      return data;
+    } catch (error) {
+      return rejectWithValue({ message: "Failed to signup" });
+    }
+  }
+);
 
 export const login = createAsyncThunk(
   "auth/login",
@@ -55,7 +100,7 @@ export const login = createAsyncThunk(
       });
       const data = await response.json();
       if (!data.success) {
-        return rejectWithValue(data.errors);
+        return rejectWithValue(data);
       }
       return data;
     } catch (error) {

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { SignupBannerSvg, GoogleSvg } from "../assets/svg/";
-import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Eye, EyeOff, LoaderCircle, Lock, Mail, User } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Footer, Header } from "../components";
+import { useDispatch, useSelector } from "react-redux";
+import { signup } from "../store/slices/authSlice";
 
 function Signup() {
   const [signupData, setSignupData] = useState({
@@ -10,8 +12,11 @@ function Signup() {
     email: "",
     password: "",
   });
-
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const error = useSelector((state) => state.auth.error.signup);
+  const loading = useSelector((state) => state.auth.loading);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSignupChange = (e) => {
     setSignupData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -21,7 +26,13 @@ function Signup() {
     setIsPasswordVisible((prev) => !prev);
   };
 
-  const handleFormSubmit = () => {};
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const resultAction = await dispatch(signup(signupData));
+    if (signup.fulfilled.match(resultAction)) {
+      navigate("/");
+    }
+  };
   return (
     <>
       <Header />
@@ -55,7 +66,7 @@ function Signup() {
                   />
                 </div>
               </label>
-              {/* <span className="text-red-600 text-sm">invalid fullname</span> */}
+              <span className="text-red-600 text-sm">{error?.fullName}</span>
             </div>
 
             <div>
@@ -79,9 +90,7 @@ function Signup() {
                   />
                 </div>
               </label>
-              {/* <span className="text-red-600 text-sm">
-              Incorrect email address
-            </span> */}
+              <span className="text-red-600 text-sm">{error?.email}</span>
             </div>
 
             <div className="flex flex-col gap-1">
@@ -120,13 +129,17 @@ function Signup() {
                   )}
                 </div>
               </label>
-              {/* <span className="text-red-600 text-sm">Incorrect password</span> */}
+              <span className="text-red-600 text-sm">{error?.password}</span>
             </div>
             <button
               type="submit"
               className="bg-violet-700 text-white p-3 rounded-lg hover:bg-violet-900"
             >
-              Sign Up
+              {loading ? (
+                <LoaderCircle className="animate-spin " />
+              ) : (
+                <span>Sign Up</span>
+              )}
             </button>
           </form>
           <span className="text-slate-500 text-sm before:content-['-_'] after:content-['_-'] ">

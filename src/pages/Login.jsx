@@ -12,7 +12,7 @@ function Login() {
     password: "",
   });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const error = useSelector((state) => state.auth.error);
+  const error = useSelector((state) => state.auth.error.login);
   const loading = useSelector((state) => state.auth.loading);
   const dispatch = useDispatch();
   const navigate = useNavigate();
