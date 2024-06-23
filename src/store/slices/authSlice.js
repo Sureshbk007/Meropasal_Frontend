@@ -1,31 +1,85 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { LogOut } from "lucide-react";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLogged: false,
-  data: {
-    id: "1",
-    fullName: "Suresh bk",
-    email: "suresh@gmail.com",
-    role: "ADMIN",
-    img: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
+  data: null,
+  loading: false,
+  error: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state, action) => {
-      state.isLogged = true;
-      state.data = action.payload;
-    },
-
     logout: (state) => {
       state.isLogged = false;
-      state.data = {};
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.data = action.payload.data;
+        state.loading = false;
+        state.error = null;
+        state.isLogged = true;
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = false;
+        state.isLogged = false;
+        state.data = null;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.isLogged = false;
+        state.data = null;
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.error = action.payload;
+      });
+  },
 });
-export const { login, logout } = authSlice.actions;
+
+export const login = createAsyncThunk(
+  "auth/login",
+  async (loginData, { rejectWithValue }) => {
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
+      const data = await response.json();
+      if (!data.success) {
+        return rejectWithValue(data.errors);
+      }
+      return data;
+    } catch (error) {
+      return rejectWithValue({ message: "Failed to login" });
+    }
+  }
+);
+
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+      const data = await response.json();
+      if (!data.success) {
+        return rejectWithValue(data.message);
+      }
+      return data.message;
+    } catch (error) {
+      return rejectWithValue({ message: "Failed to logout" });
+    }
+  }
+);
+
 export default authSlice.reducer;

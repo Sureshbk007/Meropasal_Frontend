@@ -3,14 +3,17 @@ import { SignupBannerSvg, GoogleSvg } from "../assets/svg/";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Footer, Header } from "../components";
+
 function Signup() {
   const [signupData, setSignupData] = useState({
     fullName: "",
     email: "",
     password: "",
   });
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const handleSignup = (e) => {
+
+  const handleSignupChange = (e) => {
     setSignupData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -18,6 +21,7 @@ function Signup() {
     setIsPasswordVisible((prev) => !prev);
   };
 
+  const handleFormSubmit = () => {};
   return (
     <>
       <Header />
@@ -26,7 +30,10 @@ function Signup() {
           <span className="text-2xl text-slate-600 font-semibold mb-5">
             Create your account
           </span>
-          <form className="flex flex-col gap-4 min-w-80">
+          <form
+            className="flex flex-col gap-4 min-w-80"
+            onSubmit={handleFormSubmit}
+          >
             <div>
               <label className="flex flex-col gap-1">
                 <span className="text-sm font-medium text-slate-500">
@@ -43,7 +50,7 @@ function Signup() {
                     name="fullName"
                     value={signupData.fullName}
                     className="outline-none px-2 bg-transparent text-sm w-full"
-                    onChange={handleSignup}
+                    onChange={handleSignupChange}
                     placeholder="Ram Bahadur"
                   />
                 </div>
@@ -67,7 +74,7 @@ function Signup() {
                     name="email"
                     value={signupData.email}
                     className="outline-none px-2 bg-transparent text-sm w-full"
-                    onChange={handleSignup}
+                    onChange={handleSignupChange}
                     placeholder="you@example.com"
                   />
                 </div>
@@ -94,7 +101,7 @@ function Signup() {
                       name="password"
                       value={signupData.password}
                       className="outline-none px-2 bg-transparent text-sm w-full"
-                      onChange={handleSignup}
+                      onChange={handleSignupChange}
                       placeholder="****************"
                     />
                   </div>

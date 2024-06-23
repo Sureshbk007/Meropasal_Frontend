@@ -1,20 +1,36 @@
 import React, { useState } from "react";
 import { LoginBannerSvg, GoogleSvg } from "../assets/svg/";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Eye, EyeOff, LoaderCircle, Lock, Mail } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Footer, Header } from "../components";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../store/slices/authSlice";
+
 function Login() {
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const error = useSelector((state) => state.auth.error);
+  const loading = useSelector((state) => state.auth.loading);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleLogin = (e) => {
     setLoginData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handlePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const resultAction = await dispatch(login(loginData));
+    if (login.fulfilled.match(resultAction)) {
+      navigate("/");
+    }
   };
 
   return (
@@ -33,7 +49,10 @@ function Login() {
           <span className="text-2xl text-slate-600 font-semibold mb-5">
             Welcome back!
           </span>
-          <form className="flex flex-col gap-3 min-w-72">
+          <form
+            className="flex flex-col gap-3 min-w-72"
+            onSubmit={handleFormSubmit}
+          >
             <div>
               <label className="flex flex-col gap-1">
                 <span className="text-sm font-medium text-slate-500">
@@ -55,9 +74,7 @@ function Login() {
                   />
                 </div>
               </label>
-              {/* <span className="text-red-600 text-sm">
-              Incorrect email address
-            </span> */}
+              <span className="text-red-600 text-sm">{error?.email}</span>
             </div>
 
             <div className="flex flex-col gap-1">
@@ -96,7 +113,7 @@ function Login() {
                   )}
                 </div>
               </label>
-              {/* <span className="text-red-600 text-sm">Incorrect password</span> */}
+              <span className="text-red-600 text-sm">{error?.password}</span>
               <Link to="#" className="text-sm text-violet-900 text-right">
                 Forgot Password?
               </Link>
@@ -104,9 +121,13 @@ function Login() {
 
             <button
               type="submit"
-              className="bg-violet-700 text-white p-3 rounded-lg hover:bg-violet-900"
+              className="bg-violet-700 text-white p-3 rounded-lg hover:bg-violet-900 flex justify-center items-center"
             >
-              Login
+              {loading ? (
+                <LoaderCircle className="animate-spin " />
+              ) : (
+                <span>Login</span>
+              )}
             </button>
           </form>
           <span className="text-slate-500 text-sm before:content-['-_'] after:content-['_-'] ">

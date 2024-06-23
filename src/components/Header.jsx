@@ -2,6 +2,7 @@ import {
   ChevronDown,
   CircleUserRound,
   Home,
+  LogOut,
   MoveRight,
   Package,
   Search,
@@ -20,7 +21,10 @@ import {
   removeFromCart,
   toggleCart,
 } from "../store/slices/cartSlice";
+import { logout } from "../store/slices/authSlice";
 import currencyFormat from "../utils/currencyFormat";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 function Header() {
   const dispatch = useDispatch();
@@ -28,6 +32,26 @@ function Header() {
   const userData = useSelector((state) => state.auth.data);
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
   const orders = useSelector((state) => state.cart.orders);
+  const [isUserOptionsOpen, setIsUserOptionsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsUserOptionsOpen(false);
+      }
+    }
+
+    if (isUserOptionsOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isUserOptionsOpen]);
 
   const totalCartAmount = orders.reduce(
     (total, item) => total + item.selectedQty * item.price,
@@ -36,6 +60,15 @@ function Header() {
 
   const handleCartQtyChange = (e, id) => {
     dispatch(changeCartProductQty({ id, selectedQty: e.target.value }));
+  };
+
+  const handleLogout = async () => {
+    const resultAction = await dispatch(logout());
+    if (logout.fulfilled.match(resultAction)) {
+      toast.success(resultAction.payload || "Logout successfully");
+    } else {
+      toast.error("Failed to logout");
+    }
   };
 
   return (
@@ -81,7 +114,7 @@ function Header() {
           >
             <ShoppingCart className="h-5 sm:h-auto text-slate-700 group-hover:text-white" />
             <span className="absolute top-0 right-0 bg-red-500 text-white rounded-xl text-[10px] sm:text-sm text-center font-medium w-5">
-              {orders.length === 0 ? "" : orders.length}
+              {orders.length === 0 ? 0 : orders.length}
             </span>
           </button>
 
@@ -207,51 +240,68 @@ function Header() {
               </div>
             )}
           </Drawer>
+          <div ref={dropdownRef}>
+            <div className="border rounded-full hover:bg-violet-600 group shadow bg-slate-200 relative overflow-hidden">
+              {isLoggedIn ? (
+                <button
+                  className="flex items-center sm:gap-2 h-10 w-10 cursor-pointer group-hover:bg-slate-50"
+                  onClick={() => setIsUserOptionsOpen((prev) => !prev)}
+                >
+                  <img
+                    src={
+                      userData?.img ||
+                      "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" ||
+                      "https://cdn-icons-png.flaticon.com/128/10412/10412383.png"
+                    }
+                    alt="profile picture"
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  className="flex items-center sm:gap-2 py-2 px-3"
+                >
+                  <UserCircle className="hidden sm:block text-slate-700 group-hover:text-slate-50 h-4 sm:h-auto" />
+                  <span className="text-slate-700 font-medium group-hover:text-slate-50">
+                    Login
+                  </span>
+                </Link>
+              )}
+            </div>
 
-          <div className="border rounded-full hover:bg-violet-600 group shadow bg-slate-200 relative ">
-            {isLoggedIn ? (
-              <Link to="/dashboard" className="block w-7 h-8 sm:w-10">
-                <img
-                  src={userData.img}
-                  alt="profile picture"
-                  className="w-full h-full object-cover rounded-full"
-                />
-              </Link>
-            ) : (
-              <Link to="/login" className="flex items-center sm:gap-2 p-2">
-                <UserCircle className="hidden sm:block text-slate-700 group-hover:text-slate-50 h-4 sm:h-auto" />
-                <span className="text-slate-700 font-medium group-hover:text-slate-50">
-                  Login
-                </span>
-                <ChevronDown
-                  size={16}
-                  className="hidden sm:block group-hover:rotate-180 group-hover:text-slate-50 transition-transform duration-300 drop-shadow"
-                />
-              </Link>
+            {/* Dropdown list */}
+            {isLoggedIn && isUserOptionsOpen && (
+              <ul className="sm:flex flex-col absolute top-full right-0 mt-2 bg-slate-50 border rounded-lg transition-opacity duration-500 z-50 w-max visible opacity-100 ">
+                <li className="font-medium  flex items-center gap-4 text-sm p-4">
+                  <span className="cursor-default">New customer? </span>
+                  <Link to="/signup" className="text-violet-700">
+                    Signup
+                  </Link>
+                </li>
+                <li className="p-3 hover:bg-slate-200 rounded-lg text-sm">
+                  <Link to="/user" className="flex items-center gap-2">
+                    <User size={18} />
+                    My Profile
+                  </Link>
+                </li>
+                <li className="p-3  hover:bg-slate-200 rounded-lg text-sm">
+                  <Link to="/user/orders" className="flex items-center gap-2">
+                    <Package size={18} />
+                    Orders
+                  </Link>
+                </li>
+                <li
+                  className="p-3  hover:bg-slate-200 rounded-lg text-sm cursor-pointer"
+                  onClick={handleLogout}
+                >
+                  <button className="flex items-center gap-2">
+                    <LogOut size={18} />
+                    Log Out
+                  </button>
+                </li>
+              </ul>
             )}
-
-            <div className="bg-transparent absolute top-full left-0 right-0 h-2"></div>
-            {/* Dropdown Menu */}
-            <ul className="invisible sm:flex flex-col absolute top-full right-0 mt-2 bg-slate-50 border rounded-lg group-hover:visible group-hover:opacity-100 opacity-0 transition-opacity duration-500 z-10 w-max">
-              <li className="font-medium  flex items-center gap-4 text-sm p-4">
-                <span className="cursor-default">New customer? </span>
-                <Link to="/signup" className="text-violet-700">
-                  Signup
-                </Link>
-              </li>
-              <li className="p-3 hover:bg-slate-200 rounded-lg text-sm">
-                <Link to="/user" className="flex items-center gap-2">
-                  <User size={18} />
-                  My Profile
-                </Link>
-              </li>
-              <li className="p-3  hover:bg-slate-200 rounded-lg text-sm">
-                <Link to="/user/orders" className="flex items-center gap-2">
-                  <Package size={18} />
-                  Orders
-                </Link>
-              </li>
-            </ul>
           </div>
         </div>
       </div>
