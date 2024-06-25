@@ -3,36 +3,57 @@ import { SignupBannerSvg, GoogleSvg } from "../assets/svg/";
 import { Eye, EyeOff, LoaderCircle, Lock, Mail, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Footer, Header } from "../components";
-import { useDispatch, useSelector } from "react-redux";
-import { signup } from "../store/slices/authSlice";
+import { useFormik } from "formik";
+import { registrationSchema } from "../utils/authValidator";
+import { toast } from "react-toastify";
 
 function Signup() {
-  const [signupData, setSignupData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-  });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const error = useSelector((state) => state.auth.error.signup);
-  const loading = useSelector((state) => state.auth.loading);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSignupChange = (e) => {
-    setSignupData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleFormSubmit = async (values, { setErrors }) => {
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw data;
+      }
+      const data = await response.json();
+      toast.success(data.message);
+      navigate("/login");
+    } catch (err) {
+      if (err.errors) setErrors(err.errors);
+    }
   };
+
+  const {
+    values,
+    errors,
+    isSubmitting,
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    touched,
+  } = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      password: "",
+    },
+    validationSchema: registrationSchema,
+    onSubmit: handleFormSubmit,
+  });
 
   const handlePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    const resultAction = await dispatch(signup(signupData));
-    if (signup.fulfilled.match(resultAction)) {
-      navigate("/");
-    }
-  };
   return (
     <>
       <Header />
@@ -43,7 +64,7 @@ function Signup() {
           </span>
           <form
             className="flex flex-col gap-4 min-w-80"
-            onSubmit={handleFormSubmit}
+            onSubmit={handleSubmit}
           >
             <div>
               <label className="flex flex-col gap-1">
@@ -59,14 +80,17 @@ function Signup() {
                   <input
                     type="text"
                     name="fullName"
-                    value={signupData.fullName}
+                    value={values.fullName}
                     className="outline-none px-2 bg-transparent text-sm w-full"
-                    onChange={handleSignupChange}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="Ram Bahadur"
                   />
                 </div>
               </label>
-              <span className="text-red-600 text-sm">{error?.fullName}</span>
+              <span className="text-red-600 text-sm">
+                {errors.fullName && touched.fullName && errors.fullName}
+              </span>
             </div>
 
             <div>
@@ -83,14 +107,17 @@ function Signup() {
                   <input
                     type="email"
                     name="email"
-                    value={signupData.email}
+                    value={values.email}
                     className="outline-none px-2 bg-transparent text-sm w-full"
-                    onChange={handleSignupChange}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="you@example.com"
                   />
                 </div>
               </label>
-              <span className="text-red-600 text-sm">{error?.email}</span>
+              <span className="text-red-600 text-sm">
+                {errors.email && touched.email && errors.email}
+              </span>
             </div>
 
             <div className="flex flex-col gap-1">
@@ -108,9 +135,10 @@ function Signup() {
                     <input
                       type={`${isPasswordVisible ? "text" : "password"}`}
                       name="password"
-                      value={signupData.password}
+                      value={values.password}
                       className="outline-none px-2 bg-transparent text-sm w-full"
-                      onChange={handleSignupChange}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                       placeholder="****************"
                     />
                   </div>
@@ -129,14 +157,17 @@ function Signup() {
                   )}
                 </div>
               </label>
-              <span className="text-red-600 text-sm">{error?.password}</span>
+              <span className="text-red-600 text-sm">
+                {errors.password && touched.password && errors.password}
+              </span>
             </div>
             <button
               type="submit"
-              className="bg-violet-700 text-white p-3 rounded-lg hover:bg-violet-900"
+              disabled={isSubmitting}
+              className="bg-violet-700 text-white p-3 rounded-lg hover:bg-violet-900 flex justify-center items-center"
             >
-              {loading ? (
-                <LoaderCircle className="animate-spin " />
+              {isSubmitting ? (
+                <LoaderCircle className="animate-spin" />
               ) : (
                 <span>Sign Up</span>
               )}

@@ -3,34 +3,55 @@ import { LoginBannerSvg, GoogleSvg } from "../assets/svg/";
 import { Eye, EyeOff, LoaderCircle, Lock, Mail } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Footer, Header } from "../components";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
+import { useFormik } from "formik";
+import { loginSchema } from "../utils/authValidator";
 
 function Login() {
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
+  const handleFormSubmit = async (values, { setErrors }) => {
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw data;
+      }
+      const data = await response.json();
+      dispatch(login(data.data));
+      navigate("/");
+    } catch (err) {
+      if (err.errors) setErrors(err.errors);
+    }
+  };
+
+  const {
+    values,
+    errors,
+    isSubmitting,
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    touched,
+  } = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit: handleFormSubmit,
   });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const error = useSelector((state) => state.auth.error.login);
-  const loading = useSelector((state) => state.auth.loading);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    setLoginData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
   const handlePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
-  };
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    const resultAction = await dispatch(login(loginData));
-    if (login.fulfilled.match(resultAction)) {
-      navigate("/");
-    }
   };
 
   return (
@@ -51,7 +72,7 @@ function Login() {
           </span>
           <form
             className="flex flex-col gap-3 min-w-72"
-            onSubmit={handleFormSubmit}
+            onSubmit={handleSubmit}
           >
             <div>
               <label className="flex flex-col gap-1">
@@ -67,14 +88,17 @@ function Login() {
                   <input
                     type="email"
                     name="email"
-                    value={loginData.email}
+                    value={values.email}
                     className="outline-none px-2 bg-transparent text-sm w-full"
-                    onChange={handleLogin}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="you@example.com"
                   />
                 </div>
               </label>
-              <span className="text-red-600 text-sm">{error?.email}</span>
+              <span className="text-red-600 text-sm">
+                {errors.email && touched.email && errors.email}
+              </span>
             </div>
 
             <div className="flex flex-col gap-1">
@@ -92,9 +116,10 @@ function Login() {
                     <input
                       type={`${isPasswordVisible ? "text" : "password"}`}
                       name="password"
-                      value={loginData.password}
+                      value={values.password}
                       className="outline-none px-2 bg-transparent text-sm w-full"
-                      onChange={handleLogin}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                       placeholder="**************"
                     />
                   </div>
@@ -113,7 +138,9 @@ function Login() {
                   )}
                 </div>
               </label>
-              <span className="text-red-600 text-sm">{error?.password}</span>
+              <span className="text-red-600 text-sm">
+                {errors.password && touched.password && errors.password}
+              </span>
               <Link to="#" className="text-sm text-violet-900 text-right">
                 Forgot Password?
               </Link>
@@ -121,9 +148,10 @@ function Login() {
 
             <button
               type="submit"
+              disabled={isSubmitting}
               className="bg-violet-700 text-white p-3 rounded-lg hover:bg-violet-900 flex justify-center items-center"
             >
-              {loading ? (
+              {isSubmitting ? (
                 <LoaderCircle className="animate-spin " />
               ) : (
                 <span>Login</span>

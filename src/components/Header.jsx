@@ -63,11 +63,18 @@ function Header() {
   };
 
   const handleLogout = async () => {
-    const resultAction = await dispatch(logout());
-    if (logout.fulfilled.match(resultAction)) {
-      toast.success(resultAction.payload || "Logout successfully");
-    } else {
-      toast.error("Failed to logout");
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error("Failed to logout, Please try again later");
+      }
+      dispatch(logout());
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
