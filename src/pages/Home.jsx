@@ -3,6 +3,7 @@ import { LayoutGrid, Zap } from "lucide-react";
 import { Footer, Header, ProductCard } from "../components";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { useSelector } from "react-redux";
 
 function Home() {
   const totalCategories = [
@@ -154,6 +155,7 @@ function Home() {
   let categories =
     totalCategories.length > 8 ? totalCategories.slice(0, 8) : totalCategories;
 
+  const products = useSelector((state) => state.store.products);
   return (
     <>
       <Header />
@@ -256,7 +258,7 @@ function Home() {
             },
           }}
         >
-          {Array.from({ length: 15 }).map((_, idx) => (
+          {/* {Array.from({ length: 15 }).map((_, idx) => (
             <Link key={idx} to={`/products/${idx}`}>
               <ProductCard
                 imgUrl="https://via.placeholder.com/150/92c952"
@@ -264,6 +266,18 @@ function Home() {
                 price={1500}
                 crossPrice={2000}
                 rating={4.5}
+                ratingCount={5}
+              />
+            </Link>
+          ))} */}
+          {products.map((product) => (
+            <Link key={product._id} to={`/products/${product.slug}`}>
+              <ProductCard
+                imgUrl={product.variants[0].images[0].imageUrl}
+                name={product.title}
+                price={product.variants[0].price}
+                crossPrice={product.variants[0]?.crossPrice}
+                rating={product.ratings[0]?.value || 0}
                 ratingCount={5}
               />
             </Link>

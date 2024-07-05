@@ -256,11 +256,10 @@ function Header() {
                 >
                   <img
                     src={
-                      userData?.img ||
-                      "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" ||
-                      "https://cdn-icons-png.flaticon.com/128/10412/10412383.png"
+                      userData?.avatar.imageUrl ||
+                      `https://ui-avatars.com/api/?name=${userData.fullName}`
                     }
-                    alt="profile picture"
+                    alt="profile image"
                     className="w-full h-full object-cover rounded-full"
                   />
                 </button>
