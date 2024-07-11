@@ -260,7 +260,7 @@ function Header() {
             )}
           </Drawer>
           <div ref={dropdownRef}>
-            <div className="border rounded-full hover:bg-violet-600 group shadow bg-slate-200 relative overflow-hidden duration-500">
+            <div className="border rounded-full hover:bg-violet-600 hover:border-violet-600 group shadow bg-slate-200 relative overflow-hidden duration-500">
               {isLoggedIn ? (
                 <button
                   className="flex items-center sm:gap-2 h-10 w-10 cursor-pointer group-hover:bg-slate-50"
