@@ -19,6 +19,7 @@ import {
 } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
+import { ProtectedRoute } from "./components/index.js";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,7 +29,14 @@ const router = createBrowserRouter(
       <Route path="Signup" element={<Signup />} />
       <Route path="products" element={<Products />} />
       <Route path="products/:slug" element={<ProductDetails />} />
-      <Route path="checkout" element={<Checkout />} />
+      <Route
+        path="checkout"
+        element={
+          <ProtectedRoute>
+            <Checkout />
+          </ProtectedRoute>
+        }
+      />
       <Route path="*" element={<PageNotFound />} />
     </Route>
   )

@@ -34,7 +34,6 @@ function Header() {
   const orders = useSelector((state) => state.cart.orders);
   const [isUserOptionsOpen, setIsUserOptionsOpen] = useState(false);
   const dropdownRef = useRef(null);
-
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -78,6 +77,19 @@ function Header() {
     }
   };
 
+  const userDropDownOptions = [
+    {
+      title: "My Profile",
+      icon: <User size={18} />,
+      link: "/user",
+    },
+    {
+      title: "Orders",
+      icon: <Package size={18} />,
+      link: "/user/orders",
+    },
+  ];
+
   return (
     <>
       {/*navbar */}
@@ -116,10 +128,10 @@ function Header() {
 
         <div className="flex gap-1 sm:gap-4 items-center relative ">
           <button
-            className="relative cursor-pointer p-2 rounded-full hover:bg-violet-600 group"
+            className="relative cursor-pointer p-2 rounded-full hover:bg-violet-600 group duration-200"
             onClick={() => dispatch(toggleCart(true))}
           >
-            <ShoppingCart className="h-5 sm:h-auto text-slate-700 group-hover:text-white" />
+            <ShoppingCart className="h-5 sm:h-auto text-slate-700 group-hover:text-white duration-200" />
             <span className="absolute top-0 right-0 bg-red-500 text-white rounded-xl text-[10px] sm:text-sm text-center font-medium w-5">
               {orders.length === 0 ? 0 : orders.length}
             </span>
@@ -248,17 +260,14 @@ function Header() {
             )}
           </Drawer>
           <div ref={dropdownRef}>
-            <div className="border rounded-full hover:bg-violet-600 group shadow bg-slate-200 relative overflow-hidden">
+            <div className="border rounded-full hover:bg-violet-600 group shadow bg-slate-200 relative overflow-hidden duration-500">
               {isLoggedIn ? (
                 <button
                   className="flex items-center sm:gap-2 h-10 w-10 cursor-pointer group-hover:bg-slate-50"
                   onClick={() => setIsUserOptionsOpen((prev) => !prev)}
                 >
                   <img
-                    src={
-                      userData?.avatar.imageUrl ||
-                      `https://ui-avatars.com/api/?name=${userData.fullName}`
-                    }
+                    src={userData.avatar.imageUrl}
                     alt="profile image"
                     className="w-full h-full object-cover rounded-full"
                   />
@@ -268,8 +277,8 @@ function Header() {
                   to="/login"
                   className="flex items-center sm:gap-2 py-2 px-3"
                 >
-                  <UserCircle className="hidden sm:block text-slate-700 group-hover:text-slate-50 h-4 sm:h-auto" />
-                  <span className="text-slate-700 font-medium group-hover:text-slate-50">
+                  <UserCircle className="hidden sm:block text-slate-700 group-hover:text-slate-50 h-4 sm:h-auto duration-500" />
+                  <span className="text-slate-700 font-medium group-hover:text-slate-50 duration-500">
                     Login
                   </span>
                 </Link>
@@ -285,18 +294,17 @@ function Header() {
                     Signup
                   </Link>
                 </li>
-                <li className="p-3 hover:bg-slate-200 rounded-lg text-sm">
-                  <Link to="/user" className="flex items-center gap-2">
-                    <User size={18} />
-                    My Profile
-                  </Link>
-                </li>
-                <li className="p-3  hover:bg-slate-200 rounded-lg text-sm">
-                  <Link to="/user/orders" className="flex items-center gap-2">
-                    <Package size={18} />
-                    Orders
-                  </Link>
-                </li>
+                {userDropDownOptions.map((option, idx) => (
+                  <li className="hover:bg-slate-200 rounded-lg text-sm">
+                    <Link
+                      to={option.link}
+                      className="flex items-center gap-2 p-3"
+                    >
+                      {option.icon}
+                      {option.title}
+                    </Link>
+                  </li>
+                ))}
                 <li
                   className="p-3  hover:bg-slate-200 rounded-lg text-sm cursor-pointer"
                   onClick={handleLogout}

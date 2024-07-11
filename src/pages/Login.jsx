@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { LoginBannerSvg, GoogleSvg } from "../assets/svg/";
-import { Eye, EyeOff, LoaderCircle, Lock, Mail } from "lucide-react";
+import {
+  CircleAlert,
+  Eye,
+  EyeOff,
+  LoaderCircle,
+  Lock,
+  Mail,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Footer, Header } from "../components";
 import { useDispatch } from "react-redux";
@@ -96,11 +103,15 @@ function Login() {
                   />
                 </div>
               </label>
-              <span className="text-red-600 text-sm">
-                {errors.email && touched.email && errors.email}
+              <span className="text-red-600 text-sm flex items-center">
+                {errors.email && touched.email && (
+                  <>
+                    <CircleAlert className="h-3" />
+                    {errors.email}
+                  </>
+                )}
               </span>
             </div>
-
             <div className="flex flex-col gap-1">
               <label className="flex flex-col gap-1">
                 <span className="text-sm font-medium text-slate-500">
@@ -138,8 +149,13 @@ function Login() {
                   )}
                 </div>
               </label>
-              <span className="text-red-600 text-sm">
-                {errors.password && touched.password && errors.password}
+              <span className="text-red-600 text-sm flex items-center">
+                {errors.password && touched.password && (
+                  <>
+                    <CircleAlert className="h-3" />
+                    {errors.password}
+                  </>
+                )}
               </span>
               <Link to="#" className="text-sm text-violet-900 text-right">
                 Forgot Password?
