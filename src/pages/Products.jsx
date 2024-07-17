@@ -275,10 +275,7 @@ function Products() {
               </ul>
             </div>
           </div>
-          {/* <div className="fixed w-4/5 sm:w-3/5 z-50 left-0 top-0 bottom-0 bg-slate-50 overflow-scroll">
-          </div> */}
         </Drawer>
-        {/* sidebar end */}
 
         <div className="xl:basis-4/5 p-5  flex flex-col gap-3 w-full">
           <div className="pb-2 border-b flex justify-between flex-col lg:flex-row gap-2">

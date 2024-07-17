@@ -1,14 +1,13 @@
 import { useEffect } from "react";
 import ReactDOM from "react-dom";
 
-function Drawer({ isOpen, onClose, children, side = "right", className }) {
+function Drawer({ isOpen, onClose, children, side = "right", className = "" }) {
   useEffect(() => {
     const body = document.body.style;
     if (isOpen) {
       body.overflow = "hidden";
       body.marginRight = "17px";
     }
-
     return () => {
       body.overflow = "";
       body.marginRight = "";
@@ -19,7 +18,7 @@ function Drawer({ isOpen, onClose, children, side = "right", className }) {
     <div>
       <div
         className={`fixed inset-0 bg-black z-50 transition-opacity ${
-          isOpen ? " opacity-80" : " opacity-0"
+          isOpen ? "visible opacity-80" : "invisible opacity-0"
         }`}
         onClick={onClose}
       />
