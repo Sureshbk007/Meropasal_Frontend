@@ -4,13 +4,9 @@ import ReactDOM from "react-dom";
 function Drawer({ isOpen, onClose, children, side = "right", className }) {
   useEffect(() => {
     const body = document.body.style;
-
     if (isOpen) {
       body.overflow = "hidden";
       body.marginRight = "17px";
-    } else {
-      body.overflow = "";
-      body.marginRight = "";
     }
 
     return () => {
@@ -20,10 +16,10 @@ function Drawer({ isOpen, onClose, children, side = "right", className }) {
   }, [isOpen]);
 
   return ReactDOM.createPortal(
-    <>
+    <div>
       <div
         className={`fixed inset-0 bg-black z-50 transition-opacity ${
-          isOpen ? "visible opacity-80" : "invisible opacity-0"
+          isOpen ? " opacity-80" : " opacity-0"
         }`}
         onClick={onClose}
       />
@@ -40,8 +36,8 @@ function Drawer({ isOpen, onClose, children, side = "right", className }) {
       >
         {children}
       </div>
-    </>,
-    document.getElementById("portal-root")
+    </div>,
+    document.body
   );
 }
 
