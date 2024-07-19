@@ -9,7 +9,6 @@ import "react-multi-carousel/lib/styles.css";
 import currencyFormat from "../utils/currencyFormat";
 
 function ProductDetails() {
-  const { slug } = useParams();
   const location = useLocation();
   const dispatch = useDispatch();
   const breadList = location.pathname.split("/").filter((data) => data);
@@ -99,7 +98,7 @@ function ProductDetails() {
           })}
           <div className="text-gray-400 cursor-default">
             &nbsp; &gt; &nbsp;
-            {slug}
+            {product.name}
           </div>
         </nav>
 

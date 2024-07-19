@@ -66,11 +66,12 @@ function Header() {
       const response = await fetch("/api/auth/logout", {
         method: "POST",
       });
-      const data = await response.json();
-      if (!data.success) {
-        throw new Error("Failed to logout, Please try again later");
+      if (!response.ok) {
+        const data = await response.json();
+        throw data;
       }
       dispatch(logout());
+      const data = await response.json();
       toast.success(data.message);
     } catch (error) {
       toast.error(error.message);
@@ -267,7 +268,7 @@ function Header() {
                   onClick={() => setIsUserOptionsOpen((prev) => !prev)}
                 >
                   <img
-                    src={userData.avatar.imageUrl}
+                    src={userData?.avatar.imageUrl}
                     alt="profile image"
                     className="w-full h-full object-cover rounded-full"
                   />
@@ -295,7 +296,10 @@ function Header() {
                   </Link>
                 </li>
                 {userDropDownOptions.map((option, idx) => (
-                  <li className="hover:bg-slate-200 rounded-lg text-sm">
+                  <li
+                    className="hover:bg-slate-200 rounded-lg text-sm"
+                    key={idx}
+                  >
                     <Link
                       to={option.link}
                       className="flex items-center gap-2 p-3"

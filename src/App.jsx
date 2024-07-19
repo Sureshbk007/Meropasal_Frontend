@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import { useDispatch } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { login } from "./store/slices/authSlice";
 import { useEffect } from "react";

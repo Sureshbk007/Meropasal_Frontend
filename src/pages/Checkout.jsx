@@ -19,6 +19,7 @@ function Checkout() {
 
   const orders = useSelector((state) => state.cart.orders);
   const dispatch = useDispatch();
+
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(toggleCart(false));
@@ -30,11 +31,21 @@ function Checkout() {
   );
 
   const handleFormData = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const goBack = () => {
     navigate(-1);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    console.log("Order successful: User details", formData);
+    if (formData.paymentMethod === "ESEWA") {
+      console.log("Fill your esewa stuff");
+    }
+    alert("Order successful");
   };
 
   return (
@@ -42,7 +53,10 @@ function Checkout() {
       <h1 className="text-center text-3xl font-bold text-slate-800">
         MeroPasal
       </h1>
-      <form className="flex flex-col md:flex-row gap-10">
+      <form
+        className="flex flex-col md:flex-row gap-10"
+        onSubmit={handleFormSubmit}
+      >
         <div className="basis-3/5 flex flex-col gap-8 order-last md:order-none">
           <div className="flex items-center gap-3">
             <MoveLeft
@@ -207,7 +221,7 @@ function Checkout() {
               </label>
               <label
                 className={`flex flex-col items-center justify-center border-2 border-gray-300 shadow-lg p-3 rounded-lg bg-green-600 h-20 cursor-pointer ${
-                  formData.paymentMethod === "esewa" &&
+                  formData.paymentMethod === "ESEWA" &&
                   "outline outline-violet-500"
                 }`}
               >
@@ -218,7 +232,7 @@ function Checkout() {
                   type="radio"
                   name="paymentMethod"
                   className="hidden"
-                  value="esewa"
+                  value="ESEWA"
                   onChange={handleFormData}
                 />
               </label>
