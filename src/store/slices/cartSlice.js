@@ -43,6 +43,7 @@ const cartSlice = createSlice({
       );
       if (state.orders.length <= 0) {
         state.isCartOpen = false;
+        state.orders = [];
       }
     },
 

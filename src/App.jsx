@@ -1,3 +1,4 @@
+import ReactDOM from "react-dom";
 import { useDispatch } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -14,7 +15,7 @@ function App() {
       try {
         const response = await fetch("/api/auth/", {
           method: "POST",
-          withCredentials: true,
+          credentials: "include",
         });
         if (response.ok) {
           const data = await response.json();
@@ -29,7 +30,10 @@ function App() {
 
   return (
     <>
-      <ToastContainer autoClose={4000} position="top-right" />
+      {ReactDOM.createPortal(
+        <ToastContainer autoClose={4000} position="top-right" />,
+        document.body
+      )}
       <Outlet />
     </>
   );

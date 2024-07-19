@@ -10,13 +10,13 @@ function ProtectedRoute({ children }) {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      toast.warn("Login to checkout");
       dispatch(toggleCart(false));
+      toast.warn("Login to checkout");
     }
-  }, [isAuthenticated, dispatch]);
+  }, []);
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;
