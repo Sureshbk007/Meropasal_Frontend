@@ -293,7 +293,8 @@ function Checkout() {
             </div>
             <button
               type="submit"
-              className="hidden md:block bg-violet-800 hover:bg-violet-900 w-full p-3 text-white font-medium rounded-lg"
+              disabled={orders.length < 1}
+              className="disabled:opacity-50 disabled:cursor-not-allowed hidden md:block bg-violet-800 hover:bg-violet-900 w-full p-3 text-white font-medium rounded-lg"
             >
               Place Order
             </button>
@@ -301,7 +302,8 @@ function Checkout() {
         </div>
         <button
           type="submit"
-          className="block md:hidden bg-violet-800 hover:bg-violet-900 w-full p-3 text-white font-medium rounded-lg order-last"
+          disabled={orders.length < 1}
+          className="disabled:opacity-50 disabled:cursor-not-allowed block md:hidden bg-violet-800 hover:bg-violet-900 w-full p-3 text-white font-medium rounded-lg order-last"
         >
           Place Order
         </button>

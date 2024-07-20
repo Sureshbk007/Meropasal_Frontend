@@ -1,33 +1,20 @@
+import { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { useDispatch } from "react-redux";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { login } from "./store/slices/authSlice";
-import { useEffect } from "react";
 
 function App() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await fetch("/api/auth/", {
-          method: "POST",
-          credentials: "include",
-        });
-        if (response.ok) {
-          const data = await response.json();
-          dispatch(login(data));
-          navigate("/");
-        }
-      } catch (err) {
-        console.log(err.message);
-      }
-    })();
-  }, []);
-
+    const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    if (user && token) {
+      dispatch(login({ user: JSON.parse(user), token }));
+    }
+  });
   return (
     <>
       {ReactDOM.createPortal(

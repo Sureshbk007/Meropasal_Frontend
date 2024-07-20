@@ -24,16 +24,17 @@ import {
 import { logout } from "../store/slices/authSlice";
 import currencyFormat from "../utils/currencyFormat";
 import { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { avatarJpg } from "../assets/jpg/index";
 
 function Header() {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLogged);
-  const userData = useSelector((state) => state.auth.data);
+  const userData = useSelector((state) => state.auth.user);
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
   const orders = useSelector((state) => state.cart.orders);
   const [isUserOptionsOpen, setIsUserOptionsOpen] = useState(false);
   const dropdownRef = useRef(null);
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -62,20 +63,9 @@ function Header() {
   };
 
   const handleLogout = async () => {
-    try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        throw data;
-      }
-      dispatch(logout());
-      const data = await response.json();
-      toast.success(data.message);
-    } catch (error) {
-      toast.error(error.message);
-    }
+    dispatch(logout());
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   const userDropDownOptions = [
@@ -268,7 +258,7 @@ function Header() {
                   onClick={() => setIsUserOptionsOpen((prev) => !prev)}
                 >
                   <img
-                    src={userData?.avatar.imageUrl}
+                    src={userData?.avatar?.imageUrl || avatarJpg}
                     alt="profile image"
                     className="w-full h-full object-cover rounded-full"
                   />

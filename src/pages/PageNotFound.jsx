@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-
+import pageNotFoundImg from "../../public/404.gif";
 function PageNotFound() {
   return (
     <div className="h-screen flex justify-center items-center bg-slate-50">
       <div className="flex flex-col items-center gap-2 my-20 ">
         <img
-          src="https://cdn.dribbble.com/userupload/8726278/file/original-ab1bde6f9c74de5c8961f7fe84990cd4.gif"
+          src={pageNotFoundImg}
           alt="page not found"
           className="h-96 mix-blend-multiply -my-16 object-cover"
         />

@@ -14,29 +14,21 @@ import { Footer, Header } from "../components";
 import { useFormik } from "formik";
 import { registrationSchema } from "../utils/authValidator";
 import { toast } from "react-toastify";
-
+import axiosInstance from "../utils/axiosInstance";
 function Signup() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleFormSubmit = async (values, { setErrors }) => {
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        throw data;
-      }
-      const data = await response.json();
-      toast.success(data.message);
+      const response = await axiosInstance.post("/auth/register", values);
+      const { data, message } = response.data;
+      toast.success(message);
       navigate("/login");
     } catch (err) {
-      if (err.errors) setErrors(err.errors);
+      if (err.response && err.response.data.errors) {
+        setErrors(err.response.data.errors);
+      }
     }
   };
 

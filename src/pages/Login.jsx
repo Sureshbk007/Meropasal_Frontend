@@ -14,26 +14,20 @@ import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
 import { useFormik } from "formik";
 import { loginSchema } from "../utils/authValidator";
-
+import axiosInstance from "../utils/axiosInstance";
 function Login() {
   const handleFormSubmit = async (values, { setErrors }) => {
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        throw data;
-      }
-      const data = await response.json();
-      dispatch(login(data.data));
+      const response = await axiosInstance.post("/auth/login", values);
+      const { user, token } = response.data.data;
+      dispatch(login({ user, token }));
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", token);
       navigate("/");
     } catch (err) {
-      if (err.errors) setErrors(err.errors);
+      if (err.response && err.response.data.errors) {
+        setErrors(err.response.data.errors);
+      }
     }
   };
 
