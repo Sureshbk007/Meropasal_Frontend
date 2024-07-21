@@ -2,9 +2,12 @@ import * as Yup from "yup";
 
 // Common schemas
 const emailSchema = Yup.string()
+  .trim()
   .email("Invalid email address")
   .required("Email is required");
+
 const passwordSchema = Yup.string()
+  .trim()
   .min(5, "Password must be at least 5 characters")
   .required("Password is required");
 

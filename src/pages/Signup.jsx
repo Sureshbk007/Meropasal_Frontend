@@ -1,20 +1,15 @@
 import { useState } from "react";
 import { SignupBannerSvg, GoogleSvg } from "../assets/svg/";
-import {
-  CircleAlert,
-  Eye,
-  EyeOff,
-  LoaderCircle,
-  Lock,
-  Mail,
-  User,
-} from "lucide-react";
+import { CircleAlert, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Footer, Header } from "../components";
 import { useFormik } from "formik";
 import { registrationSchema } from "../utils/authValidator";
 import { toast } from "react-toastify";
 import axiosInstance from "../utils/axiosInstance";
+import { lineSpinner } from "ldrs";
+lineSpinner.register();
+
 function Signup() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const navigate = useNavigate();
@@ -182,7 +177,7 @@ function Signup() {
               className="bg-violet-700 text-white p-3 rounded-lg hover:bg-violet-900 flex justify-center items-center"
             >
               {isSubmitting ? (
-                <LoaderCircle className="animate-spin" />
+                <l-line-spinner size="25" stroke="2" speed="1" color="white" />
               ) : (
                 <span>Sign Up</span>
               )}

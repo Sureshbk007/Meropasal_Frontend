@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { login } from "./store/slices/authSlice";
+import { login, setLoading } from "./store/slices/authSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -13,8 +13,11 @@ function App() {
     const token = localStorage.getItem("token");
     if (user && token) {
       dispatch(login({ user: JSON.parse(user), token }));
+    } else {
+      dispatch(setLoading(false));
     }
-  });
+  }, [dispatch]);
+
   return (
     <>
       {ReactDOM.createPortal(

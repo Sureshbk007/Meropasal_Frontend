@@ -5,7 +5,6 @@ import Home from "./Home";
 import ProductDetails from "./ProductDetails";
 import Products from "./Products";
 import Checkout from "./Checkout";
-import AdminDashboard from "./AdminDashboard";
 
 export {
   Home,
@@ -15,5 +14,4 @@ export {
   ProductDetails,
   Products,
   Checkout,
-  AdminDashboard,
 };

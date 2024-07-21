@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import { LoginBannerSvg, GoogleSvg } from "../assets/svg/";
-import {
-  CircleAlert,
-  Eye,
-  EyeOff,
-  LoaderCircle,
-  Lock,
-  Mail,
-} from "lucide-react";
+import { CircleAlert, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Footer, Header } from "../components";
 import { useDispatch } from "react-redux";
@@ -15,6 +8,9 @@ import { login } from "../store/slices/authSlice";
 import { useFormik } from "formik";
 import { loginSchema } from "../utils/authValidator";
 import axiosInstance from "../utils/axiosInstance";
+import { lineSpinner } from "ldrs";
+lineSpinner.register();
+
 function Login() {
   const handleFormSubmit = async (values, { setErrors }) => {
     try {
@@ -162,7 +158,7 @@ function Login() {
               className="bg-violet-700 text-white p-3 rounded-lg hover:bg-violet-900 flex justify-center items-center"
             >
               {isSubmitting ? (
-                <LoaderCircle className="animate-spin " />
+                <l-line-spinner size="25" stroke="2" speed="1" color="white" />
               ) : (
                 <span>Login</span>
               )}

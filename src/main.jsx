@@ -9,7 +9,6 @@ import {
   ProductDetails,
   Products,
   Checkout,
-  AdminDashboard,
 } from "./pages";
 import "./index.css";
 import {
@@ -28,7 +27,6 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
-      <Route path="admin" element={<AdminDashboard />} />
       <Route path="products" element={<Products />} />
       <Route path="products/:slug" element={<ProductDetails />} />
       <Route
@@ -45,9 +43,9 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <React.StrictMode>
-  <Provider store={store}>
-    <RouterProvider router={router} />
-  </Provider>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </React.StrictMode>
 );
