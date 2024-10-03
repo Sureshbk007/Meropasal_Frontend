@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SignupBannerSvg, GoogleSvg } from "../assets/svg/";
 import { CircleAlert, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,6 +13,10 @@ lineSpinner.register();
 function Signup() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleFormSubmit = async (values, { setErrors }) => {
     try {

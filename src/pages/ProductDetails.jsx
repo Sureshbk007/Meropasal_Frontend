@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Footer, Header, ProductCard, StarRating } from "../components";
-import { Home, ShoppingBag } from "lucide-react";
+import {
+  CircleChevronLeft,
+  CircleChevronRight,
+  Home,
+  ShoppingBag,
+} from "lucide-react";
 import { useDispatch } from "react-redux";
 import { addToCart, toggleCart } from "../store/slices/cartSlice";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 import currencyFormat from "../utils/currencyFormat";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation } from "swiper/modules";
 
 function ProductDetails() {
   const location = useLocation();
@@ -301,48 +308,74 @@ function ProductDetails() {
         </details>
 
         <div className="bg-gray-100 px-2 py-4 lg:px-5 lg:py-5 flex flex-col gap-3 lg:gap-8 rounded-lg">
-          <div className="flex gap-2 lg:gap-4 items-center">
+          <div className="flex gap-2 lg:gap-4 items-center justify-between">
             <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold ">
               Similar Products
             </h3>
-          </div>
-
-          <Carousel
-            className="z-40"
-            swipeable
-            draggable={false}
-            removeArrowOnDeviceType={["mobile"]}
-            responsive={{
-              desktop: {
-                breakpoint: { max: 3000, min: 1024 },
-                items: 5,
-                slidesToSlide: 4,
-              },
-              tablet: {
-                breakpoint: { max: 1024, min: 464 },
-                items: 4.5,
-                slidesToSlide: 4,
-              },
-              mobile: {
-                breakpoint: { max: 464, min: 0 },
-                items: 2.15,
-                slidesToSlide: 5,
-              },
-            }}
-          >
-            {Array.from({ length: 7 }).map((_, idx) => (
-              <Link key={idx} to={`/products/${idx}`}>
-                <ProductCard
-                  imgUrl="https://via.placeholder.com/150/92c952"
-                  name="Product name and shit it is what it is fdgfsdg fdgfd gf d"
-                  price={1500}
-                  crossPrice={2000}
-                  rating={4.5}
-                  ratingCount={5}
+            <div className="flex gap-2 items-center">
+              <div>
+                <CircleChevronLeft
+                  className="custom-prev text-slate-800 cursor-pointer active:scale-90 transition-transform"
+                  size={35}
                 />
-              </Link>
-            ))}
-          </Carousel>
+              </div>
+              <div>
+                <CircleChevronRight
+                  className="custom-next text-slate-800 cursor-pointer active:scale-90 transition-transform"
+                  size={35}
+                />
+              </div>
+            </div>
+          </div>
+          <div>
+            <Swiper
+              slidesPerView={5}
+              spaceBetween={30}
+              navigation={{
+                prevEl: ".custom-prev",
+                nextEl: ".custom-next",
+              }}
+              className="mySwiper"
+              modules={[Navigation]}
+              breakpoints={{
+                0: {
+                  slidesPerView: 2,
+                  spaceBetween: 0,
+                },
+                345: {
+                  slidesPerView: 2.2,
+                  spaceBetween: 10,
+                },
+                480: {
+                  slidesPerView: 2.2,
+                  spaceBetween: 10,
+                },
+                640: {
+                  slidesPerView: 4,
+                  spaceBetween: 10,
+                },
+                1025: {
+                  slidesPerView: 5,
+                  spaceBetween: 10,
+                },
+              }}
+            >
+              {Array.from({ length: 7 }).map((_, idx) => (
+                <SwiperSlide key={idx}>
+                  <Link to={`/products/${idx}`}>
+                    <ProductCard
+                      imgUrl="https://via.placeholder.com/150/92c952"
+                      name="Product name and shit it is what it is fdgfsdg fdgfd gf d"
+                      price={1500}
+                      crossPrice={2000}
+                      rating={4.5}
+                      ratingCount={5}
+                    />
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
         </div>
       </main>
       <Footer />

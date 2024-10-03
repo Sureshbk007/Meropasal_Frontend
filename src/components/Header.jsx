@@ -12,9 +12,9 @@ import {
   User,
   UserCircle,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Drawer from "./Drawer";
-import { BrandLogoSvg } from "../assets/svg/";
+import { logo } from "../assets/png/";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeCartProductQty,
@@ -34,6 +34,8 @@ function Header() {
   const orders = useSelector((state) => state.cart.orders);
   const [isUserOptionsOpen, setIsUserOptionsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -81,24 +83,32 @@ function Header() {
     },
   ];
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/products?q=${searchQuery}`);
+  };
   return (
     <>
       {/*navbar */}
       <div className="flex px-3 py-2 md:px-16 gap-3 items-center justify-between sticky top-0 z-50 bg-slate-50 text-xs sm:text-base border-b">
         <Link to="/">
-          <img src={BrandLogoSvg} alt="brand name" className="max-h-10" />
+          <img src={logo} alt="brand name" className="max-h-12" />
         </Link>
-        <form className="relative border-2 border-slate-300 rounded-lg w-full max-w-lg flex items-center">
+        <form
+          className="relative border-2 border-slate-300 rounded-lg w-full max-w-lg flex items-center"
+          onSubmit={handleSearch}
+        >
           <input
             type="search"
             className="p-2 outline-none w-full bg-transparent text-slate-700"
             placeholder="Search..."
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button type="submit" className="mr-2">
             <Search color="gray" className="h-4 sm:h-auto" />
           </button>
           {/* search list */}
-          <ul className="hidden absolute top-[45px] bg-gray-100 w-full border-2 rounded-lg overflow-hidden">
+          {/* <ul className="hidden absolute top-[45px] bg-gray-100 w-full border-2 rounded-lg overflow-hidden">
             <li className="p-2 hover:bg-gray-300 cursor-pointer">
               shoes for men
             </li>
@@ -114,7 +124,7 @@ function Header() {
             <li className="p-2 hover:bg-gray-300 cursor-pointer">
               shoes for men
             </li>
-          </ul>
+          </ul> */}
         </form>
 
         <div className="flex gap-1 sm:gap-4 items-center relative ">

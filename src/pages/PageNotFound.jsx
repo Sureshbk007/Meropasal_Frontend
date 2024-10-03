@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import pageNotFoundImg from "../../public/404.gif";
+import pageNotFoundImg from "/404.gif";
 function PageNotFound() {
   return (
     <div className="h-screen flex justify-center items-center bg-slate-50">

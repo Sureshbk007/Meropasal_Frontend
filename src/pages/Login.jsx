@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LoginBannerSvg, GoogleSvg } from "../assets/svg/";
 import { CircleAlert, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,6 +12,10 @@ import { lineSpinner } from "ldrs";
 lineSpinner.register();
 
 function Login() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleFormSubmit = async (values, { setErrors }) => {
     try {
       const response = await axiosInstance.post("/auth/login", values);

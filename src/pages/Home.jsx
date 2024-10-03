@@ -1,161 +1,28 @@
 import { Link } from "react-router-dom";
-import { LayoutGrid, Zap } from "lucide-react";
+import {
+  CircleChevronLeft,
+  CircleChevronRight,
+  LayoutGrid,
+  Zap,
+} from "lucide-react";
 import { Footer, Header, ProductCard } from "../components";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 import { useSelector } from "react-redux";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation } from "swiper/modules";
+import { useEffect, useState } from "react";
 
 function Home() {
-  const totalCategories = [
-    {
-      albumId: 1,
-      id: 1,
-      title: "accusamus beatae ad facilis cum similique qui sunt",
-      url: "https://via.placeholder.com/600/92c952",
-      thumbnailUrl: "https://via.placeholder.com/150/92c952",
-    },
-    {
-      albumId: 1,
-      id: 2,
-      title: "reprehenderit est deserunt velit ipsam",
-      url: "https://via.placeholder.com/600/771796",
-      thumbnailUrl: "https://via.placeholder.com/150/771796",
-    },
-    {
-      albumId: 1,
-      id: 3,
-      title: "officia porro iure quia iusto qui ipsa ut modi",
-      url: "https://via.placeholder.com/600/24f355",
-      thumbnailUrl: "https://via.placeholder.com/150/24f355",
-    },
-    {
-      albumId: 1,
-      id: 4,
-      title: "culpa odio esse rerum omnis laboriosam voluptate repudiandae",
-      url: "https://via.placeholder.com/600/d32776",
-      thumbnailUrl: "https://via.placeholder.com/150/d32776",
-    },
-    {
-      albumId: 1,
-      id: 5,
-      title: "natus nisi omnis corporis facere molestiae rerum in",
-      url: "https://via.placeholder.com/600/f66b97",
-      thumbnailUrl: "https://via.placeholder.com/150/f66b97",
-    },
-    {
-      albumId: 1,
-      id: 6,
-      title: "accusamus ea aliquid et amet sequi nemo",
-      url: "https://via.placeholder.com/600/56a8c2",
-      thumbnailUrl: "https://via.placeholder.com/150/56a8c2",
-    },
-    {
-      albumId: 1,
-      id: 7,
-      title: "officia delectus consequatur vero aut veniam explicabo molestias",
-      url: "https://via.placeholder.com/600/b0f7cc",
-      thumbnailUrl: "https://via.placeholder.com/150/b0f7cc",
-    },
-    {
-      albumId: 1,
-      id: 8,
-      title: "aut porro officiis laborum odit ea laudantium corporis",
-      url: "https://via.placeholder.com/600/54176f",
-      thumbnailUrl: "https://via.placeholder.com/150/54176f",
-    },
-    {
-      albumId: 1,
-      id: 9,
-      title: "qui eius qui autem sed",
-      url: "https://via.placeholder.com/600/51aa97",
-      thumbnailUrl: "https://via.placeholder.com/150/51aa97",
-    },
-    {
-      albumId: 1,
-      id: 10,
-      title: "beatae et provident et ut vel",
-      url: "https://via.placeholder.com/600/810b14",
-      thumbnailUrl: "https://via.placeholder.com/150/810b14",
-    },
-    {
-      albumId: 1,
-      id: 11,
-      title: "nihil at amet non hic quia qui",
-      url: "https://via.placeholder.com/600/1ee8a4",
-      thumbnailUrl: "https://via.placeholder.com/150/1ee8a4",
-    },
-    {
-      albumId: 1,
-      id: 12,
-      title:
-        "mollitia soluta ut rerum eos aliquam consequatur perspiciatis maiores",
-      url: "https://via.placeholder.com/600/66b7d2",
-      thumbnailUrl: "https://via.placeholder.com/150/66b7d2",
-    },
-    {
-      albumId: 1,
-      id: 13,
-      title: "repudiandae iusto deleniti rerum",
-      url: "https://via.placeholder.com/600/197d29",
-      thumbnailUrl: "https://via.placeholder.com/150/197d29",
-    },
-    {
-      albumId: 1,
-      id: 14,
-      title: "est necessitatibus architecto ut laborum",
-      url: "https://via.placeholder.com/600/61a65",
-      thumbnailUrl: "https://via.placeholder.com/150/61a65",
-    },
-    {
-      albumId: 1,
-      id: 15,
-      title: "harum dicta similique quis dolore earum ex qui",
-      url: "https://via.placeholder.com/600/f9cee5",
-      thumbnailUrl: "https://via.placeholder.com/150/f9cee5",
-    },
-    {
-      albumId: 1,
-      id: 16,
-      title:
-        "iusto sunt nobis quasi veritatis quas expedita voluptatum deserunt",
-      url: "https://via.placeholder.com/600/fdf73e",
-      thumbnailUrl: "https://via.placeholder.com/150/fdf73e",
-    },
-    {
-      albumId: 1,
-      id: 17,
-      title: "natus doloribus necessitatibus ipsa",
-      url: "https://via.placeholder.com/600/9c184f",
-      thumbnailUrl: "https://via.placeholder.com/150/9c184f",
-    },
-    {
-      albumId: 1,
-      id: 18,
-      title: "laboriosam odit nam necessitatibus et illum dolores reiciendis",
-      url: "https://via.placeholder.com/600/1fe46f",
-      thumbnailUrl: "https://via.placeholder.com/150/1fe46f",
-    },
-    {
-      albumId: 1,
-      id: 19,
-      title: "perferendis nesciunt eveniet et optio a",
-      url: "https://via.placeholder.com/600/56acb2",
-      thumbnailUrl: "https://via.placeholder.com/150/56acb2",
-    },
-    {
-      albumId: 1,
-      id: 20,
-      title:
-        "assumenda voluptatem laboriosam enim consequatur veniam placeat reiciendis error",
-      url: "https://via.placeholder.com/600/8985dc",
-      thumbnailUrl: "https://via.placeholder.com/150/8985dc",
-    },
-  ];
-
-  let categories =
-    totalCategories.length > 8 ? totalCategories.slice(0, 8) : totalCategories;
-
+  const categories = useSelector((state) => state.store.categories);
   const products = useSelector((state) => state.store.products);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  let limitedCategories =
+    categories.length > 8 ? categories.slice(0, 8) : categories;
   return (
     <>
       <Header />
@@ -185,26 +52,26 @@ function Home() {
       </div>
 
       {/* categories */}
-      <div className="bg-gray-50 flex flex-wrap justify-center gap-2 lg:gap-14 px-1 py-4 lg:p-8">
-        {categories.map((category) => (
-          <Link to={`/products/${category.id}`} key={category.id}>
+      <div className="bg-gray-50 flex flex-wrap justify-center gap-2 lg:gap-14 px-1 py-4 lg:p-8 ">
+        {limitedCategories.map((category) => (
+          <Link to={`/products?category=${category.name}`} key={category.id}>
             <figure className="flex flex-col items-center">
-              <div className="w-14 lg:w-20 rounded-full overflow-hidden ">
+              <div className="w-14 h-14 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-red-500  ">
                 <img
-                  src={`${category.url}`}
-                  alt={`${category.title}`}
-                  className="w-full"
+                  src={`${category.image}`}
+                  alt={`${category.name}`}
+                  className="w-full h-full object-cover"
                 />
               </div>
               <figcaption className="font-semibold text-xs lg:text-sm mt-2 text-slate-700 text-center text-wrap line-clamp-2">
-                {`Category${category.id}`}
+                {category.name}
               </figcaption>
             </figure>
           </Link>
         ))}
 
-        {totalCategories.length > 8 && (
-          <Link to="/products">
+        {limitedCategories.length > 8 && (
+          <Link to="/categories" onClick={() => scrollTo(0, 0)}>
             <figure className="flex flex-col items-center">
               <div className="w-14 lg:w-20 aspect-square border-2 rounded-full overflow-hidden flex justify-center items-center ">
                 <LayoutGrid
@@ -224,65 +91,82 @@ function Home() {
 
       {/* flash sale */}
       <div className="bg-gray-100 px-2 py-4 lg:px-16 lg:py-10 flex flex-col gap-3 lg:gap-8">
-        <div className="flex gap-2 lg:gap-4 items-center">
-          <Zap
-            fill="white"
-            strokeWidth={1.5}
-            className="rounded-full bg-black w-8 h-8 lg:w-10 lg:h-10"
-          />
-          <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold ">
-            Flash Sale
-          </h3>
+        <div className="flex items-center justify-between">
+          <div className="flex gap-2 lg:gap-4 items-center">
+            <Zap
+              fill="white"
+              strokeWidth={1.5}
+              className="rounded-full bg-black w-8 h-8 lg:w-10 lg:h-10"
+            />
+            <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold ">
+              Flash Sale
+            </h3>
+          </div>
+          <div className="flex gap-2 items-center">
+            <div>
+              <CircleChevronLeft
+                className="custom-prev text-slate-800 cursor-pointer active:scale-90 transition-transform hover:scale-95"
+                size={35}
+              />
+            </div>
+            <div>
+              <CircleChevronRight
+                className="custom-next text-slate-800 cursor-pointer active:scale-90 transition-transform hover:scale-95"
+                size={35}
+              />
+            </div>
+          </div>
         </div>
 
-        <Carousel
-          className="p-2 z-40"
-          swipeable
-          draggable={false}
-          removeArrowOnDeviceType={["mobile"]}
-          responsive={{
-            desktop: {
-              breakpoint: { max: 3000, min: 1024 },
-              items: 5,
-              slidesToSlide: 4,
-            },
-            tablet: {
-              breakpoint: { max: 1024, min: 464 },
-              items: 4.5,
-              slidesToSlide: 4,
-            },
-            mobile: {
-              breakpoint: { max: 464, min: 0 },
-              items: 2.2,
-              slidesToSlide: 5,
-            },
-          }}
-        >
-          {/* {Array.from({ length: 15 }).map((_, idx) => (
-            <Link key={idx} to={`/products/${idx}`}>
-              <ProductCard
-                imgUrl="https://via.placeholder.com/150/92c952"
-                name="Product name and shit it is what it is fdgfsdg fdgfd gf d"
-                price={1500}
-                crossPrice={2000}
-                rating={4.5}
-                ratingCount={5}
-              />
-            </Link>
-          ))} */}
-          {products.map((product) => (
-            <Link key={product._id} to={`/products/${product.slug}`}>
-              <ProductCard
-                imgUrl={product.variants[0].images[0].imageUrl}
-                name={product.title}
-                price={product.variants[0].price}
-                crossPrice={product.variants[0]?.crossPrice}
-                rating={product.ratings[0]?.value || 0}
-                ratingCount={5}
-              />
-            </Link>
-          ))}
-        </Carousel>
+        <div>
+          <Swiper
+            slidesPerView={5}
+            spaceBetween={30}
+            navigation={{
+              prevEl: ".custom-prev",
+              nextEl: ".custom-next",
+            }}
+            className="mySwiper"
+            modules={[Navigation]}
+            breakpoints={{
+              0: {
+                slidesPerView: 2,
+                spaceBetween: 0,
+              },
+              345: {
+                slidesPerView: 2.2,
+                spaceBetween: 10,
+              },
+              480: {
+                slidesPerView: 2.2,
+                spaceBetween: 10,
+              },
+              640: {
+                slidesPerView: 4,
+                spaceBetween: 10,
+              },
+              1025: {
+                slidesPerView: 5,
+                spaceBetween: 10,
+              },
+            }}
+          >
+            {Array.from({ length: 15 }).map((_, idx) => (
+              <SwiperSlide key={idx}>
+                <Link to={`/products/${idx}`}>
+                  <ProductCard
+                    imgUrl="https://via.placeholder.com/150/92c952"
+                    name="Product name and shit it is what it is fdgfsdg fdgfd gf d"
+                    price={1500}
+                    crossPrice={2000}
+                    rating={4.5}
+                    ratingCount={5}
+                  />
+                </Link>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       </div>
 
       {/* latest products */}
