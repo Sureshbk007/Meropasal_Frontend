@@ -4,7 +4,7 @@ import currencyFormat from "../utils/currencyFormat";
 function ProductCard({ imgUrl, name, price, crossPrice, rating, className }) {
   return (
     <div
-      className={`flex flex-col w-40 lg:w-56 bg-slate-50 border-2 min-h-64 lg:min-h-80 rounded-lg overflow-hidden hover:shadow-md ${className}`}
+      className={`flex flex-col w-40 lg:w-56 bg-slate-50 border-2 min-h-64 box-border lg:min-h-80 rounded-lg overflow-hidden hover:shadow-md ${className}`}
     >
       <img src={imgUrl} className="h-40 lg:h-52 w-full object-cover" />
       <div className="px-2 py-1 lg:p-3 flex flex-col gap-1">
@@ -13,7 +13,7 @@ function ProductCard({ imgUrl, name, price, crossPrice, rating, className }) {
             {name}
           </span>
           <div className="flex items-center">
-            <StarRating size={14} rating={3.5} />
+            <StarRating size={14} rating={rating} />
             <span className="opacity-55 text-xs lg:text-sm">{rating}</span>
           </div>
         </div>

@@ -6,23 +6,30 @@ import {
   Zap,
 } from "lucide-react";
 import { Footer, Header, ProductCard } from "../components";
-import { useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { useEffect, useState } from "react";
+import { getHomeData } from "../api";
 
 function Home() {
-  const categories = useSelector((state) => state.store.categories);
-  const products = useSelector((state) => state.store.products);
-
+  const [homeData, setHomeData] = useState({
+    categories: [],
+    flashSaleProducts: [],
+    latestProducts: [],
+  });
   useEffect(() => {
-    window.scrollTo(0, 0);
+    (async () => {
+      const response = await getHomeData();
+      setHomeData(response.data.data);
+    })();
   }, []);
 
   let limitedCategories =
-    categories.length > 8 ? categories.slice(0, 8) : categories;
+    homeData.categories.length > 8
+      ? homeData.categories.slice(0, 8)
+      : homeData.categories;
   return (
     <>
       <Header />
@@ -54,11 +61,11 @@ function Home() {
       {/* categories */}
       <div className="bg-gray-50 flex flex-wrap justify-center gap-2 lg:gap-14 px-1 py-4 lg:p-8 ">
         {limitedCategories.map((category) => (
-          <Link to={`/products?category=${category.name}`} key={category.id}>
+          <Link to={`/products?category=${category.name}`} key={category._id}>
             <figure className="flex flex-col items-center">
               <div className="w-14 h-14 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-red-500  ">
                 <img
-                  src={`${category.image}`}
+                  src={`${category.image.imageUrl}`}
                   alt={`${category.name}`}
                   className="w-full h-full object-cover"
                 />
@@ -90,84 +97,86 @@ function Home() {
       </div>
 
       {/* flash sale */}
-      <div className="bg-gray-100 px-2 py-4 lg:px-16 lg:py-10 flex flex-col gap-3 lg:gap-8">
-        <div className="flex items-center justify-between">
-          <div className="flex gap-2 lg:gap-4 items-center">
-            <Zap
-              fill="white"
-              strokeWidth={1.5}
-              className="rounded-full bg-black w-8 h-8 lg:w-10 lg:h-10"
-            />
-            <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold ">
-              Flash Sale
-            </h3>
-          </div>
-          <div className="flex gap-2 items-center">
-            <div>
-              <CircleChevronLeft
-                className="custom-prev text-slate-800 cursor-pointer active:scale-90 transition-transform hover:scale-95"
-                size={35}
+      {homeData.flashSaleProducts.length > 0 && (
+        <div className="bg-gray-100 px-2 py-4 lg:px-16 lg:py-10 flex flex-col gap-3 lg:gap-8">
+          <div className="flex items-center justify-between">
+            <div className="flex gap-2 lg:gap-4 items-center">
+              <Zap
+                fill="white"
+                strokeWidth={1.5}
+                className="rounded-full bg-black w-8 h-8 lg:w-10 lg:h-10"
               />
+              <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold ">
+                Flash Sale
+              </h3>
             </div>
-            <div>
-              <CircleChevronRight
-                className="custom-next text-slate-800 cursor-pointer active:scale-90 transition-transform hover:scale-95"
-                size={35}
-              />
+            <div className="flex gap-2 items-center">
+              <div>
+                <CircleChevronLeft
+                  className="custom-prev text-slate-800 cursor-pointer active:scale-90 transition-transform hover:scale-95"
+                  size={35}
+                />
+              </div>
+              <div>
+                <CircleChevronRight
+                  className="custom-next text-slate-800 cursor-pointer active:scale-90 transition-transform hover:scale-95"
+                  size={35}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div>
-          <Swiper
-            slidesPerView={5}
-            spaceBetween={30}
-            navigation={{
-              prevEl: ".custom-prev",
-              nextEl: ".custom-next",
-            }}
-            className="mySwiper"
-            modules={[Navigation]}
-            breakpoints={{
-              0: {
-                slidesPerView: 2,
-                spaceBetween: 0,
-              },
-              345: {
-                slidesPerView: 2.2,
-                spaceBetween: 10,
-              },
-              480: {
-                slidesPerView: 2.2,
-                spaceBetween: 10,
-              },
-              640: {
-                slidesPerView: 4,
-                spaceBetween: 10,
-              },
-              1025: {
-                slidesPerView: 5,
-                spaceBetween: 10,
-              },
-            }}
-          >
-            {Array.from({ length: 15 }).map((_, idx) => (
-              <SwiperSlide key={idx}>
-                <Link to={`/products/${idx}`}>
-                  <ProductCard
-                    imgUrl="https://via.placeholder.com/150/92c952"
-                    name="Product name and shit it is what it is fdgfsdg fdgfd gf d"
-                    price={1500}
-                    crossPrice={2000}
-                    rating={4.5}
-                    ratingCount={5}
-                  />
-                </Link>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <div>
+            <Swiper
+              slidesPerView={5}
+              spaceBetween={30}
+              navigation={{
+                prevEl: ".custom-prev",
+                nextEl: ".custom-next",
+              }}
+              className="mySwiper"
+              modules={[Navigation]}
+              breakpoints={{
+                0: {
+                  slidesPerView: 2,
+                  spaceBetween: 0,
+                },
+                345: {
+                  slidesPerView: 2.2,
+                  spaceBetween: 10,
+                },
+                480: {
+                  slidesPerView: 2.2,
+                  spaceBetween: 10,
+                },
+                640: {
+                  slidesPerView: 4,
+                  spaceBetween: 10,
+                },
+                1025: {
+                  slidesPerView: 5,
+                  spaceBetween: 10,
+                },
+              }}
+            >
+              {homeData.flashSaleProducts.map((item, idx) => (
+                <SwiperSlide key={item._id}>
+                  <Link to={`/products/${item.slug}`}>
+                    <ProductCard
+                      imgUrl={item.images[0].imageUrl}
+                      name={item.title}
+                      price={item.sellingPrice}
+                      crossPrice={item?.crossPrice}
+                      rating={item.rating}
+                      ratingCount={5}
+                    />
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* latest products */}
       <section className="px-2 py-4 lg:px-16 lg:py-10 flex flex-col gap-1 lg:gap-8">
@@ -176,15 +185,14 @@ function Home() {
         </h3>
 
         <div className="grid gap-y-5 lg:gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 justify-items-center ">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <Link to={"/products/123"} key={i}>
+          {homeData.latestProducts.map((item) => (
+            <Link to={`/products/${item.slug}`} key={item._id}>
               <ProductCard
-                imgUrl="https://via.placeholder.com/150/92c952"
-                name="Product name and shit it is what it is fdgfsdg fdgfd gf d"
-                price={1500}
-                crossPrice={2000}
-                rating={4.5}
-                ratingCount={5}
+                imgUrl={item.images[0].imageUrl}
+                name={item.title}
+                price={item.sellingPrice}
+                crossPrice={item.crossPrice}
+                rating={item.rating}
               />
             </Link>
           ))}

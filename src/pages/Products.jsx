@@ -1,77 +1,134 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Drawer, Footer, Header, ProductCard } from "../components";
 import { SlidersHorizontal } from "lucide-react";
 import { createPortal } from "react-dom";
-import axiosInstance, { getProducts } from "../utils/axiosInstance";
 import { getAllProducts } from "../api";
-import { useSelector } from "react-redux";
 
 function Products() {
   const location = useLocation();
   const navigate = useNavigate();
-  const query = new URLSearchParams(location.search);
-  const searchQuery = query.get("q");
+  const [isSidebarFilterOpen, setIsSidebarFilterOpen] = useState(false);
+  const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState({
-    selectedCategories: [],
-    selectedBrands: [],
+    category: [],
+    brand: [],
     minPrice: "",
     maxPrice: "",
-    minRating: "",
+    rating: "",
+    sortBy: "",
   });
-  const [isSidebarFilterOpen, setIsSidebarFilterOpen] = useState(false);
-  const [products, setProducts] = useState(
-    useSelector((state) => state.store.products)
-  );
-
   const [showAll, setShowAll] = useState({
     categories: false,
     brands: false,
   });
 
-  const categories = [...new Set(products.map((product) => product.category))];
-  const brands = [...new Set(products.map((product) => product.brand))];
+  const categories = useMemo(
+    () => [...new Set(products.map((prod) => prod.category.name))],
+    [products]
+  );
+  const brands = useMemo(
+    () => [...new Set(products.map((prod) => prod.brand))],
+    [products]
+  );
 
-  const getProducts = async () => {
-    try {
-      setIsLoading(true);
-      const response = await getAllProducts();
-      console.log(response.data);
-      setProducts(response.data.data);
-    } catch (error) {
-      console.log("Failed to load products");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const limitCategories = showAll.categories
+    ? categories
+    : categories.slice(0, 8);
+  const limitBrands = showAll.brands ? brands : brands.slice(0, 8);
+
+  const searchParam = new URLSearchParams(location.search);
+  const searchQuery = searchParam.get("q");
 
   useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const response = await getAllProducts(location.search);
+        setProducts(response.data.data);
+      } catch (error) {
+        console.log("Failed to load products", error.message);
+      }
+    };
     getProducts();
-  }, []);
+  }, [location.search]);
 
-  const handleFilterChange = (name, value) => {
-    setFilters((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleFilterChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFilters((prevFilters) => {
+      if (type === "checkbox") {
+        const newValues = checked
+          ? [...prevFilters[name], value]
+          : prevFilters[name].filter((item) => item !== value);
+        return { ...prevFilters, [name]: newValues };
+      }
+      return { ...prevFilters, [name]: value };
+    });
   };
 
   const applyFilters = () => {
-    const queryParams = new URLSearchParams(filters);
-    navigate({
-      search: queryParams.toString(),
-    });
-    fetchProducts(filters);
+    const params = new URLSearchParams(location.search);
+
+    if (filters.category.length > 0) {
+      const existingCategories = params.getAll("category");
+      filters.category.forEach((cat) => {
+        if (!existingCategories.includes(cat)) {
+          params.append("category", cat);
+        }
+      });
+    } else {
+      params.delete("category");
+    }
+
+    if (filters.brand.length > 0) {
+      const existingBrands = params.getAll("brand");
+      filters.brand.forEach((br) => {
+        if (!existingBrands.includes(br)) {
+          params.append("brand", br);
+        }
+      });
+    } else {
+      params.delete("brand");
+    }
+
+    if (filters.minPrice) {
+      params.set("minPrice", filters.minPrice);
+    } else {
+      params.delete("minPrice");
+    }
+
+    if (filters.maxPrice) {
+      params.set("maxPrice", filters.maxPrice);
+    } else {
+      params.delete("maxPrice");
+    }
+
+    // Rating
+    if (filters.rating) {
+      params.set("rating", filters.rating);
+    } else {
+      params.delete("rating");
+    }
+
+    // Sort By
+    if (filters.sortBy) {
+      params.set("sortBy", filters.sortBy);
+    } else {
+      params.delete("sortBy");
+    }
+
+    navigate({ search: params.toString() });
   };
 
-  const toggleShowAll = (field) => {
-    setShowAll((prev) => ({ ...prev, [field]: !prev[field] }));
-  };
-  const displayCategories = showAll.categories
-    ? categories
-    : categories.slice(0, 8);
-  const displayBands = showAll.brands ? brands : brands.slice(0, 8);
+  useEffect(() => {
+    if (filters.sortBy) {
+      applyFilters();
+    }
+  }, [filters.sortBy]);
 
+  const handleSortingChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
   return (
     <>
       <Header />
@@ -86,91 +143,99 @@ function Products() {
             <div className="flex items-center gap-1">
               <input
                 type="number"
-                placeholder="Min"
+                name="minPrice"
+                placeholder="min"
+                value={filters.minPrice}
                 className="border border-gray-400 p-1 w-20 outline-none rounded-lg text-sm"
-                onChange={(e) => handleFilterChange("minPrice", e.target.value)}
+                onChange={handleFilterChange}
               />
               <span>-</span>
               <input
                 type="number"
-                placeholder="Max"
+                name="maxPrice"
+                placeholder="max"
+                value={filters.maxPrice}
                 className="border border-gray-400 p-1 w-20 outline-none rounded-lg text-sm"
-                onChange={(e) => handleFilterChange("maxPrice", e.target.value)}
+                onChange={handleFilterChange}
               />
             </div>
           </div>
 
           {/* categories */}
-          <div>
-            <div className="text-lg text-slate-700 border-b-2 mb-2">
-              Category
+          {categories.length > 0 && (
+            <div>
+              <div className="text-lg text-slate-700 border-b-2 mb-2">
+                Category
+              </div>
+              <ul className="text-slate-600 ">
+                {limitCategories.map((category, idx) => (
+                  <li key={idx}>
+                    <label className="flex gap-2 items-center accent-violet-600 cursor-pointer hover:text-violet-600">
+                      <input
+                        type="checkbox"
+                        name="category"
+                        value={category}
+                        checked={filters.category.includes(category)}
+                        onChange={handleFilterChange}
+                      />
+                      <span>{category}</span>
+                    </label>
+                  </li>
+                ))}
+                {categories.length > 8 && (
+                  <button
+                    onClick={() =>
+                      setShowAll((prev) => ({
+                        ...prev,
+                        categories: ![prev.categories],
+                      }))
+                    }
+                    className="text-violet-700"
+                  >
+                    {showAll.categories ? "- Show Less" : "+ Show More"}
+                  </button>
+                )}
+              </ul>
             </div>
-            <ul className="text-slate-600 ">
-              {displayCategories.map((category, idx) => (
-                <li key={idx}>
-                  <label className="flex gap-2 items-center accent-violet-600 cursor-pointer hover:text-violet-600">
-                    <input
-                      type="checkbox"
-                      onChange={(e) =>
-                        handleFilterChange(
-                          "selectedCategories",
-                          e.target.checked
-                            ? [...filters.selectedCategories, e.target.value]
-                            : filters.selectedCategories.filter(
-                                (c) => c !== e.target.value
-                              )
-                        )
-                      }
-                    />
-                    <span>{category}</span>
-                  </label>
-                </li>
-              ))}
-              {categories.length > 8 && (
-                <button
-                  onClick={() => toggleShowAll("categories")}
-                  className="text-violet-700"
-                >
-                  {showAll.categories ? "- Show Less" : "+ Show More"}
-                </button>
-              )}
-            </ul>
-          </div>
+          )}
 
           {/* brand */}
-          <div>
-            <div className="text-lg text-slate-700 border-b-2 mb-2">Brand</div>
-            <ul className="text-slate-600 ">
-              {displayBands.map((brand, idx) => (
-                <li key={idx}>
-                  <label className="flex gap-2 items-center accent-violet-600 cursor-pointer hover:text-violet-600">
-                    <input
-                      type="checkbox"
-                      onChange={(e) =>
-                        handleFilterChange(
-                          "selectedBrands",
-                          e.target.checked
-                            ? [...filters.selectedBrands, e.target.value]
-                            : filters.selectedBrands.filter(
-                                (b) => b !== e.target.value
-                              )
-                        )
-                      }
-                    />
-                    <span>{brand}</span>
-                  </label>
-                </li>
-              ))}
-              {brands.length > 8 && (
-                <button
-                  onClick={() => toggleShowAll("brands")}
-                  className="text-violet-700"
-                >
-                  {showAll.brands ? "- Show Less" : "+ Show More"}
-                </button>
-              )}
-            </ul>
-          </div>
+          {brands.length > 0 && (
+            <div>
+              <div className="text-lg text-slate-700 border-b-2 mb-2">
+                Brand
+              </div>
+              <ul className="text-slate-600 ">
+                {limitBrands.map((brand) => (
+                  <li key={brand}>
+                    <label className="flex gap-2 items-center accent-violet-600 cursor-pointer hover:text-violet-600">
+                      <input
+                        type="checkbox"
+                        name="brand"
+                        value={brand}
+                        checked={filters.brand.includes(brand)}
+                        onChange={handleFilterChange}
+                      />
+                      <span>{brand}</span>
+                    </label>
+                  </li>
+                ))}
+                {brands.length > 8 && (
+                  <button
+                    onClick={() =>
+                      setShowAll((prev) => ({
+                        ...prev,
+                        brands: ![prev.brands],
+                      }))
+                    }
+                    className="text-violet-700"
+                  >
+                    {showAll.brands ? "- Show Less" : "+ Show More"}
+                  </button>
+                )}
+              </ul>
+            </div>
+          )}
 
           {/* Rating */}
           <div>
@@ -186,8 +251,8 @@ function Products() {
                         type="radio"
                         name="rating"
                         value={fullStars}
-                        checked={filters.minRating === fullStars.toString()}
-                        onChange={() => handleFilterChange("minRating", rating)}
+                        checked={filters.rating === fullStars.toString()}
+                        onChange={handleFilterChange}
                       />
                       <div className="flex items-center">
                         <span className="text-sm">
@@ -211,137 +276,6 @@ function Products() {
           <button onClick={applyFilters}>Apply Filters</button>
         </div>
 
-        {/* sidebar filters */}
-        {createPortal(
-          <Drawer
-            isOpen={isSidebarFilterOpen}
-            onClose={() => setIsSidebarFilterOpen(false)}
-            side="left"
-          >
-            <div className=" flex flex-col gap-4 p-5 h-full overflow-y-auto scrollbar-none">
-              <div className="flex items-center justify-between">
-                <h4 className="text-xl font-medium text-slate-800">Filters</h4>
-                <span
-                  className="text-slate-600 font-bold text-lg hover:text-slate-400 cursor-pointer"
-                  onClick={() => setIsSidebarFilterOpen(false)}
-                >
-                  X
-                </span>
-              </div>
-
-              {/* price */}
-              <div>
-                <div className="text-lg text-slate-700 border-b-2 mb-2">
-                  Price
-                </div>
-                <div className="flex items-center gap-1">
-                  <input
-                    type="number"
-                    placeholder="Min"
-                    className="border border-gray-400 p-1 w-20 outline-none rounded-lg text-sm"
-                  />
-                  <span>-</span>
-                  <input
-                    type="number"
-                    placeholder="Max"
-                    className="border border-gray-400 p-1 w-20 outline-none rounded-lg text-sm"
-                  />
-                  <button className="bg-violet-800 text-slate-50 text-xs px-4 py-2 rounded-lg  ">
-                    Apply
-                  </button>
-                </div>
-              </div>
-
-              {/* categories */}
-              <div>
-                <div className="text-lg text-slate-700 border-b-2 mb-2">
-                  Category
-                </div>
-                <ul className="text-slate-600 ">
-                  {displayCategories.map((category, idx) => (
-                    <li key={idx}>
-                      <label className="flex gap-2 items-center accent-violet-600 cursor-pointer hover:text-violet-600">
-                        <input
-                          type="checkbox"
-                          name={category}
-                          value={category}
-                        />
-                        <span>{category}</span>
-                      </label>
-                    </li>
-                  ))}
-                  {categories.length > 8 && (
-                    <button
-                      onClick={() => toggleShowAll("categories")}
-                      className="text-violet-700"
-                    >
-                      {showAll.categories ? "- Show Less" : "+ Show More"}
-                    </button>
-                  )}
-                </ul>
-              </div>
-
-              {/* brand */}
-              <div>
-                <div className="text-lg text-slate-700 border-b-2 mb-2">
-                  Brand
-                </div>
-                <ul className="text-slate-600 ">
-                  {displayBands.map((brand, idx) => (
-                    <li key={idx}>
-                      <label className="flex gap-2 items-center accent-violet-600 cursor-pointer hover:text-violet-600">
-                        <input type="checkbox" name={brand} value={brand} />
-                        <span>{brand}</span>
-                      </label>
-                    </li>
-                  ))}
-                  {brands.length > 8 && (
-                    <button
-                      onClick={() => toggleShowAll("brands")}
-                      className="text-violet-700"
-                    >
-                      {showAll.brands ? "- Show Less" : "+ Show More"}
-                    </button>
-                  )}
-                </ul>
-              </div>
-
-              {/* Rating */}
-              <div>
-                <div className="text-lg text-slate-700 border-b-2 mb-2">
-                  Rating
-                </div>
-                <ul className="text-slate-600 flex flex-col gap-1">
-                  {Array.from({ length: 5 }, (_, idx) => {
-                    const fullStars = 5 - idx;
-                    const hollowStars = idx;
-                    return (
-                      <li key={idx}>
-                        <label className="flex gap-2 items-center accent-violet-600 cursor-pointer">
-                          <input type="radio" name="rating" value={fullStars} />
-                          <div className="flex items-center">
-                            <span className="text-sm">
-                              {"⭐️".repeat(fullStars)}
-                            </span>
-                            <span className="text-xl">
-                              {"☆".repeat(hollowStars)}
-                            </span>
-                            <span className="text-sm font-medium ml-1">
-                              {fullStars}
-                              {fullStars < 5 && "+"}
-                            </span>
-                          </div>
-                        </label>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </div>
-          </Drawer>,
-          document.body
-        )}
-
         <div className="xl:basis-4/5 p-5  flex flex-col gap-3 w-full">
           <div className="pb-2 border-b flex justify-between flex-col lg:flex-row gap-2">
             <div className="flex flex-wrap gap-3 items-center">
@@ -355,23 +289,28 @@ function Products() {
               <div className="flex gap-2 items-center">
                 <span className="text-sm lg:text-base">Sort By:</span>
                 <select
-                  name=""
+                  name="sortBy"
+                  value={filters.sortBy}
+                  onChange={handleSortingChange}
                   className="text-sm lg:text-base p-1 lg:p-2 rounded-xl border border-gray-400 bg-gray-50 outline-none cursor-pointer"
                 >
                   <option value="" className="text-xs lg:text-base">
-                    Newest
+                    Select
                   </option>
-                  <option value="asc" className="text-xs lg:text-base">
+                  <option value="latest" className="text-xs lg:text-base">
+                    Latest
+                  </option>
+                  <option
+                    value="priceLowToHigh"
+                    className="text-xs lg:text-base"
+                  >
                     Price: Low to High
                   </option>
-                  <option value="desc" className="text-xs lg:text-base">
+                  <option
+                    value="priceHighToLow"
+                    className="text-xs lg:text-base"
+                  >
                     Price: High to Low
-                  </option>
-                  <option value="ratingAsc" className="text-xs lg:text-base">
-                    Rating: Low to high
-                  </option>
-                  <option value="ratingDesc" className="text-xs lg:text-base">
-                    Rating: High to Low
                   </option>
                 </select>
               </div>
@@ -381,23 +320,192 @@ function Products() {
               />
             </div>
           </div>
-          <div className="grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-4 justify-items-center ">
-            {Array.from({ length: 16 }).map((_, idx) => (
-              <Link key={idx} to={`/products/${idx}`}>
-                <ProductCard
-                  imgUrl="https://via.placeholder.com/150/92c952"
-                  name="Product name and shit it is "
-                  price={1500}
-                  crossPrice={2000}
-                  rating={4.5}
-                  ratingCount={5}
-                />
-              </Link>
-            ))}
-          </div>
+          {products.length === 0 ? (
+            <div className="text-center text-slate-600">No products found</div>
+          ) : (
+            <div className="grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-4 justify-items-center ">
+              {products.map((item) => (
+                <Link key={item._id} to={`/products/${item.slug}`}>
+                  <ProductCard
+                    imgUrl={item.images[0].imageUrl}
+                    name={item.title}
+                    price={item.sellingPrice}
+                    crossPrice={item?.crossedPrice}
+                    rating={item.rating}
+                  />
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
+      {/* sidebar filters */}
+      {createPortal(
+        <Drawer
+          isOpen={isSidebarFilterOpen}
+          onClose={() => setIsSidebarFilterOpen(false)}
+          side="left"
+        >
+          <div className=" flex flex-col gap-4 p-5 h-full overflow-y-auto scrollbar-none">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xl font-medium text-slate-800">Filters</h4>
+              <span
+                className="text-slate-600 font-bold text-lg hover:text-slate-400 cursor-pointer"
+                onClick={() => setIsSidebarFilterOpen(false)}
+              >
+                X
+              </span>
+            </div>
+
+            {/* price */}
+            <div>
+              <div className="text-lg text-slate-700 border-b-2 mb-2">
+                Price
+              </div>
+              <div className="flex items-center gap-1">
+                <input
+                  type="number"
+                  name="minPrice"
+                  placeholder="min"
+                  value={filters.minPrice}
+                  onChange={handleFilterChange}
+                  className="border border-gray-400 p-1 w-20 outline-none rounded-lg text-sm"
+                />
+                <span>-</span>
+                <input
+                  type="number"
+                  name="maxPrice"
+                  placeholder="max"
+                  value={filters.maxPrice}
+                  onChange={handleFilterChange}
+                  className="border border-gray-400 p-1 w-20 outline-none rounded-lg text-sm"
+                />
+                <button className="bg-violet-800 text-slate-50 text-xs px-4 py-2 rounded-lg  ">
+                  Apply
+                </button>
+              </div>
+            </div>
+
+            {/* categories */}
+            {categories.length > 0 && (
+              <div>
+                <div className="text-lg text-slate-700 border-b-2 mb-2">
+                  Category
+                </div>
+                <ul className="text-slate-600 ">
+                  {limitCategories.map((category, idx) => (
+                    <li key={idx}>
+                      <label className="flex gap-2 items-center accent-violet-600 cursor-pointer hover:text-violet-600">
+                        <input
+                          type="checkbox"
+                          name="category"
+                          value={category}
+                          checked={filters.category.includes(category)}
+                          onChange={handleFilterChange}
+                        />
+                        <span>{category}</span>
+                      </label>
+                    </li>
+                  ))}
+                  {categories.length > 8 && (
+                    <button
+                      onClick={() =>
+                        setShowAll((prev) => ({
+                          ...prev,
+                          categories: ![prev.categories],
+                        }))
+                      }
+                      className="text-violet-700"
+                    >
+                      {showAll.categories ? "- Show Less" : "+ Show More"}
+                    </button>
+                  )}
+                </ul>
+              </div>
+            )}
+
+            {/* brand */}
+            {brands.length > 0 && (
+              <div>
+                <div className="text-lg text-slate-700 border-b-2 mb-2">
+                  Brand
+                </div>
+                <ul className="text-slate-600 ">
+                  {limitBrands.map((brand) => (
+                    <li key={brand}>
+                      <label className="flex gap-2 items-center accent-violet-600 cursor-pointer hover:text-violet-600">
+                        <input
+                          type="checkbox"
+                          name="brand"
+                          value={brand}
+                          checked={filters.brand.includes(brand)}
+                          onChange={handleFilterChange}
+                        />
+                        <span>{brand}</span>
+                      </label>
+                    </li>
+                  ))}
+                  {brands.length > 8 && (
+                    <button
+                      onClick={() =>
+                        setShowAll((prev) => ({
+                          ...prev,
+                          brands: ![prev.brands],
+                        }))
+                      }
+                      className="text-violet-700"
+                    >
+                      {showAll.brands ? "- Show Less" : "+ Show More"}
+                    </button>
+                  )}
+                </ul>
+              </div>
+            )}
+
+            {/* Rating */}
+            <div>
+              <div className="text-lg text-slate-700 border-b-2 mb-2">
+                Rating
+              </div>
+              <ul className="text-slate-600 flex flex-col gap-1">
+                {Array.from({ length: 5 }, (_, idx) => {
+                  const fullStars = 5 - idx;
+                  const hollowStars = idx;
+                  return (
+                    <li key={idx}>
+                      <label className="flex gap-2 items-center accent-violet-600 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="rating"
+                          value={fullStars}
+                          checked={filters.rating === fullStars.toString()}
+                          onChange={handleFilterChange}
+                        />
+                        <div className="flex items-center">
+                          <span className="text-sm">
+                            {"⭐️".repeat(fullStars)}
+                          </span>
+                          <span className="text-xl">
+                            {"☆".repeat(hollowStars)}
+                          </span>
+                          <span className="text-sm font-medium ml-1">
+                            {fullStars}
+                            {fullStars < 5 && "+"}
+                          </span>
+                        </div>
+                      </label>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            <button onClick={applyFilters}>Apply Filters</button>
+          </div>
+        </Drawer>,
+        document.body
+      )}
       <Footer />
     </>
   );
