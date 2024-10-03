@@ -41,15 +41,15 @@ function Products() {
   const searchQuery = searchParam.get("q");
 
   useEffect(() => {
-    const getProducts = async () => {
+    scrollTo(0, 0);
+    (async () => {
       try {
         const response = await getAllProducts(location.search);
         setProducts(response.data.data);
       } catch (error) {
         console.log("Failed to load products", error.message);
       }
-    };
-    getProducts();
+    })();
   }, [location.search]);
 
   const handleFilterChange = (e) => {
@@ -273,7 +273,12 @@ function Products() {
             </ul>
           </div>
 
-          <button onClick={applyFilters}>Apply Filters</button>
+          <button
+            onClick={applyFilters}
+            className="bg-violet-800 text-slate-50 px-4 py-2 rounded-lg"
+          >
+            Apply Filters
+          </button>
         </div>
 
         <div className="xl:basis-4/5 p-5  flex flex-col gap-3 w-full">
@@ -381,9 +386,6 @@ function Products() {
                   onChange={handleFilterChange}
                   className="border border-gray-400 p-1 w-20 outline-none rounded-lg text-sm"
                 />
-                <button className="bg-violet-800 text-slate-50 text-xs px-4 py-2 rounded-lg  ">
-                  Apply
-                </button>
               </div>
             </div>
 
@@ -501,7 +503,12 @@ function Products() {
               </ul>
             </div>
 
-            <button onClick={applyFilters}>Apply Filters</button>
+            <button
+              onClick={applyFilters}
+              className="bg-violet-800 text-slate-50 px-4 py-2 rounded-lg"
+            >
+              Apply Filters
+            </button>
           </div>
         </Drawer>,
         document.body

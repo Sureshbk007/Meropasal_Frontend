@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Footer, Header, ProductCard, StarRating } from "../components";
 import {
   CircleChevronLeft,
@@ -38,15 +38,38 @@ function ProductDetails() {
   });
   const [similarProducts, setSimilarProducts] = useState([]);
   const [currentLargeImage, setCurrentLargeImage] = useState("");
+  const [cartSelect, setCartSelect] = useState({
+    _id: "",
+    title: "",
+    image: "",
+    color: "",
+    size: "",
+    selectedQty: 1,
+    stock: "",
+    sellingPrice: "",
+  });
+
   useEffect(() => {
     scrollTo(0, 0);
     (async () => {
       try {
         const response = await getProductDetails(breadList[1]);
-        setProduct(response.data.data);
-        setCurrentLargeImage(response.data.data.images[0].imageUrl);
+        const fetchedProduct = response.data.data;
+        setProduct(fetchedProduct);
+        setCartSelect({
+          _id: fetchedProduct._id,
+          title: fetchedProduct.title,
+          image: fetchedProduct.images[0]?.imageUrl || "",
+          color: fetchedProduct.colors[0] || "",
+          size: fetchedProduct.sizes[0] || "",
+          selectedQty: 1,
+          stock: fetchedProduct.stock,
+          sellingPrice: fetchedProduct.sellingPrice,
+        });
+
+        setCurrentLargeImage(fetchedProduct.images[0].imageUrl);
         const similarProductsResponse = await getAllProducts(
-          `?category=${response.data.data.category.name}`
+          `?category=${fetchedProduct.category.name}`
         );
         const similarItems = similarProductsResponse.data.data.filter(
           (item) => item._id !== response.data.data._id
@@ -57,6 +80,16 @@ function ProductDetails() {
       }
     })();
   }, [breadList[1]]);
+
+  const handleAddToCart = () => {
+    console.log(cartSelect);
+    if (!cartSelect.color || !cartSelect.size) {
+      alert("Please select color and size.");
+      return;
+    }
+    dispatch(addToCart(cartSelect));
+    dispatch(toggleCart(true));
+  };
 
   return (
     <>
@@ -128,8 +161,14 @@ function ProductDetails() {
                 )}
               </span>
             </div>
+            <div className="font-medium py-1 text-slate-500 ">
+              Brand:
+              <span className="pl-2 text-brand text-sm font-medium">
+                {product.brand ? `${product.brand}` : "No Brand"}
+              </span>
+            </div>
             {/* price */}
-            <div className="flex items-end gap-2 py-2">
+            <div className="flex items-end gap-2 py-1">
               <data
                 value={product.sellingPrice}
                 className="text-lg lg:text-2xl font-semibold text-slate-700"
@@ -154,13 +193,16 @@ function ProductDetails() {
                 <div className="lg:text-lg font-medium text-slate-500 lg:mb-1">
                   Color:
                   <span className="text-slate-700 font-medium ml-1 lg:ml-3">
-                    {/* {cartSelect.color} */}
+                    {cartSelect.color}
                   </span>
                 </div>
-                <div className="flex gap-2 lg:gap-4 overflow-x-auto flex-wrap p-1 lg:p-2">
+                <div className="flex gap-2 lg:gap-4 overflow-x-auto flex-wrap p-1">
                   {product.colors.map((color) => (
                     <label
-                      className={`px-3 py-1 border border-slate-300 rounded-2xl bg-gray-100 cursor-pointer ${"outline outline-violet-500 outline-2"}`}
+                      className={`px-3 py-1 border border-slate-300 rounded-2xl bg-gray-100 cursor-pointer ${
+                        cartSelect.color == color &&
+                        "outline outline-violet-500 outline-2"
+                      }`}
                       key={color}
                     >
                       <input
@@ -168,6 +210,12 @@ function ProductDetails() {
                         name="color"
                         value={color}
                         className="hidden"
+                        onChange={(e) =>
+                          setCartSelect((prev) => ({
+                            ...prev,
+                            [e.target.name]: e.target.value,
+                          }))
+                        }
                       />
                       <span className="text-xs lg:text-sm font-medium text-slate-800 ">
                         {color}
@@ -184,13 +232,16 @@ function ProductDetails() {
                 <div className="lg:text-lg font-medium text-slate-500 mb-1">
                   Size:
                   <span className="text-slate-700 font-medium ml-1 lg:ml-3">
-                    {/* {cartSelect.size} */}
+                    {cartSelect.size}
                   </span>
                 </div>
-                <div className="flex gap-2 lg:gap-4 overflow-x-auto p-1 lg:p-2 flex-wrap">
+                <div className="flex gap-2 lg:gap-4 overflow-x-auto p-1 flex-wrap">
                   {product.sizes.map((size) => (
                     <label
-                      className={`px-3 py-1 border border-slate-300 rounded-2xl bg-gray-100 cursor-pointer ${"outline outline-violet-500 outline-2"}`}
+                      className={`px-3 py-1 border border-slate-300 rounded-2xl bg-gray-100 cursor-pointer ${
+                        cartSelect.size == size &&
+                        "outline outline-violet-500 outline-2"
+                      }`}
                       key={size}
                     >
                       <input
@@ -198,7 +249,12 @@ function ProductDetails() {
                         name="size"
                         value={size}
                         className="hidden"
-                        // onChange={handleCartSelectChange}
+                        onChange={(e) =>
+                          setCartSelect((prev) => ({
+                            ...prev,
+                            [e.target.name]: e.target.value,
+                          }))
+                        }
                       />
                       <span className="text-xs lg:text-sm font-medium text-slate-800 ">
                         {size}
@@ -245,7 +301,7 @@ function ProductDetails() {
             <div className="mt-4 lg:mt-8 font-medium">
               <button
                 className="flex gap-2 justify-center items-center bg-violet-800 hover:bg-violet-900 text-white p-3 lg:p-5 rounded-xl w-full"
-                // onClick={handleAddtoCart}
+                onClick={handleAddToCart}
               >
                 <ShoppingBag /> Add to Cart
               </button>

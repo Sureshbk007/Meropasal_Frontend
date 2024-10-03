@@ -12,9 +12,13 @@ function ProductCard({ imgUrl, name, price, crossPrice, rating, className }) {
           <span className="tracking-tight line-clamp-2 leading-tight text-sm lg:text-base">
             {name}
           </span>
-          <div className="flex items-center">
-            <StarRating size={14} rating={rating} />
-            <span className="opacity-55 text-xs lg:text-sm">{rating}</span>
+          <div className="flex items-center h-4">
+            {rating > 0 && (
+              <>
+                <StarRating size={14} rating={rating} />
+                <span className="opacity-55 text-xs lg:text-sm">{rating}</span>
+              </>
+            )}
           </div>
         </div>
         <div className="flex gap-2 items-center">

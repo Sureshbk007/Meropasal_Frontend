@@ -17,13 +17,13 @@ function Footer() {
           <Link className="block" to="/">
             Home
           </Link>
-          <Link className="block" to="products">
+          <Link className="block" to="/products">
             Products
           </Link>
-          <Link className="block" to="login">
+          <Link className="block" to="/login">
             Login
           </Link>
-          <Link className="block" to="signup">
+          <Link className="block" to="/signup">
             Sign Up
           </Link>
         </div>
