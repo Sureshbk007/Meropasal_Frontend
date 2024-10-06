@@ -76,10 +76,20 @@ const cartSlice = createSlice({
         state.orders[existingProductIndex].selectedQty = newQty;
       }
     },
+
+    clearCartProducts: (state, action) => {
+      state.orders = [];
+      state.isCartOpen = false;
+    },
   },
 });
 
-export const { toggleCart, addToCart, removeFromCart, changeCartProductQty } =
-  cartSlice.actions;
+export const {
+  toggleCart,
+  addToCart,
+  removeFromCart,
+  changeCartProductQty,
+  clearCartProducts,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

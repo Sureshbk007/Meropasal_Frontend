@@ -10,6 +10,7 @@ const localStorageMiddleware = (store) => (next) => (action) => {
   if (
     action.type === "cart/addToCart" ||
     action.type === "cart/removeFromCart" ||
+    action.type === "cart/clearCartProducts" ||
     action.type === "cart/changeCartProductQty"
   ) {
     const cartState = store.getState().cart.orders;

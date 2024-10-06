@@ -8,10 +8,8 @@ import { login } from "../store/slices/authSlice";
 import { useFormik } from "formik";
 import { loginSchema } from "../utils/authValidator";
 import { toggleCart } from "../store/slices/cartSlice";
-
-import { lineSpinner } from "ldrs";
+import "ldrs/lineSpinner";
 import { UserLogin } from "../api";
-lineSpinner.register();
 
 function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);

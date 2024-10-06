@@ -6,9 +6,8 @@ import { Footer, Header } from "../components";
 import { useFormik } from "formik";
 import { registrationSchema } from "../utils/authValidator";
 import { toast } from "react-toastify";
-import { lineSpinner } from "ldrs";
+import "ldrs/lineSpinner";
 import { UserRegister } from "../api";
-lineSpinner.register();
 
 function Signup() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
