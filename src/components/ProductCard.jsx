@@ -1,7 +1,7 @@
 import { StarRating } from "../components";
 import currencyFormat from "../utils/currencyFormat";
 
-function ProductCard({ imgUrl, name, price, crossPrice, rating, className }) {
+function ProductCard({ imgUrl, name, price, crossedPrice, rating, className }) {
   return (
     <div
       className={`flex flex-col w-40 lg:w-56 bg-slate-50 border-2 min-h-64 box-border lg:min-h-80 rounded-lg overflow-hidden hover:shadow-md ${className}`}
@@ -25,9 +25,9 @@ function ProductCard({ imgUrl, name, price, crossPrice, rating, className }) {
           <span className="text-slate-700 lg:text-lg font-bold">
             {currencyFormat(price)}
           </span>
-          {crossPrice && (
+          {crossedPrice && (
             <span className="line-through text-xs lg:text-sm opacity-60">
-              {currencyFormat(crossPrice)}
+              {currencyFormat(crossedPrice)}
             </span>
           )}
         </div>

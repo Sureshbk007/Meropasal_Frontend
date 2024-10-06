@@ -7,18 +7,25 @@ import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
 import { useFormik } from "formik";
 import { loginSchema } from "../utils/authValidator";
-import axiosInstance from "../utils/axiosInstance";
+import { toggleCart } from "../store/slices/cartSlice";
+
 import { lineSpinner } from "ldrs";
+import { UserLogin } from "../api";
 lineSpinner.register();
 
 function Login() {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    dispatch(toggleCart(false));
   }, []);
 
   const handleFormSubmit = async (values, { setErrors }) => {
     try {
-      const response = await axiosInstance.post("/auth/login", values);
+      const response = await UserLogin(values);
       const { user, token } = response.data.data;
       dispatch(login({ user, token }));
       localStorage.setItem("user", JSON.stringify(user));
@@ -47,9 +54,6 @@ function Login() {
     validationSchema: loginSchema,
     onSubmit: handleFormSubmit,
   });
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handlePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);

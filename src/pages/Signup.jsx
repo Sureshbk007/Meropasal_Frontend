@@ -6,8 +6,8 @@ import { Footer, Header } from "../components";
 import { useFormik } from "formik";
 import { registrationSchema } from "../utils/authValidator";
 import { toast } from "react-toastify";
-import axiosInstance from "../utils/axiosInstance";
 import { lineSpinner } from "ldrs";
+import { UserRegister } from "../api";
 lineSpinner.register();
 
 function Signup() {
@@ -20,7 +20,7 @@ function Signup() {
 
   const handleFormSubmit = async (values, { setErrors }) => {
     try {
-      const response = await axiosInstance.post("/auth/register", values);
+      const response = await UserRegister(values);
       const { data, message } = response.data;
       toast.success(message);
       navigate("/login");

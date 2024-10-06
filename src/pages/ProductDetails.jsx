@@ -15,6 +15,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { getAllProducts, getProductDetails } from "../api";
+import calculateProgress from "../utils/calculateProgress";
+import { setProgress } from "../store/slices/progressSlice";
 
 function ProductDetails() {
   const location = useLocation();
@@ -39,7 +41,7 @@ function ProductDetails() {
   const [similarProducts, setSimilarProducts] = useState([]);
   const [currentLargeImage, setCurrentLargeImage] = useState("");
   const [cartSelect, setCartSelect] = useState({
-    _id: "",
+    id: "",
     title: "",
     image: "",
     color: "",
@@ -53,11 +55,14 @@ function ProductDetails() {
     scrollTo(0, 0);
     (async () => {
       try {
-        const response = await getProductDetails(breadList[1]);
+        const [response] = await calculateProgress(
+          [getProductDetails(breadList[1])],
+          (value) => dispatch(setProgress(value))
+        );
         const fetchedProduct = response.data.data;
         setProduct(fetchedProduct);
         setCartSelect({
-          _id: fetchedProduct._id,
+          id: fetchedProduct._id,
           title: fetchedProduct.title,
           image: fetchedProduct.images[0]?.imageUrl || "",
           color: fetchedProduct.colors[0] || "",
@@ -82,15 +87,18 @@ function ProductDetails() {
   }, [breadList[1]]);
 
   const handleAddToCart = () => {
-    console.log(cartSelect);
-    if (!cartSelect.color || !cartSelect.size) {
-      alert("Please select color and size.");
-      return;
-    }
     dispatch(addToCart(cartSelect));
     dispatch(toggleCart(true));
   };
 
+  const handleCartSelect = (e) => {
+    const { name, value } = e.target;
+
+    setCartSelect((prev) => ({
+      ...prev,
+      [name]: name === "selectedQty" ? Number(value) : value,
+    }));
+  };
   return (
     <>
       <Header />
@@ -129,7 +137,7 @@ function ProductDetails() {
                 />
               )}
             </div>
-            <div className=" flex gap-2 lg:gap-5 mt-2 overflow-x-auto lg:p-2 scrollbar-none lg:scrollbar-show">
+            <div className=" flex gap-2 lg:gap-5 mt-2 overflow-x-auto lg:p-2 scrollbar-none">
               {product.images.map((image, idx) => (
                 <img
                   src={image.imageUrl}
@@ -210,12 +218,7 @@ function ProductDetails() {
                         name="color"
                         value={color}
                         className="hidden"
-                        onChange={(e) =>
-                          setCartSelect((prev) => ({
-                            ...prev,
-                            [e.target.name]: e.target.value,
-                          }))
-                        }
+                        onChange={handleCartSelect}
                       />
                       <span className="text-xs lg:text-sm font-medium text-slate-800 ">
                         {color}
@@ -249,12 +252,7 @@ function ProductDetails() {
                         name="size"
                         value={size}
                         className="hidden"
-                        onChange={(e) =>
-                          setCartSelect((prev) => ({
-                            ...prev,
-                            [e.target.name]: e.target.value,
-                          }))
-                        }
+                        onChange={handleCartSelect}
                       />
                       <span className="text-xs lg:text-sm font-medium text-slate-800 ">
                         {size}
@@ -271,15 +269,15 @@ function ProductDetails() {
                 Quantity:
               </span>
 
-              {product.stock > 0 ? (
+              {product?.stock > 0 ? (
                 <select
                   name="selectedQty"
-                  // value={cartSelect.quantity}
-                  // onChange={handleCartSelectChange}
+                  value={cartSelect.quantity}
+                  onChange={handleCartSelect}
                   className="px-3 border border-gray-300 rounded-lg bg-gray-100 outline-violet-500 font-medium text-slate-700 cursor-pointer"
                 >
                   {Array.from(
-                    { length: product.stock > 5 ? 5 : product.stock },
+                    { length: Math.min(5, product.stock) },
                     (_, idx) => (
                       <option
                         value={idx + 1}

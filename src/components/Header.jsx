@@ -1,7 +1,4 @@
 import {
-  ChevronDown,
-  CircleUserRound,
-  Home,
   LogOut,
   MoveRight,
   Package,
@@ -25,6 +22,7 @@ import { logout } from "../store/slices/authSlice";
 import currencyFormat from "../utils/currencyFormat";
 import { useEffect, useRef, useState } from "react";
 import { avatarJpg } from "../assets/jpg/index";
+import ProgressBar from "./ProgressBar";
 
 function Header() {
   const dispatch = useDispatch();
@@ -56,13 +54,9 @@ function Header() {
   }, [isUserOptionsOpen]);
 
   const totalCartAmount = orders.reduce(
-    (total, item) => total + item.selectedQty * item.price,
+    (total, item) => total + item.selectedQty * item.sellingPrice,
     0
   );
-
-  const handleCartQtyChange = (e, id) => {
-    dispatch(changeCartProductQty({ id, selectedQty: e.target.value }));
-  };
 
   const handleLogout = async () => {
     dispatch(logout());
@@ -89,6 +83,7 @@ function Header() {
   };
   return (
     <>
+      <ProgressBar />
       {/*navbar */}
       <div className="flex px-3 py-2 md:px-16 gap-3 items-center justify-between sticky top-0 z-50 bg-slate-50 text-xs sm:text-base border-b">
         <Link to="/">
@@ -108,7 +103,7 @@ function Header() {
             <Search color="gray" className="h-4 sm:h-auto" />
           </button>
           {/* search list */}
-          {/* <ul className="hidden absolute top-[45px] bg-gray-100 w-full border-2 rounded-lg overflow-hidden">
+          {/* <ul className="absolute top-[45px] bg-gray-100 w-full border-2 rounded-lg overflow-hidden">
             <li className="p-2 hover:bg-gray-300 cursor-pointer">
               shoes for men
             </li>
@@ -144,7 +139,7 @@ function Header() {
             onClose={() => dispatch(toggleCart(false))}
           >
             {orders.length > 0 ? (
-              <div className="p-2 sm:p-6 flex flex-col justify-evenly sm:justify-between h-full ">
+              <div className="p-2 sm:p-6 flex flex-col justify-evenly sm:justify-between h-full">
                 <div className="flex items-center justify-between text-violet-700 pb-3 border-b-2 border-violet-300">
                   <Truck className="h-8" />
                   <MoveRight
@@ -155,38 +150,47 @@ function Header() {
                   />
                 </div>
                 <div className="basis-4/6 flex flex-col overflow-y-auto scrollbar-none ">
-                  {orders.map((order) => (
+                  {orders.map((order, idx) => (
                     <div
                       className="flex justify-between items-center p-2 gap-2"
-                      key={order.id}
+                      key={idx}
                     >
                       <div className="flex gap-2">
                         <img
-                          src={order.img}
+                          src={order.image}
                           alt="product image"
                           className="h-16 w-16 md:w-24 object-cover object-center rounded"
                         />
                         <div className="flex flex-col justify-center">
-                          <span className="line-clamp-1 text-slate-800 font-medium">
-                            {order.name}
+                          <span className="line-clamp-1 text-slate-800 font-medium max-w-80">
+                            {order.title}
                           </span>
-                          <span className="text-slate-500 text-sm">
-                            Variant: {order.color}/{order.size}
-                          </span>
+                          {(order.color || order.size) && (
+                            <span className="text-slate-500 text-sm">
+                              Variant: {order.color}/{order.size}
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div>
-                        {order.stockQty > 0 ? (
+                        {order.stock > 0 ? (
                           <select
                             name="quantity"
                             value={order.selectedQty}
-                            onChange={(e) => handleCartQtyChange(e, order.id)}
+                            onChange={(e) =>
+                              dispatch(
+                                changeCartProductQty({
+                                  id: order.id,
+                                  color: order?.color,
+                                  size: order?.size,
+                                  newQty: +e.target.value,
+                                })
+                              )
+                            }
                             className="px-3 border border-gray-300 rounded-lg bg-gray-100 outline-violet-500 font-medium text-slate-700 cursor-pointer text-xs'"
                           >
                             {Array.from(
-                              {
-                                length: order.stockQty > 5 ? 5 : order.stockQty,
-                              },
+                              { length: Math.min(5, order.stock) },
                               (_, idx) => (
                                 <option
                                   value={idx + 1}
@@ -205,13 +209,21 @@ function Header() {
                         )}
                       </div>
                       <data value="" className="text-xs sm:text-sm font-medium">
-                        {currencyFormat(order.price * order.selectedQty)}
+                        {currencyFormat(order.sellingPrice * order.selectedQty)}
                       </data>
                       <Trash2
                         color="white"
                         size={28}
                         className="bg-red-500 p-1 rounded-full cursor-pointer h-7 sm:h-auto"
-                        onClick={() => dispatch(removeFromCart(order.id))}
+                        onClick={() =>
+                          dispatch(
+                            removeFromCart({
+                              id: order.id,
+                              color: order.color,
+                              size: order.size,
+                            })
+                          )
+                        }
                       />
                     </div>
                   ))}
@@ -245,7 +257,7 @@ function Header() {
               </div>
             ) : (
               <div className="p-2 sm:p-6 w-96">
-                <div className="flex items-center justify-between text-violet-700 pb-3 border-b-2 border-violet-300">
+                <div className="flex items-center justify-between text-violet-700 p-3 border-b-2 border-violet-300">
                   <Truck className="h-8" />
                   <MoveRight
                     onClick={() => dispatch(toggleCart(false))}

@@ -4,10 +4,14 @@ import { Drawer, Footer, Header, ProductCard } from "../components";
 import { SlidersHorizontal } from "lucide-react";
 import { createPortal } from "react-dom";
 import { getAllProducts } from "../api";
+import calculateProgress from "../utils/calculateProgress";
+import { setProgress } from "../store/slices/progressSlice";
+import { useDispatch } from "react-redux";
 
 function Products() {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isSidebarFilterOpen, setIsSidebarFilterOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState({
@@ -44,7 +48,10 @@ function Products() {
     scrollTo(0, 0);
     (async () => {
       try {
-        const response = await getAllProducts(location.search);
+        const [response] = await calculateProgress(
+          [getAllProducts(location.search)],
+          (value) => dispatch(setProgress(value))
+        );
         setProducts(response.data.data);
       } catch (error) {
         console.log("Failed to load products", error.message);
@@ -102,14 +109,12 @@ function Products() {
       params.delete("maxPrice");
     }
 
-    // Rating
     if (filters.rating) {
       params.set("rating", filters.rating);
     } else {
       params.delete("rating");
     }
 
-    // Sort By
     if (filters.sortBy) {
       params.set("sortBy", filters.sortBy);
     } else {
@@ -129,6 +134,35 @@ function Products() {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
+
+  const resetFilters = () => {
+    const params = new URLSearchParams(location.search);
+
+    const searchQuery = params.get("q");
+
+    params.delete("category");
+    params.delete("brand");
+    params.delete("minPrice");
+    params.delete("maxPrice");
+    params.delete("rating");
+    params.delete("sortBy");
+
+    if (searchQuery) {
+      params.set("q", searchQuery);
+    }
+
+    setFilters({
+      category: [],
+      brand: [],
+      minPrice: "",
+      maxPrice: "",
+      rating: "",
+      sortBy: "",
+    });
+
+    navigate({ search: params.toString() });
+  };
+
   return (
     <>
       <Header />
@@ -145,6 +179,7 @@ function Products() {
                 type="number"
                 name="minPrice"
                 placeholder="min"
+                min="0"
                 value={filters.minPrice}
                 className="border border-gray-400 p-1 w-20 outline-none rounded-lg text-sm"
                 onChange={handleFilterChange}
@@ -154,6 +189,7 @@ function Products() {
                 type="number"
                 name="maxPrice"
                 placeholder="max"
+                min="0"
                 value={filters.maxPrice}
                 className="border border-gray-400 p-1 w-20 outline-none rounded-lg text-sm"
                 onChange={handleFilterChange}
@@ -273,12 +309,20 @@ function Products() {
             </ul>
           </div>
 
-          <button
-            onClick={applyFilters}
-            className="bg-violet-800 text-slate-50 px-4 py-2 rounded-lg"
-          >
-            Apply Filters
-          </button>
+          <div className="flex items-center justify-center gap-4">
+            <button
+              onClick={resetFilters}
+              className="bg-slate-500 text-slate-50 px-4 py-2 rounded-lg"
+            >
+              Reset
+            </button>
+            <button
+              onClick={applyFilters}
+              className="bg-violet-800 text-slate-50 px-4 py-2 rounded-lg text-nowrap"
+            >
+              Apply Filters
+            </button>
+          </div>
         </div>
 
         <div className="xl:basis-4/5 p-5  flex flex-col gap-3 w-full">
@@ -503,12 +547,26 @@ function Products() {
               </ul>
             </div>
 
-            <button
-              onClick={applyFilters}
-              className="bg-violet-800 text-slate-50 px-4 py-2 rounded-lg"
-            >
-              Apply Filters
-            </button>
+            <div className="flex items-center justify-center gap-4">
+              <button
+                onClick={() => {
+                  resetFilters();
+                  setIsSidebarFilterOpen(false);
+                }}
+                className="bg-slate-500 text-slate-50 px-4 py-2 rounded-lg"
+              >
+                Reset
+              </button>
+              <button
+                onClick={() => {
+                  applyFilters();
+                  setIsSidebarFilterOpen(false);
+                }}
+                className="bg-violet-800 text-slate-50 px-4 py-2 rounded-lg"
+              >
+                Apply Filters
+              </button>
+            </div>
           </div>
         </Drawer>,
         document.body

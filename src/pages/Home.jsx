@@ -11,7 +11,10 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { useEffect, useState } from "react";
-import { getHomeData } from "../api";
+import { getAllCategory, getAllProducts } from "../api";
+import calculateProgress from "../utils/calculateProgress";
+import { setProgress } from "../store/slices/progressSlice";
+import { useDispatch } from "react-redux";
 
 function Home() {
   const [homeData, setHomeData] = useState({
@@ -19,10 +22,28 @@ function Home() {
     flashSaleProducts: [],
     latestProducts: [],
   });
+  const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
-      const response = await getHomeData();
-      setHomeData(response.data.data);
+      try {
+        const [categories, saleProducts, latestProducts] =
+          await calculateProgress(
+            [
+              getAllCategory("?limit=10"),
+              getAllProducts("?isSale=true&limit=15"),
+              getAllProducts(),
+            ],
+            (value) => dispatch(setProgress(value))
+          );
+
+        setHomeData({
+          categories: categories?.data.data || [],
+          flashSaleProducts: saleProducts?.data.data || [],
+          latestProducts: latestProducts?.data.data || [],
+        });
+      } catch (error) {
+        console.log("Failed to fetch data ", error.message);
+      }
     })();
   }, []);
 
@@ -166,7 +187,7 @@ function Home() {
                       imgUrl={item.images[0].imageUrl}
                       name={item.title}
                       price={item.sellingPrice}
-                      crossPrice={item?.crossPrice}
+                      crossedPrice={item?.crossedPrice}
                       rating={item.rating}
                       ratingCount={5}
                     />
@@ -191,7 +212,7 @@ function Home() {
                 imgUrl={item.images[0].imageUrl}
                 name={item.title}
                 price={item.sellingPrice}
-                crossPrice={item.crossPrice}
+                crossedPrice={item.crossedPrice}
                 rating={item.rating}
               />
             </Link>

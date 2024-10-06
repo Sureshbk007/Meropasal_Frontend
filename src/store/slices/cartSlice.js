@@ -1,58 +1,79 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const getCartFromLocalStorage = () => {
+  const savedCart = localStorage.getItem("cart");
+  return savedCart ? JSON.parse(savedCart) : [];
+};
+
 const initialState = {
-  // orders: [
-  //   {
-  //     id: Date.now(),
-  //     img: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  //     name: "Nike Low Calf shoes",
-  //     color: "red",
-  //     size: "md",
-  //     selectedQty: 1,
-  //     stockQty: 5,
-  //     price: 25000,
-  //   },
-  // ],
-  orders: [],
+  orders: getCartFromLocalStorage(),
   isCartOpen: false,
 };
+
+// Utility function to find the index of a product based on id, color, and size
+const findProductIndex = (orders, { id, color, size }) => {
+  return orders.findIndex((order) => {
+    const isSameProduct = order.id === id;
+    const isSameColor = color ? order.color === color : !order.color;
+    const isSameSize = size ? order.size === size : !order.size;
+
+    return isSameProduct && isSameColor && isSameSize;
+  });
+};
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    // Toggle cart open/close state
     toggleCart: (state, action) => {
       state.isCartOpen = action.payload;
     },
 
+    // Add product to cart or update quantity if already exists
     addToCart: (state, action) => {
       const product = action.payload;
-      const existingProduct = state.orders.find(
-        (order) => order.id === product.id
-      );
-
-      if (existingProduct) {
+      const existingProductIndex = findProductIndex(state.orders, product);
+      if (existingProductIndex >= 0) {
+        const existingProduct = state.orders[existingProductIndex];
         const newQty = existingProduct.selectedQty + product.selectedQty;
-        existingProduct.selectedQty = newQty > 5 ? 5 : newQty;
+        existingProduct.selectedQty = Math.min(newQty, product.stock);
       } else {
         state.orders.push(product);
       }
     },
 
+    // Remove product from cart or reduce its quantity
     removeFromCart: (state, action) => {
-      state.orders = state.orders.filter(
-        (order) => order.id !== action.payload
-      );
-      if (state.orders.length <= 0) {
+      const product = action.payload;
+      const existingProductIndex = findProductIndex(state.orders, product);
+
+      if (existingProductIndex >= 0) {
+        const existingProduct = state.orders[existingProductIndex];
+        if (existingProduct.selectedQty > 1) {
+          existingProduct.selectedQty -= 1;
+        } else {
+          state.orders.splice(existingProductIndex, 1);
+        }
+      }
+
+      // Close the cart if it's empty
+      if (state.orders.length === 0) {
         state.isCartOpen = false;
-        state.orders = [];
       }
     },
 
+    // Change product quantity directly
     changeCartProductQty: (state, action) => {
-      const { id, selectedQty } = action.payload;
-      const product = state.orders.find((item) => item.id === id);
-      if (product) {
-        product.selectedQty = +selectedQty;
+      const { id, color, size, newQty } = action.payload;
+      const existingProductIndex = findProductIndex(state.orders, {
+        id,
+        color,
+        size,
+      });
+
+      if (existingProductIndex >= 0) {
+        state.orders[existingProductIndex].selectedQty = newQty;
       }
     },
   },

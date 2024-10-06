@@ -26,7 +26,7 @@ function Checkout() {
   }, []);
 
   const totalCartAmount = orders.reduce(
-    (total, item) => total + item.selectedQty * item.price,
+    (total, item) => total + item.selectedQty * item.sellingPrice,
     0
   );
 
@@ -247,7 +247,7 @@ function Checkout() {
               <div className="flex justify-between" key={order.id}>
                 <div className="flex gap-3">
                   <img
-                    src={order.img}
+                    src={order.image}
                     alt={order.name}
                     className="h-20 w-20 object-cover object-center rounded"
                   />
@@ -257,7 +257,9 @@ function Checkout() {
                       Variant: {order?.color}/{order.size}
                     </span>
                     <div>
-                      <span className="font-medium">Rs {order.price}</span>
+                      <span className="font-medium">
+                        Rs {order.sellingPrice}
+                      </span>
                       <span className="text-slate-400">
                         {" "}
                         x {order.selectedQty}
@@ -266,7 +268,7 @@ function Checkout() {
                   </div>
                 </div>
                 <data className="font-medium">
-                  {currencyFormat(order.selectedQty * order.price)}
+                  {currencyFormat(order.selectedQty * order.sellingPrice)}
                 </data>
               </div>
             ))}

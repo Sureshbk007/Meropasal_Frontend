@@ -34,7 +34,7 @@ const router = createBrowserRouter(
       <Route
         path="checkout"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute role={["USER", "ADMIN"]} requireCartCheck>
             <Checkout />
           </ProtectedRoute>
         }

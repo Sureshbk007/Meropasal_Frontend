@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 function Drawer({ isOpen, onClose, children, side = "right" }) {
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
+
     return () => {
       document.body.overflow = "auto";
     };
