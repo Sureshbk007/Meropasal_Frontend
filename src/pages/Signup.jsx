@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import { registrationSchema } from "../utils/authValidator";
 import { toast } from "react-toastify";
 import "ldrs/lineSpinner";
-import { UserRegister } from "../api";
+import { userRegister } from "../api";
 
 function Signup() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -19,7 +19,7 @@ function Signup() {
 
   const handleFormSubmit = async (values, { setErrors }) => {
     try {
-      const response = await UserRegister(values);
+      const response = await userRegister(values);
       const { data, message } = response.data;
       toast.success(message);
       navigate("/login");

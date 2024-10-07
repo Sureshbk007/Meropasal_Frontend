@@ -6,6 +6,7 @@ import ProductDetails from "./ProductDetails";
 import Products from "./Products";
 import Checkout from "./Checkout";
 import Categories from "./Categories";
+import Dashboard from "./Dashboard";
 
 export {
   Home,
@@ -16,4 +17,5 @@ export {
   Products,
   Checkout,
   Categories,
+  Dashboard,
 };

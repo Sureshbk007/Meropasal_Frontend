@@ -66,14 +66,14 @@ function Header() {
 
   const userDropDownOptions = [
     {
-      title: "My Profile",
+      title: "My Account",
       icon: <User size={18} />,
-      link: "/user",
+      link: "/dashboard",
     },
     {
       title: "Orders",
       icon: <Package size={18} />,
-      link: "/user/orders",
+      link: "/orders",
     },
   ];
 

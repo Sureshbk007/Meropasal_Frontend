@@ -10,6 +10,7 @@ import {
   Products,
   Checkout,
   Categories,
+  Dashboard,
 } from "./pages";
 import "./index.css";
 import {
@@ -36,6 +37,14 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute role={["USER", "ADMIN"]} requireCartCheck>
             <Checkout />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="dashboard"
+        element={
+          <ProtectedRoute role={["USER", "ADMIN"]}>
+            <Dashboard />
           </ProtectedRoute>
         }
       />

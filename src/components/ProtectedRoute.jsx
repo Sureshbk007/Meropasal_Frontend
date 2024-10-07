@@ -1,9 +1,8 @@
 import { useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
-import { lineSpinner } from "ldrs";
+import "ldrs/lineSpinner";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
-lineSpinner.register();
 
 function ProtectedRoute({ role, children, requireCartCheck = false }) {
   const { isLogged, user, loading } = useSelector((state) => state.auth);
@@ -13,7 +12,7 @@ function ProtectedRoute({ role, children, requireCartCheck = false }) {
   useEffect(() => {
     if (loading) return;
     if (!isLogged) {
-      toast.warn("Login to checkout");
+      toast.warn("Login is Required");
       navigate("/login");
     } else if (!role.includes(user.role)) {
       toast.warn("You are not Authorized to access this page");

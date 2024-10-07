@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 import { loginSchema } from "../utils/authValidator";
 import { toggleCart } from "../store/slices/cartSlice";
 import "ldrs/lineSpinner";
-import { UserLogin } from "../api";
+import { userLogin } from "../api";
 
 function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -23,7 +23,7 @@ function Login() {
 
   const handleFormSubmit = async (values, { setErrors }) => {
     try {
-      const response = await UserLogin(values);
+      const response = await userLogin(values);
       const { user, token } = response.data.data;
       dispatch(login({ user, token }));
       localStorage.setItem("user", JSON.stringify(user));
