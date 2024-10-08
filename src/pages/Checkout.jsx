@@ -1,6 +1,6 @@
 import { CircleAlert, MoveLeft } from "lucide-react";
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { esewaPng, vanPng } from "../assets/png/";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCartProducts, toggleCart } from "../store/slices/cartSlice";
@@ -8,11 +8,34 @@ import currencyFormat from "../utils/currencyFormat";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import { createOrder } from "../api";
+import esewaCall from "../utils/esewaCall";
+import "ldrs/lineSpinner";
 
 function Checkout() {
   const navigate = useNavigate();
   const orders = useSelector((state) => state.cart.orders);
   const dispatch = useDispatch();
+  const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const paidOrder = new URLSearchParams(location.search).get("order");
+
+  useEffect(() => {
+    if (paidOrder) {
+      if (paidOrder === "success") {
+        toast.success("Order created Successfully");
+        navigate("/");
+        setTimeout(() => {
+          dispatch(clearCartProducts());
+        }, 500);
+      } else if (paidOrder === "failed") {
+        toast.error("Failed to created Order");
+        navigate("/checkout");
+      }
+      return;
+    }
+  }, [paidOrder, navigate, dispatch]);
 
   useEffect(() => {
     dispatch(toggleCart(false));
@@ -20,17 +43,44 @@ function Checkout() {
     document.body.style.overflow = "auto";
   }, []);
 
-  const handleFormSubmit = (values) => {
+  const handleFormSubmit = async (values) => {
     try {
-      console.log("Order successful: User details", values);
+      setIsLoading(true);
+      const formattedOrders = orders.map((order) => ({
+        productId: order.id,
+        price: order.sellingPrice,
+        quantity: order.selectedQty,
+        size: order.size || "",
+        color: order.color || "",
+      }));
+
+      const orderData = {
+        products: formattedOrders,
+        shippingDetails: {
+          recipientName: values.fullName,
+          contactNumber: values.phoneNumber,
+          email: values.email || "",
+          city: values.city,
+          address: values.address,
+          landmark: values.landmark || "",
+        },
+        paymentMethod: values.paymentMethod,
+      };
+
+      const response = await createOrder(orderData);
       if (values.paymentMethod === "ESEWA") {
-        console.log("Fill your esewa stuff");
+        esewaCall(response.data.data);
+        return;
       }
-      dispatch(clearCartProducts());
-      toast.success("Order placed successfully");
-      navigate("/user");
+      toast.success(response.data.message);
+      navigate("/");
+      setTimeout(() => {
+        dispatch(clearCartProducts());
+      }, 500);
     } catch (error) {
-      console.log("Failed to place order");
+      toast.error(error.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,10 +108,12 @@ function Checkout() {
       onSubmit: handleFormSubmit,
     });
 
-  const totalCartAmount = orders.reduce(
-    (total, item) => total + item.selectedQty * item.sellingPrice,
-    0
-  );
+  const delivaryCharge = 100;
+  let totalCartAmount =
+    orders.reduce(
+      (total, item) => total + item.selectedQty * item.sellingPrice,
+      0
+    ) + delivaryCharge;
 
   const goBack = () => {
     navigate(-1);
@@ -301,8 +353,8 @@ function Checkout() {
           <div className="basis-2/5 md:min-w-[370px] flex flex-col h-full gap-3 p-4 shadow-xl border-2 border-gray-300 rounded-lg">
             <h3 className="font-semibold text-center">Order Summary</h3>
             <div className="flex flex-col gap-3">
-              {orders.map((order) => (
-                <div className="flex justify-between" key={order.id}>
+              {orders.map((order, idx) => (
+                <div className="flex justify-between" key={idx}>
                   <div className="flex gap-3">
                     <img
                       src={order.image}
@@ -344,7 +396,9 @@ function Checkout() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Delivery Charge</span>
-                  <data className="font-medium uppercase">Free</data>
+                  <data className="font-medium uppercase">
+                    {currencyFormat(delivaryCharge)}
+                  </data>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Total</span>
@@ -355,19 +409,32 @@ function Checkout() {
               </div>
               <button
                 type="submit"
-                disabled={orders.length < 1}
+                disabled={orders.length < 1 || isLoading}
                 className="disabled:opacity-50 disabled:cursor-not-allowed hidden md:block bg-violet-800 hover:bg-violet-900 w-full p-3 text-white font-medium rounded-lg"
               >
-                <span>Place Order</span>
+                {isLoading ? (
+                  <l-line-spinner
+                    size="25"
+                    stroke="2"
+                    speed="1"
+                    color="white"
+                  />
+                ) : (
+                  <span>Place Order</span>
+                )}
               </button>
             </div>
           </div>
           <button
             type="submit"
-            disabled={orders.length < 1}
+            disabled={orders.length < 1 || isLoading}
             className="disabled:opacity-50 disabled:cursor-not-allowed block md:hidden bg-violet-800 hover:bg-violet-900 w-full p-3 text-white font-medium rounded-lg order-last"
           >
-            Place Order
+            {isLoading ? (
+              <l-line-spinner size="25" stroke="2" speed="1" color="white" />
+            ) : (
+              <span>Place Order</span>
+            )}
           </button>
         </form>
       </div>
