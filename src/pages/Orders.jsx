@@ -16,7 +16,6 @@ function Orders() {
         setIsLoading(true);
         const response = await getUserOrders();
         setOrders(response.data.data);
-        console.log(response.data.data);
       } catch (error) {
         if (error.response && error.response.data.message)
           toast.error(error.response.data.message);
@@ -64,7 +63,11 @@ function Orders() {
                     <div>
                       <h3 className="text-slate-400">Delivery Date</h3>
                       <p className="text-slate-700">
-                        {new Date(order.createdAt).toLocaleDateString("en-Us", {
+                        {new Date(
+                          new Date(order.createdAt).setDate(
+                            new Date(order.createdAt).getDate() + 3
+                          )
+                        ).toLocaleDateString("en-US", {
                           year: "numeric",
                           month: "short",
                           day: "numeric",
@@ -85,14 +88,14 @@ function Orders() {
                       className="flex hover:bg-slate-200 cursor-pointer"
                       onClick={() => handleRedirect(product.productId.slug)}
                     >
-                      <div className="h-40 w-36 p-5">
+                      <div className="h-40 w-36 md:p-5 p-2">
                         <img
                           src={product.productId.images[0].imageUrl}
                           alt={product.productId.title}
                           className="h-full w-full object-cover rounded-xl"
                         />
                       </div>
-                      <div className="flex justify-between w-full p-4 ">
+                      <div className="flex flex-col gap-4 md:flex-row justify-evenly w-full p-4 flex-wrap ">
                         <div>
                           <h3 className="font-semibold text-slate-700 line-clamp-2 w-60 md:w-80">
                             {product.productId.title}
@@ -117,6 +120,26 @@ function Orders() {
                             quantity :
                             <span className="text-slate-700 ml-1">
                               {product.quantity}
+                            </span>
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-slate-400 font-medium">
+                            Status :
+                            <span className="text-slate-700 ml-1">
+                              {order.status}
+                            </span>
+                          </p>
+                          <p className="text-slate-400 font-medium">
+                            Payment Method :
+                            <span className="text-slate-700 ml-1">
+                              {order.payment.paymentMethod}
+                            </span>
+                          </p>
+                          <p className="text-slate-400 font-medium">
+                            Payment Status :
+                            <span className="text-slate-700 ml-1">
+                              {order.payment.paymentStatus}
                             </span>
                           </p>
                         </div>
