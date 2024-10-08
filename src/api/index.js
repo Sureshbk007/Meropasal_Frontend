@@ -35,5 +35,7 @@ export const getProductDetails = async (slug) =>
 export const getAllCategory = async (filter = "") =>
   await API.get(`/category${filter}`);
 
+export const getUserOrders = async () => await API.get("/orders/my-orders");
+
 export const createOrder = async (data) =>
   await API.post("/orders/create", data);

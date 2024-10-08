@@ -11,6 +11,7 @@ import {
   Checkout,
   Categories,
   Dashboard,
+  Orders,
 } from "./pages";
 import "./index.css";
 import {
@@ -45,6 +46,14 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute role={["USER", "ADMIN"]}>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="orders"
+        element={
+          <ProtectedRoute role={["USER", "ADMIN"]}>
+            <Orders />
           </ProtectedRoute>
         }
       />
