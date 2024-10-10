@@ -170,7 +170,7 @@ function Login() {
               )}
             </button>
           </form>
-          <span className="text-slate-500 text-sm before:content-['-_'] after:content-['_-'] ">
+          {/* <span className="text-slate-500 text-sm before:content-['-_'] after:content-['_-'] ">
             or
           </span>
           <Link
@@ -179,7 +179,7 @@ function Login() {
           >
             <img src={GoogleSvg} alt="google logo" className="w-7" /> Login with
             Google
-          </Link>
+          </Link>     */}
           <div className="text-slate-500">
             <span>Don't have an account? </span>
             <Link

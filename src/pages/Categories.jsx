@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Footer, Header } from "../components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getAllCategory } from "../api";
 
 function Categories() {
   // const categories = [
@@ -51,10 +52,14 @@ function Categories() {
   //     img: "https://via.placeholder.com/600/771796",
   //   },
   // ];
-  const categories = useSelector((state) => state.store.categories);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    (async () => {
+      const response = await getAllCategory();
+      setCategories(response.data.data);
+    })();
   }, []);
   return (
     <>
@@ -65,11 +70,11 @@ function Categories() {
         </h3>
         <div className=" flex flex-wrap my-4 gap-2 lg:gap-14 ">
           {categories.map((category) => (
-            <Link to={`/products?category=${category.id}`} key={category.id}>
+            <Link to={`/products?category=${category._id}`} key={category._id}>
               <figure className="flex flex-col items-center">
                 <div className="w-14 h-14 lg:w-20 lg:h-20 rounded-full overflow-hidden ">
                   <img
-                    src={`${category.image}`}
+                    src={`${category.image.imageUrl}`}
                     alt={`${category.name}`}
                     className="w-full h-full object-cover"
                   />

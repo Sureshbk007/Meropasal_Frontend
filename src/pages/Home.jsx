@@ -98,7 +98,7 @@ function Home() {
           </Link>
         ))}
 
-        {limitedCategories.length > 8 && (
+        {homeData.categories.length > 8 && (
           <Link to="/categories" onClick={() => scrollTo(0, 0)}>
             <figure className="flex flex-col items-center">
               <div className="w-14 lg:w-20 aspect-square border-2 rounded-full overflow-hidden flex justify-center items-center ">
@@ -200,25 +200,27 @@ function Home() {
       )}
 
       {/* latest products */}
-      <section className="px-2 py-4 lg:px-16 lg:py-10 flex flex-col gap-1 lg:gap-8">
-        <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold text-start p-3 lg:p-0">
-          Latest Products
-        </h3>
+      {homeData.latestProducts.length > 0 && (
+        <section className="px-2 py-4 lg:px-16 lg:py-10 flex flex-col gap-1 lg:gap-8">
+          <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold text-start p-3 lg:p-0">
+            Latest Products
+          </h3>
 
-        <div className="grid gap-y-5 lg:gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 justify-items-center ">
-          {homeData.latestProducts.map((item) => (
-            <Link to={`/products/${item.slug}`} key={item._id}>
-              <ProductCard
-                imgUrl={item.images[0].imageUrl}
-                name={item.title}
-                price={item.sellingPrice}
-                crossedPrice={item.crossedPrice}
-                rating={item.rating}
-              />
-            </Link>
-          ))}
-        </div>
-      </section>
+          <div className="grid gap-y-5 lg:gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 justify-items-center ">
+            {homeData.latestProducts.map((item) => (
+              <Link to={`/products/${item.slug}`} key={item._id}>
+                <ProductCard
+                  imgUrl={item.images[0].imageUrl}
+                  name={item.title}
+                  price={item.sellingPrice}
+                  crossedPrice={item.crossedPrice}
+                  rating={item.rating}
+                />
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="bannerGradient h-44 lg:h-60 flex justify-center items-center">
         <span className="text-xl lg:text-3xl font-bold text-slate-100 italic drop-shadow-2xl">

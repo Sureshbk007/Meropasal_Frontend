@@ -34,6 +34,20 @@ export const getProductDetails = async (slug) =>
 
 export const getAllCategory = async (filter = "") =>
   await API.get(`/category${filter}`);
+export const createCategory = async (formData) =>
+  await API.post("/category", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+export const deleteCategory = async (id) =>
+  await API.delete(`/category?id=${id}`);
+export const updateCategory = async (id, formData) =>
+  await API.put(`/category?id=${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
 export const getUserOrders = async () => await API.get("/orders/my-orders");
 

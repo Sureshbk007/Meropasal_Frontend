@@ -186,7 +186,7 @@ function Signup() {
               )}
             </button>
           </form>
-          <span className="text-slate-500 text-sm before:content-['-_'] after:content-['_-'] ">
+          {/* <span className="text-slate-500 text-sm before:content-['-_'] after:content-['_-'] ">
             or
           </span>
           <Link
@@ -195,7 +195,7 @@ function Signup() {
           >
             <img src={GoogleSvg} alt="google logo" className="w-7" /> Sign up
             with Google
-          </Link>
+          </Link> */}
           <div className="text-slate-500">
             <span>Already have an account? </span>
             <Link

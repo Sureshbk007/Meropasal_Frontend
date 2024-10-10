@@ -4,5 +4,14 @@ import ProductCard from "./ProductCard";
 import StarRating from "./StarRating";
 import Drawer from "./Drawer";
 import ProtectedRoute from "./ProtectedRoute";
+import Modal from "./Modal";
 
-export { Header, Footer, ProductCard, StarRating, Drawer, ProtectedRoute };
+export {
+  Header,
+  Footer,
+  ProductCard,
+  StarRating,
+  Drawer,
+  ProtectedRoute,
+  Modal,
+};
