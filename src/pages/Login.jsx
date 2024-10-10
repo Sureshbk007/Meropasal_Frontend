@@ -26,9 +26,9 @@ function Login() {
       const response = await userLogin(values);
       const { user, token } = response.data.data;
       dispatch(login({ user, token }));
-      localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("token", token);
-      navigate("/");
+      if (user.role === "ADMIN") navigate("/admin");
+      else navigate("/");
     } catch (err) {
       if (err.response && err.response.data.errors) {
         setErrors(err.response.data.errors);

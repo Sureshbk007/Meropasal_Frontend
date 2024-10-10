@@ -23,6 +23,7 @@ import {
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
 import { ProtectedRoute } from "./components/index.js";
+import Admin from "./pages/Admin.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -54,6 +55,14 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute role={["USER", "ADMIN"]}>
             <Orders />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="admin"
+        element={
+          <ProtectedRoute role={["USER", "ADMIN"]}>
+            <Admin />
           </ProtectedRoute>
         }
       />

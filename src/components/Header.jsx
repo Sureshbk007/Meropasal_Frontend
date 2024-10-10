@@ -23,6 +23,7 @@ import currencyFormat from "../utils/currencyFormat";
 import { useEffect, useRef, useState } from "react";
 import { avatarJpg } from "../assets/jpg/index";
 import ProgressBar from "./ProgressBar";
+import { getAllProducts } from "../api";
 
 function Header() {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ function Header() {
   const dropdownRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const [searchProducts, setSearchProducts] = useState([]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -58,6 +60,17 @@ function Header() {
     0
   );
 
+  useEffect(() => {
+    if (searchQuery.trim().length > 0) {
+      const timeoutId = setTimeout(async () => {
+        const response = await getAllProducts(`?q=${searchQuery}&limit=10`);
+        setSearchProducts(response.data.data);
+      }, 350);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchQuery]);
+
   const handleLogout = async () => {
     dispatch(logout());
     localStorage.removeItem("user");
@@ -81,6 +94,8 @@ function Header() {
     e.preventDefault();
     navigate(`/products?q=${searchQuery}`);
   };
+
+  const handleAutoCompleteSearch = (e) => {};
   return (
     <>
       <ProgressBar />
@@ -103,23 +118,28 @@ function Header() {
             <Search color="gray" className="h-4 sm:h-auto" />
           </button>
           {/* search list */}
-          {/* <ul className="absolute top-[45px] bg-gray-100 w-full border-2 rounded-lg overflow-hidden">
-            <li className="p-2 hover:bg-gray-300 cursor-pointer">
-              shoes for men
-            </li>
-            <li className="p-2 hover:bg-gray-300 cursor-pointer">
-              shoes for men
-            </li>
-            <li className="p-2 hover:bg-gray-300 cursor-pointer">
-              shoes for men
-            </li>
-            <li className="p-2 hover:bg-gray-300 cursor-pointer">
-              shoes for men
-            </li>
-            <li className="p-2 hover:bg-gray-300 cursor-pointer">
-              shoes for men
-            </li>
-          </ul> */}
+          {searchProducts.length > 0 && (
+            <ul className="absolute top-[45px] bg-gray-100 w-full border-2 rounded-lg overflow-hidden">
+              {searchProducts.map((item) => (
+                <li
+                  className="p-2 hover:bg-gray-300 cursor-pointer"
+                  key={item._id}
+                >
+                  <Link
+                    to={`/products/${item.slug}`}
+                    className="h-full w-full flex items-center gap-2"
+                  >
+                    <img
+                      src={item.images[0].imageUrl}
+                      alt={item.title}
+                      className="w-8 h-8"
+                    />
+                    <span className="line-clamp-1 ">{item.title}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </form>
 
         <div className="flex gap-1 sm:gap-4 items-center relative ">

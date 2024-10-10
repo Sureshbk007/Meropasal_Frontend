@@ -8,6 +8,7 @@ import Checkout from "./Checkout";
 import Categories from "./Categories";
 import Dashboard from "./Dashboard";
 import Orders from "./Orders";
+import Admin from "./Admin";
 
 export {
   Home,
