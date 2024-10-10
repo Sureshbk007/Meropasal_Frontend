@@ -17,6 +17,7 @@ API.interceptors.request.use(
   }
 );
 
+// user api
 export const userLogin = async (data) => await API.post("/auth/login", data);
 export const userRegister = async (data) =>
   await API.post("/auth/register", data);
@@ -27,11 +28,19 @@ export const userUpdate = async (formData) =>
     },
   });
 
+// product api
 export const getAllProducts = async (filter = "") =>
   await API.get(`/products${filter}`);
 export const getProductDetails = async (slug) =>
   await API.get(`/products/${slug}`);
+export const createProduct = async (formData) =>
+  await API.post("/product", formData);
+export const deleteProduct = async (id) =>
+  await API.delete(`/product?id=${id}`);
+export const updateProduct = async (id, formData) =>
+  await API.put(`/product?id=${id}`, formData, { new: true });
 
+// category api
 export const getAllCategory = async (filter = "") =>
   await API.get(`/category${filter}`);
 export const createCategory = async (formData) =>
@@ -49,7 +58,7 @@ export const updateCategory = async (id, formData) =>
     },
   });
 
+// order api
 export const getUserOrders = async () => await API.get("/orders/my-orders");
-
 export const createOrder = async (data) =>
   await API.post("/orders/create", data);

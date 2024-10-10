@@ -217,7 +217,7 @@ function Categories() {
           <div className="relative bg-white w-80 p-2 rounded-lg">
             <button
               onClick={handleModalClose}
-              className="absolute top-3 right-3 hover:bg-gray-500 rounded-full p-[2px] group transition-all"
+              className="absolute top-3 right-3 hover:bg-red-600 rounded-full p-[2px] group transition-all"
             >
               <XIcon
                 size={25}
@@ -341,7 +341,7 @@ function Categories() {
               ))
             ) : (
               <tr>
-                <td className="p-5 text-center">
+                <td colSpan={3} className="p-5 text-center">
                   No Category to show, add category
                 </td>
               </tr>
