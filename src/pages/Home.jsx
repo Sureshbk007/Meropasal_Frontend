@@ -30,8 +30,8 @@ function Home() {
           await calculateProgress(
             [
               getAllCategory("?limit=10"),
-              getAllProducts("?isSale=true&limit=15"),
-              getAllProducts(),
+              getAllProducts("?isSale=true&limit=15&isActive=true"),
+              getAllProducts("?isActive=true"),
             ],
             (value) => dispatch(setProgress(value))
           );

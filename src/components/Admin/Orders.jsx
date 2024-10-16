@@ -1,44 +1,25 @@
 import { Trash2 } from "lucide-react";
 import currencyFormat from "../../utils/currencyFormat";
+import { useEffect, useState } from "react";
+import { getAllOrders } from "../../api";
 function Orders() {
-  const category = [
-    {
-      id: 1,
-      name: "Watches",
-      image:
-        "https://cdn.blanxer.com/category_image/649bdead6d8fbbdc514712e1/649be1946d8fbbdc514715e1.png",
-      price: 2000,
-      inventory: 5,
-      status: "Active",
-      created: "jan 20, 2022",
-    },
-    {
-      id: 2,
-      name: "Pants",
-      image:
-        "https://cdn.blanxer.com/category_image/649bdead6d8fbbdc514712e1/649be1946d8fbbdc514715e1.png",
-      price: 2000,
-      inventory: 5,
-      status: "Active",
-      created: "jan 20, 2022",
-    },
-    {
-      id: 3,
-      name: "Bags",
-      image:
-        "https://cdn.blanxer.com/category_image/649bdead6d8fbbdc514712e1/649be1946d8fbbdc514715e1.png",
-      price: 2000,
-      inventory: 5,
-      status: "Active",
-      created: "jan 20, 2022",
-    },
-  ];
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await getAllOrders();
+      setOrders(response.data.data);
+    })();
+  }, []);
+
+  const handleOrderChange = () => {};
+
   return (
     <div>
       <div className="flex justify-between">
         <h1 className="font-semibold text-slate-500 text-lg">Products</h1>
         <button className="text-slate-50 bg-brand cursor-pointer px-4 py-2 text-sm rounded-lg font-semibold hover:bg-opacity-80">
-          Add Product
+          Add Order
         </button>
       </div>
       <div>
@@ -57,23 +38,51 @@ function Orders() {
             </tr>
           </thead>
           <tbody>
-            {category.length > 0 ? (
-              category.map((cat, idx) => (
-                <tr key={cat.id} className="hover:bg-slate-400 cursor-pointer">
+            {orders.length > 0 ? (
+              orders.map((order, idx) => (
+                <tr
+                  key={order.orderId}
+                  className="hover:bg-slate-400 cursor-pointer"
+                >
                   <td className="pl-4">{idx + 1}</td>
                   <td className="pl-4">
                     <div className="p-2 pl-0">
-                      <span className="text-slate-600 font-semibold">
-                        {cat.name}
+                      <span className="text-slate-600 font-semibold capitalize">
+                        {order.shippingDetails.recipientName}
                       </span>
                     </div>
                   </td>
-                  <td className="pl-4">5</td>
-                  <td className="pl-4">{currencyFormat(cat.price)}</td>
-                  <td className="pl-4">unpaid</td>
-                  <td className="pl-4">COD</td>
-                  <td className="pl-4">Pending</td>
-                  <td className="pl-4">Jan 7, 2024</td>
+                  <td className="pl-4">
+                    {order.products.reduce(
+                      (acc, curr) => acc + curr.quantity,
+                      0
+                    )}
+                  </td>
+                  <td className="pl-4">{currencyFormat(order.totalAmount)}</td>
+                  <td className="pl-4">{order.payment.paymentStatus}</td>
+                  <td className="pl-4">{order.payment.paymentMethod}</td>
+                  <td className="pl-4">
+                    <select
+                      name="status"
+                      value={order.status}
+                      onChange={handleOrderChange}
+                      className="bg-slate-50 border rounded-lg p-1 cursor-pointer"
+                    >
+                      <option value="PENDING">PENDING</option>
+                      <option value="PROCESSING">PROCESSING</option>
+                      <option value="SHIPPING">SHIPPING</option>
+                      <option value="DELIVERED">DELIVERED</option>
+                      <option value="CANCELLED">CANCELLED</option>
+                      <option value="RETURNED">RETURNED</option>
+                    </select>
+                  </td>
+                  <td className="pl-4">
+                    {new Date(order.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </td>
                   <td className="pl-4">
                     <Trash2 className="text-red-500" size={20} />
                   </td>

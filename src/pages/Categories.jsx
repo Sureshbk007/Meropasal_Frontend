@@ -70,7 +70,7 @@ function Categories() {
         </h3>
         <div className=" flex flex-wrap my-4 gap-2 lg:gap-14 ">
           {categories.map((category) => (
-            <Link to={`/products?category=${category._id}`} key={category._id}>
+            <Link to={`/products?category=${category.name}`} key={category._id}>
               <figure className="flex flex-col items-center">
                 <div className="w-14 h-14 lg:w-20 lg:h-20 rounded-full overflow-hidden ">
                   <img

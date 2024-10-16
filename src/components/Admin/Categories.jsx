@@ -17,7 +17,6 @@ function Categories() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [formData, setFormData] = useState({
-    id: "",
     categoryName: "",
     categoryImage: null,
   });
@@ -26,6 +25,7 @@ function Categories() {
     categoryImage: null,
   });
   const [updateFormData, setUpdateFormData] = useState({
+    id: "",
     categoryName: "",
     categoryImage: null,
   });

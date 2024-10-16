@@ -86,12 +86,12 @@ function Orders() {
                     <div
                       key={idx}
                       className="flex hover:bg-slate-200 cursor-pointer"
-                      onClick={() => handleRedirect(product.productId.slug)}
+                      onClick={() => handleRedirect(product?.productId.slug)}
                     >
                       <div className="h-40 w-36 md:p-5 p-2">
                         <img
-                          src={product.productId.images[0].imageUrl}
-                          alt={product.productId.title}
+                          src={product.productId?.images[0].imageUrl}
+                          alt={product.productId?.title}
                           className="h-full w-full object-cover rounded-xl"
                         />
                       </div>

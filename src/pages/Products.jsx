@@ -49,7 +49,7 @@ function Products() {
     (async () => {
       try {
         const [response] = await calculateProgress(
-          [getAllProducts(location.search)],
+          [getAllProducts(`${location.search}&isActive=true`)],
           (value) => dispatch(setProgress(value))
         );
         setProducts(response.data.data);
