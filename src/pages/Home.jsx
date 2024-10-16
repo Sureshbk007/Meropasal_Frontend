@@ -81,22 +81,27 @@ function Home() {
 
       {/* categories */}
       <div className="bg-gray-50 flex flex-wrap justify-center gap-2 lg:gap-14 px-1 py-4 lg:p-8 ">
-        {limitedCategories.map((category) => (
-          <Link to={`/products?category=${category.name}`} key={category._id}>
-            <figure className="flex flex-col items-center">
-              <div className="w-14 h-14 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-red-500  ">
-                <img
-                  src={`${category.image.imageUrl}`}
-                  alt={`${category.name}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <figcaption className="font-semibold text-xs lg:text-sm mt-2 text-slate-700 text-center text-wrap line-clamp-2">
-                {category.name}
-              </figcaption>
-            </figure>
-          </Link>
-        ))}
+        {limitedCategories.length > 0
+          ? limitedCategories.map((category) => (
+              <Link
+                to={`/products?category=${category.name}`}
+                key={category._id}
+              >
+                <figure className="flex flex-col items-center">
+                  <div className="w-14 h-14 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-red-500  ">
+                    <img
+                      src={`${category.image.imageUrl}`}
+                      alt={`${category.name}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <figcaption className="font-semibold text-xs lg:text-sm mt-2 text-slate-700 text-center text-wrap line-clamp-2">
+                    {category.name}
+                  </figcaption>
+                </figure>
+              </Link>
+            ))
+          : "loading..."}
 
         {homeData.categories.length > 8 && (
           <Link to="/categories" onClick={() => scrollTo(0, 0)}>
