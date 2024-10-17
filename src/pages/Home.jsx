@@ -86,7 +86,7 @@ function Home() {
                 <figure className="flex flex-col items-center">
                   <div className="w-14 h-14 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-red-500  ">
                     <img
-                      src={`${category.image.imageUrl}`}
+                      src={`${category.image?.imageUrl || ""}`}
                       alt={`${category.name}`}
                       className="w-full h-full object-cover"
                     />
@@ -185,7 +185,7 @@ function Home() {
                 <SwiperSlide key={item._id}>
                   <Link to={`/products/${item.slug}`}>
                     <ProductCard
-                      imgUrl={item.images[0].imageUrl}
+                      imgUrl={item.images[0]?.imageUrl || ""}
                       name={item.title}
                       price={item.sellingPrice}
                       crossedPrice={item?.crossedPrice}
@@ -211,7 +211,7 @@ function Home() {
             {homeData.latestProducts.map((item) => (
               <Link to={`/products/${item.slug}`} key={item._id}>
                 <ProductCard
-                  imgUrl={item.images[0].imageUrl}
+                  imgUrl={item.images[0]?.imageUrl || ""}
                   name={item.title}
                   price={item.sellingPrice}
                   crossedPrice={item.crossedPrice}

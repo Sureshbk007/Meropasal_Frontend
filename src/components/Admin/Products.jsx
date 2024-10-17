@@ -558,6 +558,7 @@ function Products() {
                         name="productImg"
                         onChange={handleFormChange}
                         multiple
+                        required
                         className="border border-1 outline-brand w-full p-1 pl-2 rounded mt-1 bg-slate-100"
                       />
                     </label>
@@ -666,8 +667,8 @@ function Products() {
                     <td className="p-2">
                       <div className="flex gap-4">
                         <img
-                          src={product.images[0].imageUrl}
-                          alt={product.title}
+                          src={product.images[0]?.imageUrl || ""}
+                          alt={product?.title}
                           className="h-12 w-12 object-cover rounded-lg"
                         />
                         <span className="text-slate-600 font-semibold line-clamp-2 w-80 ">

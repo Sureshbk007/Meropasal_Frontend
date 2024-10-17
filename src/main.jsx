@@ -11,6 +11,7 @@ import {
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
 import { ProtectedRoute } from "./components/index.js";
+import Admin from "./pages/Admin.jsx";
 
 // Lazy load the page components
 const Home = lazy(() => import("./pages/Home.jsx"));
@@ -22,7 +23,7 @@ const ProductDetails = lazy(() => import("./pages/ProductDetails.jsx"));
 const Checkout = lazy(() => import("./pages/Checkout.jsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
 const Orders = lazy(() => import("./pages/Orders.jsx"));
-const Admin = lazy(() => import("./pages/Admin.jsx"));
+// const Admin = lazy(() => import("./pages/Admin.jsx"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound.jsx"));
 
 const router = createBrowserRouter(

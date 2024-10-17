@@ -223,7 +223,7 @@ function Products() {
                     onClick={() =>
                       setShowAll((prev) => ({
                         ...prev,
-                        categories: ![prev.categories],
+                        categories: !prev.categories,
                       }))
                     }
                     className="text-violet-700"
@@ -261,7 +261,7 @@ function Products() {
                     onClick={() =>
                       setShowAll((prev) => ({
                         ...prev,
-                        brands: ![prev.brands],
+                        brands: !prev.brands,
                       }))
                     }
                     className="text-violet-700"

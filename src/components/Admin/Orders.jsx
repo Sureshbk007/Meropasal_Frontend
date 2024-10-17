@@ -18,9 +18,9 @@ function Orders() {
     <div>
       <div className="flex justify-between">
         <h1 className="font-semibold text-slate-500 text-lg">Products</h1>
-        <button className="text-slate-50 bg-brand cursor-pointer px-4 py-2 text-sm rounded-lg font-semibold hover:bg-opacity-80">
+        {/* <button className="text-slate-50 bg-brand cursor-pointer px-4 py-2 text-sm rounded-lg font-semibold hover:bg-opacity-80">
           Add Order
-        </button>
+        </button> */}
       </div>
       <div>
         <table className="w-full p-5 mt-5 text-slate-700 rounded-lg bg-slate-200 overflow-hidden">
