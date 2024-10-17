@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { logo } from "../assets/png";
 import { useDispatch } from "react-redux";
 import { logout } from "../store/slices/authSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Home,
   Categories,
@@ -63,11 +63,13 @@ function Admin() {
       <aside className="w-1/5 flex flex-col justify-between shadow-lg p-2">
         <div>
           <div className="flex justify-start items-center flex-col md:flex-row m-2 md:m-0">
-            <img
-              src={logo}
-              alt="logo"
-              className="h-8 w-8 md:h-12 md:w-12 object-contain m-2 md:m-5"
-            />
+            <Link to="/">
+              <img
+                src={logo}
+                alt="logo"
+                className="h-8 w-8 md:h-12 md:w-12 object-contain m-2 md:m-5"
+              />
+            </Link>
             <h2 className="text-slate-700 text-xs md:text-sm lg:text-xl">
               MeroPasal
             </h2>
