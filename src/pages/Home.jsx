@@ -12,9 +12,6 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { useEffect, useState } from "react";
 import { getAllCategory, getAllProducts } from "../api";
-import calculateProgress from "../utils/calculateProgress";
-import { setProgress } from "../store/slices/progressSlice";
-import { useDispatch } from "react-redux";
 
 function Home() {
   const [homeData, setHomeData] = useState({
@@ -22,25 +19,24 @@ function Home() {
     flashSaleProducts: [],
     latestProducts: [],
   });
-  const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
       try {
-        const [categories, saleProducts, latestProducts] =
-          await calculateProgress(
-            [
-              getAllCategory("?limit=10"),
-              getAllProducts("?isSale=true&limit=15&isActive=true"),
-              getAllProducts("?isActive=true"),
-            ],
-            (value) => dispatch(setProgress(value))
-          );
-
-        setHomeData({
+        const categories = await getAllCategory("?limit=10");
+        setHomeData((prev) => ({
+          ...prev,
           categories: categories?.data.data || [],
+        }));
+        const saleProducts = await getAllProducts("?isSale=true&limit=15");
+        setHomeData((prev) => ({
+          ...prev,
           flashSaleProducts: saleProducts?.data.data || [],
+        }));
+        const latestProducts = await getAllProducts();
+        setHomeData((prev) => ({
+          ...prev,
           latestProducts: latestProducts?.data.data || [],
-        });
+        }));
       } catch (error) {
         console.log("Failed to fetch data ", error.message);
       }
