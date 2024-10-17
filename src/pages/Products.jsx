@@ -28,11 +28,15 @@ function Products() {
   });
 
   const categories = useMemo(
-    () => [...new Set(products.map((prod) => prod.category.name))],
+    () =>
+      [...new Set(products.map((prod) => prod.category.name))].filter(
+        (brand) => brand
+      ),
     [products]
   );
   const brands = useMemo(
-    () => [...new Set(products.map((prod) => prod.brand))],
+    () =>
+      [...new Set(products.map((prod) => prod.brand))].filter((brand) => brand),
     [products]
   );
 
