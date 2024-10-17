@@ -3,6 +3,7 @@ import {
   MoveRight,
   Package,
   Search,
+  Shield,
   ShoppingCart,
   Trash2,
   Truck,
@@ -327,6 +328,14 @@ function Header() {
                     Signup
                   </Link>
                 </li>
+                {userData.role === "ADMIN" && (
+                  <li className="hover:bg-slate-200 rounded-lg text-sm">
+                    <Link to="/admin" className="flex items-center gap-2 p-3">
+                      <Shield />
+                      Admin Panel
+                    </Link>
+                  </li>
+                )}
                 {userDropDownOptions.map((option, idx) => (
                   <li
                     className="hover:bg-slate-200 rounded-lg text-sm"
