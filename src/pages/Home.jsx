@@ -11,7 +11,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { useEffect, useState } from "react";
-import { getAllCategory, getAllProducts } from "../api";
+import { getAllCategory, getAllProducts, getHomePageData } from "../api";
 
 function Home() {
   const [homeData, setHomeData] = useState({
@@ -22,26 +22,18 @@ function Home() {
   useEffect(() => {
     (async () => {
       try {
-        const categories = await getAllCategory("?limit=10");
+        const response = await getHomePageData();
         setHomeData((prev) => ({
           ...prev,
-          categories: categories?.data.data || [],
-        }));
-        const saleProducts = await getAllProducts("?isSale=true&limit=15");
-        setHomeData((prev) => ({
-          ...prev,
-          flashSaleProducts: saleProducts?.data.data || [],
-        }));
-        const latestProducts = await getAllProducts();
-        setHomeData((prev) => ({
-          ...prev,
-          latestProducts: latestProducts?.data.data || [],
+          categories: response.data.data.categories || [],
+          flashSaleProducts: response.data.data.saleProducts || [],
+          latestProducts: response.data.data.latestProducts || [],
         }));
       } catch (error) {
-        console.log("Failed to fetch data ", error.message);
+        console.log("failed to fetch data");
       }
     })();
-  }, []);
+  });
 
   let limitedCategories =
     homeData.categories.length > 8

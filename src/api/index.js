@@ -29,6 +29,9 @@ export const userUpdate = async (formData) =>
   });
 export const getAllUsers = async () => await API.get("/users");
 
+//home page api
+export const getHomePageData = async () => await API.get("/home");
+
 // product api
 export const getAllProducts = async (filter = "") =>
   await API.get(`/products${filter}`);

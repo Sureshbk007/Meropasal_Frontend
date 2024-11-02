@@ -17,7 +17,7 @@ function Checkout() {
   const orders = useSelector((state) => state.cart.orders);
   const dispatch = useDispatch();
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const paidOrder = new URLSearchParams(location.search).get("order");
 
