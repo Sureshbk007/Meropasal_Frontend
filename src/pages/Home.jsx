@@ -11,7 +11,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { useEffect, useState } from "react";
-import { getAllCategory, getAllProducts, getHomePageData } from "../api";
+import { getHomePageData } from "../api";
 
 function Home() {
   const [homeData, setHomeData] = useState({
