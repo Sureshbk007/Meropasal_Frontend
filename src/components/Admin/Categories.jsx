@@ -32,12 +32,14 @@ function Categories() {
   const [updateFormErrors, setUpdateFormErrors] = useState({
     categoryName: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
+      setIsLoading(true);
       const response = await getAllCategory();
       setCategories(response.data.data);
+      setIsLoading(false);
     })();
   }, []);
 
@@ -307,46 +309,56 @@ function Categories() {
               <th className="text-start p-3">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {categories.length > 0 ? (
-              categories.map((cat, idx) => (
-                <tr
-                  key={cat._id}
-                  className="hover:bg-slate-400 cursor-pointer"
-                  onClick={() => handleRowClick(cat._id)}
-                >
-                  <td className="pl-4">{idx + 1}</td>
-                  <td className="pl-4">
-                    <div className="flex gap-4 mt-4">
-                      <img
-                        src={cat.image.imageUrl}
-                        alt={cat.name}
-                        className="h-12 w-12 object-cover rounded-lg"
-                      />
-                      <span className="text-slate-600 font-semibold">
-                        {cat.name}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="pl-4">
-                    <Trash2
-                      onClick={(e) =>
-                        handleCategoryDelete(e, cat._id, cat.name)
-                      }
-                      className="text-red-600 h-10 w-10 p-[10px]"
-                      size={20}
-                    />
-                  </td>
-                </tr>
-              ))
-            ) : (
+          {isLoading ? (
+            <tbody>
               <tr>
-                <td colSpan={3} className="p-5 text-center">
-                  No Category to show, add category
+                <td colSpan={3} className="p-5 text-center animate-pulse">
+                  loading...
                 </td>
               </tr>
-            )}
-          </tbody>
+            </tbody>
+          ) : (
+            <tbody>
+              {categories.length > 0 ? (
+                categories.map((cat, idx) => (
+                  <tr
+                    key={cat._id}
+                    className="hover:bg-slate-400 cursor-pointer"
+                    onClick={() => handleRowClick(cat._id)}
+                  >
+                    <td className="pl-4">{idx + 1}</td>
+                    <td className="pl-4">
+                      <div className="flex gap-4 mt-4">
+                        <img
+                          src={cat.image.imageUrl}
+                          alt={cat.name}
+                          className="h-12 w-12 object-cover rounded-lg"
+                        />
+                        <span className="text-slate-600 font-semibold">
+                          {cat.name}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="pl-4">
+                      <Trash2
+                        onClick={(e) =>
+                          handleCategoryDelete(e, cat._id, cat.name)
+                        }
+                        className="text-red-600 h-10 w-10 p-[10px]"
+                        size={20}
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={3} className="p-5 text-center">
+                    No Category to show, add category
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          )}
         </table>
 
         <Drawer isOpen={isDrawerOpen} onClose={handleDrawerClose}>

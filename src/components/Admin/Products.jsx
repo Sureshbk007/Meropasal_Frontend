@@ -14,7 +14,7 @@ import Drawer from "../Drawer";
 
 function Products() {
   const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -55,12 +55,15 @@ function Products() {
   useEffect(() => {
     (async () => {
       try {
+        setIsLoading(true);
         const response = await getAllProducts("?isActive");
         setProducts(response.data.data);
         const catResponse = await getAllCategory();
         setCategories(catResponse.data.data);
       } catch (error) {
         console.log("Failed to fetch products", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
@@ -640,21 +643,27 @@ function Products() {
         </Modal>
       </div>
       <div>
-        {isLoading ? (
-          "Loading..."
-        ) : (
-          <table className="w-full p-5 mt-5 text-slate-700 rounded-lg bg-slate-200 overflow-hidden">
-            <thead>
+        <table className="w-full p-5 mt-5 text-slate-700 rounded-lg bg-slate-200 overflow-hidden">
+          <thead>
+            <tr>
+              <th className="text-start p-3">#</th>
+              <th className="text-start p-3">Name</th>
+              <th className="text-start p-3">Price</th>
+              <th className="text-start p-3">Inventory</th>
+              <th className="text-start p-3">Status</th>
+              <th className="text-start p-3">Created</th>
+              <th className="text-start p-3">Actions</th>
+            </tr>
+          </thead>
+          {isLoading ? (
+            <tbody>
               <tr>
-                <th className="text-start p-3">#</th>
-                <th className="text-start p-3">Name</th>
-                <th className="text-start p-3">Price</th>
-                <th className="text-start p-3">Inventory</th>
-                <th className="text-start p-3">Status</th>
-                <th className="text-start p-3">Created</th>
-                <th className="text-start p-3">Actions</th>
+                <td colSpan={7} className="p-5 text-center animate-pulse">
+                  loading...
+                </td>
               </tr>
-            </thead>
+            </tbody>
+          ) : (
             <tbody>
               {products.length > 0 ? (
                 products.map((product, idx) => (
@@ -707,8 +716,8 @@ function Products() {
                 </tr>
               )}
             </tbody>
-          </table>
-        )}
+          )}
+        </table>
       </div>
       <Drawer isOpen={isDrawerOpen} onClose={handleDrawerClose}>
         <div className="relative p-4 w-[80vw] h-full scrollbar-show overflow-y-auto">

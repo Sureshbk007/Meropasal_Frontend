@@ -3,11 +3,19 @@ import { getAllUsers } from "../../api";
 
 function Customers() {
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const response = await getAllUsers();
-      setUsers(response.data.data);
+      try {
+        setIsLoading(true);
+        const response = await getAllUsers();
+        setUsers(response.data.data);
+      } catch (error) {
+        console.log("failed to fetch customer");
+      } finally {
+        setIsLoading(false);
+      }
     })();
   }, []);
 
@@ -27,31 +35,41 @@ function Customers() {
               <th className="text-start p-3">Created</th>
             </tr>
           </thead>
-          <tbody>
-            {users.length > 0 ? (
-              users.map((user, idx) => (
-                <tr key={user._id}>
-                  <td className="text-center">{idx + 1}</td>
-                  <td className="p-1">{user.fullName}</td>
-                  <td className="p-1">{user.email}</td>
-                  <td className="p-1">{user.status}</td>
-                  <td className="p-1">
-                    {new Date(user.createdAt).toLocaleDateString("en-Us", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </td>
-                </tr>
-              ))
-            ) : (
+          {isLoading ? (
+            <tbody>
               <tr>
-                <td colSpan={5} className="text-center p-5">
-                  No Users to show
+                <td colSpan={5} className="p-5 text-center animate-pulse">
+                  loading...
                 </td>
               </tr>
-            )}
-          </tbody>
+            </tbody>
+          ) : (
+            <tbody>
+              {users.length > 0 ? (
+                users.map((user, idx) => (
+                  <tr key={user._id}>
+                    <td className="text-center">{idx + 1}</td>
+                    <td className="p-1">{user.fullName}</td>
+                    <td className="p-1">{user.email}</td>
+                    <td className="p-1">{user.status}</td>
+                    <td className="p-1">
+                      {new Date(user.createdAt).toLocaleDateString("en-Us", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="text-center p-5">
+                    No Users to show
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          )}
         </table>
       </div>
     </div>
