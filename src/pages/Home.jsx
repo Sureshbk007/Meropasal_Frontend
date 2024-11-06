@@ -33,7 +33,7 @@ function Home() {
         console.log("failed to fetch data");
       }
     })();
-  });
+  }, []);
 
   let limitedCategories =
     homeData.categories.length > 8
