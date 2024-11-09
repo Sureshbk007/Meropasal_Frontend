@@ -11,6 +11,7 @@ import {
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
 import { ProtectedRoute } from "./components/index.js";
+import "ldrs/lineSpinner";
 
 // Lazy load the page components
 const Home = lazy(() => import("./pages/Home.jsx"));
@@ -76,8 +77,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <Suspense
         fallback={
-          <div className="flex justify-center items-center h-screen animate-pulse">
-            Loading...
+          <div className="flex justify-center items-center h-screen">
+            <l-line-spinner size="25" stroke="2" speed="1" color="black" />
           </div>
         }
       >

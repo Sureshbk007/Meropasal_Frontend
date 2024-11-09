@@ -19,9 +19,11 @@ function Home() {
     flashSaleProducts: [],
     latestProducts: [],
   });
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     (async () => {
       try {
+        setIsLoading(true);
         const response = await getHomePageData();
         setHomeData((prev) => ({
           ...prev,
@@ -31,6 +33,8 @@ function Home() {
         }));
       } catch (error) {
         console.log("failed to fetch data");
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
@@ -66,155 +70,214 @@ function Home() {
           />
         </div>
       </div>
+      {isLoading ? (
+        <div className="animate-pulse">
+          <div className="bg-gray-50 flex flex-wrap  justify-center gap-2 lg:gap-14 px-1 py-4 lg:p-8">
+            {Array.from({ length: 9 }).map((_, i) => (
+              <figure className="flex flex-col items-center">
+                <div className="w-14 h-14 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-gray-400">
+                  <div className="w-full h-full object-cover" />
+                </div>
+                <figcaption className="mt-2">
+                  <span
+                    style={{
+                      width: `${Math.min((i + 1) * 50, 60)}px`,
+                    }}
+                    className="h-3 bg-gray-400 block rounded-md"
+                  ></span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
 
-      {/* categories */}
-      <div className="bg-gray-50 flex flex-wrap justify-center gap-2 lg:gap-14 px-1 py-4 lg:p-8 ">
-        {limitedCategories.length > 0
-          ? limitedCategories.map((category) => (
-              <Link
-                to={`/products?category=${category.name}`}
-                key={category._id}
-              >
+          <div className="bg-gray-100 px-2 py-4 lg:px-16 lg:py-10 flex flex-col gap-3 lg:gap-8">
+            <div className="flex items-center justify-between">
+              <div className="flex gap-2 lg:gap-4 items-center">
+                <div className="rounded-full bg-gray-400 w-8 h-8 lg:w-10 lg:h-10" />
+                <h3 className="bg-gray-400 w-32 h-8 rounded-md " />
+              </div>
+            </div>
+
+            <div className="flex gap-5">
+              {Array.from({ length: window.innerWidth > 400 ? 5 : 2 }).map(
+                (_, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-col w-40 lg:w-56 bg-gray-300 border-2 min-h-64 box-border lg:min-h-80 rounded-lg overflow-hidden hover:shadow-md "
+                  >
+                    <div className="h-40 lg:h-52 w-full object-cover" />
+                    <div className="px-2 py-1 lg:p-3 flex flex-col gap-1">
+                      <div className="flex flex-col gap-1">
+                        <span className="h-3 bg-slate-400 block rounded-md" />
+                        <span
+                          className="h-3 bg-slate-400 block rounded-md"
+                          style={{
+                            width: `${Math.min((i + 1) * 30, 130)}px`,
+                          }}
+                        />
+
+                        <div className="flex items-center h-4"></div>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <span className="h-5 w-14 bg-slate-400 block rounded-md" />
+                      </div>
+                    </div>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* categories */}
+          <div className="bg-gray-50 flex flex-wrap justify-center gap-2 lg:gap-14 px-1 py-4 lg:p-8 ">
+            {limitedCategories.length > 0 &&
+              limitedCategories.map((category) => (
+                <Link
+                  to={`/products?category=${category.name}`}
+                  key={category._id}
+                >
+                  <figure className="flex flex-col items-center">
+                    <div className="w-14 h-14 lg:w-20 lg:h-20 rounded-full overflow-hidden">
+                      <img
+                        src={`${category.image?.imageUrl || ""}`}
+                        alt={`${category.name}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <figcaption className="font-semibold text-xs lg:text-sm mt-2 text-slate-700 text-center text-wrap line-clamp-2">
+                      {category.name}
+                    </figcaption>
+                  </figure>
+                </Link>
+              ))}
+
+            {homeData.categories.length > 8 && (
+              <Link to="/categories" onClick={() => scrollTo(0, 0)}>
                 <figure className="flex flex-col items-center">
-                  <div className="w-14 h-14 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-red-500  ">
-                    <img
-                      src={`${category.image?.imageUrl || ""}`}
-                      alt={`${category.name}`}
-                      className="w-full h-full object-cover"
+                  <div className="w-14 lg:w-20 aspect-square border-2 rounded-full overflow-hidden flex justify-center items-center ">
+                    <LayoutGrid
+                      fillOpacity={0.5}
+                      fill="gray"
+                      strokeWidth={0}
+                      size={30}
                     />
                   </div>
-                  <figcaption className="font-semibold text-xs lg:text-sm mt-2 text-slate-700 text-center text-wrap line-clamp-2">
-                    {category.name}
+                  <figcaption className="font-semibold text-xs lg:text-sm text-nowrap mt-2 text-slate-700 ">
+                    All Category
                   </figcaption>
                 </figure>
               </Link>
-            ))
-          : "loading..."}
-
-        {homeData.categories.length > 8 && (
-          <Link to="/categories" onClick={() => scrollTo(0, 0)}>
-            <figure className="flex flex-col items-center">
-              <div className="w-14 lg:w-20 aspect-square border-2 rounded-full overflow-hidden flex justify-center items-center ">
-                <LayoutGrid
-                  fillOpacity={0.5}
-                  fill="gray"
-                  strokeWidth={0}
-                  size={30}
-                />
-              </div>
-              <figcaption className="font-semibold text-xs lg:text-sm text-nowrap mt-2 text-slate-700 ">
-                All Category
-              </figcaption>
-            </figure>
-          </Link>
-        )}
-      </div>
-
-      {/* flash sale */}
-      {homeData.flashSaleProducts.length > 0 && (
-        <div className="bg-gray-100 px-2 py-4 lg:px-16 lg:py-10 flex flex-col gap-3 lg:gap-8">
-          <div className="flex items-center justify-between">
-            <div className="flex gap-2 lg:gap-4 items-center">
-              <Zap
-                fill="white"
-                strokeWidth={1.5}
-                className="rounded-full bg-black w-8 h-8 lg:w-10 lg:h-10"
-              />
-              <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold ">
-                Flash Sale
-              </h3>
-            </div>
-            <div className="flex gap-2 items-center">
-              <div>
-                <CircleChevronLeft
-                  className="custom-prev text-slate-800 cursor-pointer active:scale-90 transition-transform hover:scale-95"
-                  size={35}
-                />
-              </div>
-              <div>
-                <CircleChevronRight
-                  className="custom-next text-slate-800 cursor-pointer active:scale-90 transition-transform hover:scale-95"
-                  size={35}
-                />
-              </div>
-            </div>
+            )}
           </div>
 
-          <div>
-            <Swiper
-              slidesPerView={5}
-              spaceBetween={30}
-              navigation={{
-                prevEl: ".custom-prev",
-                nextEl: ".custom-next",
-              }}
-              className="mySwiper"
-              modules={[Navigation]}
-              breakpoints={{
-                0: {
-                  slidesPerView: 2,
-                  spaceBetween: 0,
-                },
-                345: {
-                  slidesPerView: 2.2,
-                  spaceBetween: 10,
-                },
-                480: {
-                  slidesPerView: 2.2,
-                  spaceBetween: 10,
-                },
-                640: {
-                  slidesPerView: 4,
-                  spaceBetween: 10,
-                },
-                1025: {
-                  slidesPerView: 5,
-                  spaceBetween: 10,
-                },
-              }}
-            >
-              {homeData.flashSaleProducts.map((item, idx) => (
-                <SwiperSlide key={item._id}>
-                  <Link to={`/products/${item.slug}`}>
+          {/* flash sale */}
+          {homeData.flashSaleProducts.length > 0 && (
+            <div className="bg-gray-100 px-2 py-4 lg:px-16 lg:py-10 flex flex-col gap-3 lg:gap-8">
+              <div className="flex items-center justify-between">
+                <div className="flex gap-2 lg:gap-4 items-center">
+                  <Zap
+                    fill="white"
+                    strokeWidth={1.5}
+                    className="rounded-full bg-black w-8 h-8 lg:w-10 lg:h-10"
+                  />
+                  <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold ">
+                    Flash Sale
+                  </h3>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <div>
+                    <CircleChevronLeft
+                      className="custom-prev text-slate-800 cursor-pointer active:scale-90 transition-transform hover:scale-95"
+                      size={35}
+                    />
+                  </div>
+                  <div>
+                    <CircleChevronRight
+                      className="custom-next text-slate-800 cursor-pointer active:scale-90 transition-transform hover:scale-95"
+                      size={35}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <Swiper
+                  slidesPerView={5}
+                  spaceBetween={30}
+                  navigation={{
+                    prevEl: ".custom-prev",
+                    nextEl: ".custom-next",
+                  }}
+                  className="mySwiper"
+                  modules={[Navigation]}
+                  breakpoints={{
+                    0: {
+                      slidesPerView: 2,
+                      spaceBetween: 0,
+                    },
+                    345: {
+                      slidesPerView: 2.2,
+                      spaceBetween: 10,
+                    },
+                    480: {
+                      slidesPerView: 2.2,
+                      spaceBetween: 10,
+                    },
+                    640: {
+                      slidesPerView: 4,
+                      spaceBetween: 10,
+                    },
+                    1025: {
+                      slidesPerView: 5,
+                      spaceBetween: 10,
+                    },
+                  }}
+                >
+                  {homeData.flashSaleProducts.map((item) => (
+                    <SwiperSlide key={item._id}>
+                      <Link to={`/products/${item.slug}`}>
+                        <ProductCard
+                          imgUrl={item.images[0]?.imageUrl || ""}
+                          name={item.title}
+                          price={item.sellingPrice}
+                          crossedPrice={item?.crossedPrice}
+                          rating={item.rating}
+                          ratingCount={5}
+                        />
+                      </Link>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+            </div>
+          )}
+
+          {/* latest products */}
+          {homeData.latestProducts.length > 0 && (
+            <section className="px-2 py-4 lg:px-16 lg:py-10 flex flex-col gap-1 lg:gap-8">
+              <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold text-start p-3 lg:p-0">
+                Latest Products
+              </h3>
+
+              <div className="grid gap-y-5 lg:gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 justify-items-center ">
+                {homeData.latestProducts.map((item) => (
+                  <Link to={`/products/${item.slug}`} key={item._id}>
                     <ProductCard
                       imgUrl={item.images[0]?.imageUrl || ""}
                       name={item.title}
                       price={item.sellingPrice}
-                      crossedPrice={item?.crossedPrice}
+                      crossedPrice={item.crossedPrice}
                       rating={item.rating}
-                      ratingCount={5}
                     />
                   </Link>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-        </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </>
       )}
-
-      {/* latest products */}
-      {homeData.latestProducts.length > 0 && (
-        <section className="px-2 py-4 lg:px-16 lg:py-10 flex flex-col gap-1 lg:gap-8">
-          <h3 className="text-xl lg:text-3xl text-slate-800 font-semibold text-start p-3 lg:p-0">
-            Latest Products
-          </h3>
-
-          <div className="grid gap-y-5 lg:gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 justify-items-center ">
-            {homeData.latestProducts.map((item) => (
-              <Link to={`/products/${item.slug}`} key={item._id}>
-                <ProductCard
-                  imgUrl={item.images[0]?.imageUrl || ""}
-                  name={item.title}
-                  price={item.sellingPrice}
-                  crossedPrice={item.crossedPrice}
-                  rating={item.rating}
-                />
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
       <div className="bannerGradient h-44 lg:h-60 flex justify-center items-center">
         <span className="text-xl lg:text-3xl font-bold text-slate-100 italic drop-shadow-2xl">
           "All You Need, Just a Click Away"
