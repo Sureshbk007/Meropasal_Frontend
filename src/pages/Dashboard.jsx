@@ -17,7 +17,7 @@ function Dashboard() {
   const [errors, setErrors] = useState({
     fullName: "",
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {

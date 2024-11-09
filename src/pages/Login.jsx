@@ -153,9 +153,9 @@ function Login() {
                   </>
                 )}
               </span>
-              <Link to="#" className="text-sm text-violet-900 text-right">
+              {/* <Link to="#" className="text-sm text-violet-900 text-right">
                 Forgot Password?
-              </Link>
+              </Link> */}
             </div>
 
             <button

@@ -7,6 +7,7 @@ import { getAllProducts } from "../api";
 import calculateProgress from "../utils/calculateProgress";
 import { setProgress } from "../store/slices/progressSlice";
 import { useDispatch } from "react-redux";
+import "ldrs/lineSpinner";
 
 function Products() {
   const location = useLocation();
@@ -14,6 +15,7 @@ function Products() {
   const dispatch = useDispatch();
   const [isSidebarFilterOpen, setIsSidebarFilterOpen] = useState(false);
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState({
     category: [],
     brand: [],
@@ -52,6 +54,7 @@ function Products() {
     scrollTo(0, 0);
     (async () => {
       try {
+        setIsLoading(true);
         const [response] = await calculateProgress(
           [getAllProducts(`${location.search}`)],
           (value) => dispatch(setProgress(value))
@@ -59,6 +62,8 @@ function Products() {
         setProducts(response.data.data);
       } catch (error) {
         console.log("Failed to load products", error.message);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [location.search]);
@@ -373,22 +378,32 @@ function Products() {
               />
             </div>
           </div>
-          {products.length === 0 ? (
-            <div className="text-center text-slate-600">No products found</div>
-          ) : (
-            <div className="grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-4 justify-items-center ">
-              {products.map((item) => (
-                <Link key={item._id} to={`/products/${item.slug}`}>
-                  <ProductCard
-                    imgUrl={item.images[0].imageUrl}
-                    name={item.title}
-                    price={item.sellingPrice}
-                    crossPrice={item?.crossedPrice}
-                    rating={item.rating}
-                  />
-                </Link>
-              ))}
+          {isLoading ? (
+            <div className="flex justify-center items-center h-[80vh]">
+              <l-line-spinner size="25" stroke="2" speed="1" color="black" />
             </div>
+          ) : (
+            <>
+              {products.length === 0 ? (
+                <div className="text-center text-slate-600">
+                  No products found
+                </div>
+              ) : (
+                <div className="grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-4 justify-items-center ">
+                  {products.map((item) => (
+                    <Link key={item._id} to={`/products/${item.slug}`}>
+                      <ProductCard
+                        imgUrl={item.images[0].imageUrl}
+                        name={item.title}
+                        price={item.sellingPrice}
+                        crossPrice={item?.crossedPrice}
+                        rating={item.rating}
+                      />
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
