@@ -74,7 +74,7 @@ function Home() {
         <div className="animate-pulse">
           <div className="bg-gray-50 flex flex-wrap  justify-center gap-2 lg:gap-14 px-1 py-4 lg:p-8">
             {Array.from({ length: 9 }).map((_, i) => (
-              <figure className="flex flex-col items-center">
+              <figure className="flex flex-col items-center" key={i}>
                 <div className="w-14 h-14 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-gray-400">
                   <div className="w-full h-full object-cover" />
                 </div>
